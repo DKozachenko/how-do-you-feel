@@ -3,8 +3,10 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build"
+    "web:start": "ng serve",
+    "web:build": "ng build",
+    "android:sync": "capacitor sync android",
+    "ios:sync": "capacitor sync ios"
   },
   "private": true,
   "dependencies": {
@@ -14,6 +16,14 @@
     "@angular/forms": "21.0.0",
     "@angular/platform-browser": "21.0.0",
     "@angular/router": "21.0.0",
+    "@capacitor/android": "7.4.4",
+    "@capacitor/app": "7.1.0",
+    "@capacitor/core": "7.4.4",
+    "@capacitor/haptics": "7.0.2",
+    "@capacitor/ios": "7.4.4",
+    "@capacitor/keyboard": "7.0.3",
+    "@capacitor/status-bar": "7.0.3",
+    "@ionic/angular": "8.7.10",
     "rxjs": "7.8.0",
     "tslib": "2.3.0"
   },
@@ -21,6 +31,8 @@
     "@angular/build": "21.0.0",
     "@angular/cli": "21.0.0",
     "@angular/compiler-cli": "21.0.0",
+    "@capacitor/cli": "7.4.4",
+    "@ionic/angular-toolkit": "12.3.0",
     "jsdom": "27.1.0",
     "typescript": "5.9.2",
     "vitest": "4.0.8"
