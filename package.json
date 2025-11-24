@@ -2,13 +2,12 @@
   "name": "how-do-feel",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
     "web:start": "ng serve",
     "web:build": "ng build",
     "android:sync": "capacitor sync android",
     "ios:sync": "capacitor sync ios",
-    "lint": "eslint ./src --config eslint.config.ts",
-    "stylelint": "stylelint 'src/**/*.{scss,css}'"
+    "lint": "eslint ./src --config ./configs/eslint/eslint.config.ts",
+    "stylelint": "stylelint 'src/**/*.{scss,css}' --config ./configs/stylelint/stylelint.config.js"
   },
   "private": true,
   "dependencies": {
