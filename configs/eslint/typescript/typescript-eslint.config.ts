@@ -5,11 +5,11 @@ export const typescriptEslintConfig: Linter.Config[] = [
   {
     name: 'typescript-eslint/settings',
     languageOptions: {
-      parser: typescriptEslintPlugin.parser as Linter.Parser,
+      parser: <Linter.Parser>typescriptEslintPlugin.parser,
       sourceType: 'module',
     },
     plugins: {
-      '@typescript-eslint': typescriptEslintPlugin.plugin as ESLint.Plugin,
+      '@typescript-eslint': <ESLint.Plugin>typescriptEslintPlugin.plugin,
     },
     files: ['**/*.ts'],
     rules: {
@@ -32,6 +32,12 @@ export const typescriptEslintConfig: Linter.Config[] = [
       '@typescript-eslint/no-wrapper-object-types': 'warn',
       '@typescript-eslint/prefer-as-const': 'error',
       '@typescript-eslint/triple-slash-reference': 'error',
+      '@typescript-eslint/consistent-type-assertions': [
+        'error',
+        {
+          assertionStyle: 'angle-bracket',
+        },
+      ],
     },
   },
 ];

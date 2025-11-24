@@ -2,6 +2,7 @@ import { defineConfig } from 'eslint/config';
 import { angularEslintConfig } from './angular/angular-eslint.config';
 import { angularInlineTemplateEslintConfig } from './angular/angular-inline-template-eslint.config';
 import { angularTemplateEslintConfig } from './angular/angular-template-eslint.config';
+import { boundariesEslintConfig } from './boundaries/boundaries-eslint.config';
 import { importEslintConfig } from './import/import-eslint.config';
 import { javascriptEslintConfig } from './javascript/javascript-eslint.config';
 import { prettierEslintConfig } from './prettier/prettier-eslint.config';
@@ -17,4 +18,5 @@ export default defineConfig([
   ...angularInlineTemplateEslintConfig,
   ...prettierEslintConfig,
   ...prettierHtmlEslintConfig,
+  ...boundariesEslintConfig,
 ]);

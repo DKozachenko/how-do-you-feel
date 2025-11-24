@@ -1,14 +1,13 @@
 import { Routes } from '@angular/router';
-import { HomePage } from './home/home';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'home',
     pathMatch: 'full',
+    redirectTo: 'home',
   },
   {
     path: 'home',
-    component: HomePage,
+    loadChildren: () => import('./feature/home/home.routes').then((r) => r.HOME_ROUTES),
   },
 ];
