@@ -73,7 +73,7 @@ jobs:
 
   build:
     name: Run build
-    needs: [lint, stylelint]
+    needs: [create-cache-key, lint, stylelint]
     runs-on: ubuntu-latest
     steps:
       - name: Get repository code
