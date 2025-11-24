@@ -6,7 +6,9 @@
     "web:start": "ng serve",
     "web:build": "ng build",
     "android:sync": "capacitor sync android",
-    "ios:sync": "capacitor sync ios"
+    "ios:sync": "capacitor sync ios",
+    "lint": "eslint ./src --config eslint.config.ts",
+    "stylelint": "stylelint 'src/**/*.{scss,css}'"
   },
   "private": true,
   "dependencies": {
@@ -33,8 +35,18 @@
     "@angular/compiler-cli": "21.0.0",
     "@capacitor/cli": "7.4.4",
     "@ionic/angular-toolkit": "12.3.0",
+    "angular-eslint": "21.0.1",
+    "eslint": "9.39.1",
+    "eslint-plugin-import": "2.32.0",
+    "eslint-plugin-prettier": "5.5.4",
+    "jiti": "2.6.1",
     "jsdom": "27.1.0",
+    "prettier": "3.6.2",
+    "stylelint": "16.26.0",
+    "stylelint-config-standard-scss": "16.0.0",
+    "stylelint-prettier": "5.0.3",
     "typescript": "5.9.2",
+    "typescript-eslint": "8.47.0",
     "vitest": "4.0.8"
   }
 }
