@@ -1,0 +1,23 @@
+name: 'Set up Open JDK'
+description: 'Installing Open JDK appropriate version'
+inputs:
+  version:
+    description: 'Version of Open JDK'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Update packages
+      run: sudo apt update
+      shell: bash
+    - name: Set up Open JDK
+      uses: actions/setup-java@v5
+      with:
+        distribution: 'temurin'
+        java-version: ${{ inputs.version }}
+    - name: Check if java set up correctly
+      run: java --version
+      shell: bash
+    - name: Check if jdk set up correctly
+      run: javac --version
+      shell: bash

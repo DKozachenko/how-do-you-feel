@@ -1,0 +1,11 @@
+name: 'Set up zipalign'
+description: 'Installing zipalign'
+runs:
+  using: "composite"
+  steps:
+    - name: Update packages
+      run: sudo apt update
+      shell: bash
+    - name: Set up zipalign
+      run: sudo apt install zipalign
+      shell: bash

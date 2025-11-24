@@ -1,0 +1,11 @@
+name: 'Set up apksigner'
+description: 'Installing apksigner'
+runs:
+  using: "composite"
+  steps:
+    - name: Update packages
+      run: sudo apt update
+      shell: bash
+    - name: Set up apksigner
+      run: sudo apt install apksigner
+      shell: bash

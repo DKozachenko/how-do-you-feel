@@ -1,0 +1,42 @@
+name: 'Sign up apk'
+description: 'Generating keys, aligning apk and signing up it'
+inputs:
+  apk-path:
+    description: 'Path to apk'
+    required: true
+  apk-unsigned-filename:
+    description: 'Name of unsigned release apk file'
+    required: true
+  apk-signed-filename:
+    description: 'Name of signed release apk file'
+    required: true
+  store-password:
+    description: 'Password for store for keytool'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    # Команды взяты с
+    # https://developer.android.com/build/building-cmdline#sign_cmdline
+    - name: Generate keys
+      working-directory: ${{ inputs.apk-path }}
+      run: keytool -genkeypair -v -keystore release-keys.jks -storepass ${{ inputs.store-password }} -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Diana Kozachenko, OU=None, O=None, L=Kazan, S=None, C=RU"
+      shell: bash
+    - name: Set up zipalign
+      uses: ./.github/actions/set-up-zipalign
+    - name: Align apk
+      working-directory: ${{ inputs.apk-path }}
+      run: zipalign -v -p 4 ${{ inputs.apk-unsigned-filename }} app-release-unsigned-aligned.apk
+      shell: bash
+    - name: Set up apksigner
+      uses: ./.github/actions/set-up-apksigner
+    - name: Sign up apk with keys
+      working-directory: ${{ inputs.apk-path }}
+      # Проставление паролей таким образом, взято с
+      # https://stackoverflow.com/questions/40653492/apksigner-not-accepting-password
+      run: apksigner sign --ks release-keys.jks --ks-pass pass:${{ inputs.store-password }} --out ${{ inputs.apk-signed-filename }} app-release-unsigned-aligned.apk
+      shell: bash
+    - name: Verify apk
+      working-directory: ${{ inputs.apk-path }}
+      run: apksigner verify ${{ inputs.apk-signed-filename }}
+      shell: bash
