@@ -1,0 +1,4 @@
+{
+  "*.scss": "npm run stylelint",
+  "*.{ts,html}": "npm run lint"
+}
