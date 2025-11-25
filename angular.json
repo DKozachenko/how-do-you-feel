@@ -9,7 +9,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "how-do-feel": {
+    "how-do-you-feel": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -93,10 +93,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "how-do-feel:build:production"
+              "buildTarget": "how-do-you-feel:build:production"
             },
             "development": {
-              "buildTarget": "how-do-feel:build:development"
+              "buildTarget": "how-do-you-feel:build:development"
             }
           },
           "defaultConfiguration": "development"
