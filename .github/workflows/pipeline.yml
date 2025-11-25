@@ -75,9 +75,37 @@ jobs:
       - name: Run lint
         run: npm run stylelint
 
+  analyze-deps:
+    name: Run analyze deps
+    needs: [create-cache-key, cache-deps]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get repository code
+        uses: actions/checkout@v4
+      - name: Restore node modules
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ env.NODE_MODULES_PATH }}
+          key: "${{ needs.create-cache-key.outputs.cache-key }}"
+          fail-on-cache-miss: true
+      - name: Setup Graphviz
+        uses: ts-graphviz/setup-graphviz@v2
+      - name: Make directory "deps"
+        run: mkdir deps
+      - name: Run analyze:deps
+        run: npm run analyze:deps
+      - name: Get short SHA
+        uses: benjlevesque/short-sha@v3.0
+        id: short-sha
+      - name: Create artifact with apk
+        uses: actions/upload-artifact@v4
+        with:
+          name: "Dependency Graph for ${{ steps.short-sha.outputs.sha }}"
+          path: deps/graph.png
+
   build:
     name: Run build
-    needs: [create-cache-key, lint, stylelint]
+    needs: [create-cache-key, lint, stylelint, analyze-deps]
     runs-on: ubuntu-latest
     steps:
       - name: Get repository code
@@ -92,17 +120,21 @@ jobs:
         run: npm run web:build
 
   build-apk:
-    # needs: [build]
+    needs: [create-cache-key, build]
     runs-on: ubuntu-latest
     steps:
     - name: Get repository code
       uses: actions/checkout@v4
+    - name: Restore node modules
+      uses: actions/cache/restore@v4
+      with:
+        path: ${{ env.NODE_MODULES_PATH }}
+        key: "${{ needs.create-cache-key.outputs.cache-key }}"
+        fail-on-cache-miss: true
     - name: Set up Open JDK 21
       uses: ./.github/actions/set-up-openjdk
       with:
         version: ${{ env.JDK_VERSION }}
-    - name: Get dependencies
-      run: npm ci --legacy-peer-deps
     - name: Run web:build
       run: npm run web:build
     - name: Run android:sync
@@ -117,32 +149,12 @@ jobs:
         apk-unsigned-filename: ${{ env.UNSIGNED_RELEASE_APK_FILENAME }}
         apk-signed-filename: ${{ env.SIGNED_RELEASE_APK_FILENAME }}
         store-password: ${{ secrets.STORE_PASSWORD }}
+    - name: Get short SHA
+      uses: benjlevesque/short-sha@v3.0
+      id: short-sha
     - name: Create artifact with apk
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ github.ref }}-commit file
-        path: ${{ env.SIGNED_RELEASE_APK_FILENAME }}
-    # - name: Save package.json version
-    #   id: version
-    #   # Обрезаем версию по бокам на один символ, тк npm pkg get version возвращает строку
-    #   run: VERSION_STR=$(npm pkg get version) && echo "VERSION=${VERSION_STR:1:-1}" >> $GITHUB_OUTPUT
-    # - name: Create Release
-    #   id: create_release
-    #   uses: actions/create-release@v1
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #   with:
-    #     tag_name: ${{ steps.version.outputs.VERSION }}
-    #     release_name: Release ${{ steps.version.outputs.VERSION }}
-    #     body_path: ./apps/mobile/CHANGELOG.md
-    #     draft: false
-    #     prerelease: true
-    # - name: Upload Release Artifact
-    #   uses: actions/upload-release-asset@v1
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #   with:
-    #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-    #     asset_path: ${{ env.RELEASE_APK_PATH }}/${{ env.SIGNED_RELEASE_APK_FILENAME }}
-    #     asset_name: ${{ env.SIGNED_RELEASE_APK_FILENAME }}
-    #     asset_content_type: application/vnd.android.package-archive
+        name: "${{ steps.short-sha.outputs.sha }}-commit apk"
+        path: ${{ env.RELEASE_APK_PATH }}/${{ env.SIGNED_RELEASE_APK_FILENAME }}
+
