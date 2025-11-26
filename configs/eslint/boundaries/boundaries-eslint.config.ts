@@ -29,7 +29,7 @@ export const boundariesEslintConfig: (Linter.Config & { extends: Config[] })[] =
             },
             {
               from: 'layout',
-              allow: ['env', 'core', 'ui', 'pattern', 'layout'],
+              allow: ['env', 'core', 'ui', 'pattern', 'layout', 'feature-routes'],
             },
             {
               from: 'app',

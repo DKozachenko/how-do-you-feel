@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-
+// TODO: переименовать файл
 export const EMOTION_ROUTES: Routes = [
   {
     path: '',

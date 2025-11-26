@@ -1,13 +1,19 @@
 import { Routes } from '@angular/router';
+import { TabsLayoutComponent } from '@layout/tabs-layout/tabs-layout';
 
 export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'emotion',
+    redirectTo: 'main/emotion',
   },
   {
-    path: 'emotion',
-    loadChildren: () => import('./feature/emotion/emotion-page.routes').then((r) => r.EMOTION_ROUTES),
+    path: 'main',
+    component: TabsLayoutComponent,
+    loadChildren: () => import('@layout/tabs-layout/tabs.routes').then((r) => r.TABS_ROUTES),
+  },
+  {
+    path: '**',
+    redirectTo: 'emotion',
   },
 ];
