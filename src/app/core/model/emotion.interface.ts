@@ -1,5 +1,5 @@
 export interface Emotion {
   name: string;
-  comment: string;
+  comment?: string;
   dateTime: Date;
 }

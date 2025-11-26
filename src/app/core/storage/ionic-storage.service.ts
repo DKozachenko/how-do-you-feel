@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
-import { from, Observable } from 'rxjs';
+import { catchError, from, Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -16,8 +16,8 @@ export class IonicStorageService {
     return from(this.storage.set(key, value));
   }
 
-  get<T>(key: string): Observable<T> {
-    return from(this.storage.get(key));
+  get<T>(key: string): Observable<T | null> {
+    return from(this.storage.get(key)).pipe(catchError(() => of(null)));
   }
 
   remove(key: string): Observable<void> {

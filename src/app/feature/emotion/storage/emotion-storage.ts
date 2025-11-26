@@ -10,14 +10,14 @@ import { EMOTION_STORAGE_KEY } from './emotion.storage-key';
 export class EmotionStorageService {
   private readonly storageService = inject(IonicStorageService);
 
-  getAll(): Observable<Emotion[]> {
+  getAll(): Observable<Emotion[] | null> {
     return this.storageService.get<Emotion[]>(EMOTION_STORAGE_KEY);
   }
 
   create(newEntity: Emotion): Observable<void> {
     return this.getAll().pipe(
       switchMap((allEntities) => {
-        const updatedEntities = [...allEntities, newEntity];
+        const updatedEntities = [...(allEntities ?? []), newEntity];
 
         return this.storageService.set<Emotion[]>(EMOTION_STORAGE_KEY, updatedEntities);
       }),
