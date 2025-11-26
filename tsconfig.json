@@ -16,6 +16,7 @@
     "module": "preserve",
     "baseUrl": ".",
     "paths": {
+      "@core/*": ["./src/app/core/*"],
       "@feature/*": ["./src/app/feature/*"],
       "@ui/*": ["./src/app/ui/*"]
     }
