@@ -4,10 +4,10 @@ export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'home',
+    redirectTo: 'emotion',
   },
   {
-    path: 'home',
-    loadChildren: () => import('./feature/home/home.routes').then((r) => r.HOME_ROUTES),
+    path: 'emotion',
+    loadChildren: () => import('./feature/emotion/emotion-page.routes').then((r) => r.EMOTION_ROUTES),
   },
 ];
