@@ -10,7 +10,7 @@
   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
   "files.eol": "\n",
   "stylelint.enable": true,
-  "stylelint.configFile": "./stylelint.config.js",
+  "stylelint.configFile": "./configs/stylelint/stylelint.config.js",
   "stylelint.validate": [
     "css",
     "scss"

@@ -1,11 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
+import { MainLayoutComponent } from '@layout/main-layout/main-layout';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
-  styleUrl: './app.scss',
-  imports: [IonApp, IonRouterOutlet],
+  imports: [MainLayoutComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {}

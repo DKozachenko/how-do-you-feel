@@ -1,0 +1,17 @@
+$button-size: 180px;
+$icon-size: 80px;
+
+.emotion {
+  height: 100%;
+  background-color: #000000;
+}
+
+.add-icon {
+  min-width: $button-size;
+  min-height: $button-size;
+
+  &__elem {
+    min-width: $icon-size;
+    min-height: $icon-size;
+  }
+}

@@ -1,0 +1,67 @@
+$border-width: 1px;
+$border-color: #ffffff;
+$animation-duration: 3s;
+
+.pulse-button {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 50%;
+
+  --padding-bottom: 0;
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-start: 0;
+  --border-color: #{$border-color};
+
+  background-color: transparent;
+  color: white;
+  border: 1px solid $border-color;
+
+  &__content {
+    padding: 5px;
+  }
+
+  &::before,
+  &::after,
+  .pulse-wave {
+    content: '';
+    position: absolute;
+    top: -$border-width;
+    left: -$border-width;
+    right: -$border-width;
+    bottom: -$border-width;
+    border: $border-width solid $border-color;
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &::before {
+    animation: pulse-border $animation-duration ease-out infinite;
+  }
+
+  &::after {
+    animation: pulse-border $animation-duration ease-out ($animation-duration / 2) infinite;
+  }
+
+  .pulse-wave {
+    animation: pulse-border $animation-duration ease-out $animation-duration infinite;
+  }
+}
+
+@keyframes pulse-border {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  33% {
+    opacity: 0.4;
+  }
+  66% {
+    opacity: 0.1;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
