@@ -1,22 +1,22 @@
 <ion-tabs>
   <ion-tab-bar slot="bottom">
-    <ion-tab-button tab="likes">
+    <ion-tab-button [tab]="LIKE_PATHS.Index">
       <ion-icon src="icons/heart-outline.svg" />
       Нравится
     </ion-tab-button>
-    <ion-tab-button tab="dislikes">
+    <ion-tab-button [tab]="DISLIKE_PATHS.Index">
       <ion-icon src="icons/heart-dislike-outline.svg" />
       Не нравится
     </ion-tab-button>
-    <ion-tab-button tab="emotion">
+    <ion-tab-button [tab]="EMOTION_PATHS.Index">
       <ion-icon src="icons/accessibility-outline.svg" />
       Эмоция
     </ion-tab-button>
-    <ion-tab-button tab="journal">
+    <ion-tab-button [tab]="JOURNAL_PATHS.Index">
       <ion-icon src="icons/journal-outline.svg" />
       Журнал
     </ion-tab-button>
-    <ion-tab-button tab="settings">
+    <ion-tab-button [tab]="SETTINGS_PATHS.Index">
       <ion-icon src="icons/settings-outline.svg" />
       Настройки
     </ion-tab-button>

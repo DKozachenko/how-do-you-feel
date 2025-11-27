@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
-  selector: 'app-likes-page',
-  templateUrl: './likes-page.html',
-  styleUrl: './likes-page.scss',
+  selector: 'app-dislike-page',
+  templateUrl: './dislike-page.html',
+  styleUrl: './dislike-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LikesPage {}
+export class DislikePage {}

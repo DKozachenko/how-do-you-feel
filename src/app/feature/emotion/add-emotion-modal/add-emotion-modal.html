@@ -11,9 +11,18 @@
 </ion-header>
 <ion-content class="ion-padding">
   <form [formGroup]="form">
-    <!-- TODO: подсказка для эмоций -->
     <ion-item>
-      <ion-input labelPlacement="floating" label="Название" formControlName="name" placeholder="Радость" />
+      <ion-input
+        class="ion-margin-end"
+        labelPlacement="floating"
+        label="Название"
+        formControlName="name"
+        placeholder="Радость"
+      />
+
+      <ion-button (click)="openEmotionsHintModal()">
+        <ion-icon slot="icon-only" size="large" src="icons/information-circle-outline.svg" />
+      </ion-button>
     </ion-item>
 
     <ion-item>
@@ -30,7 +39,8 @@
       expand="block"
       [disabled]="form.invalid"
       (click)="close(ModalRole.Confirm, form.value)"
-      >Сохранить</ion-button
     >
+      Сохранить
+    </ion-button>
   </form>
 </ion-content>
