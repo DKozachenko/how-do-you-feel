@@ -13,7 +13,9 @@ import {
   IonToolbar,
   ModalController,
 } from '@ionic/angular/standalone';
+import { from, switchMap } from 'rxjs';
 import { ModalRole } from '@core/model/modal-role.enum';
+import { EmotionsHintModal } from '../emotions-hint-modal/emotions-hint-modal';
 
 @Component({
   selector: 'app-add-emotion-modal',
@@ -35,7 +37,7 @@ import { ModalRole } from '@core/model/modal-role.enum';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddEmotionModal {
-  private readonly modalCtrl = inject(ModalController);
+  private readonly modalController = inject(ModalController);
 
   protected readonly ModalRole = ModalRole;
 
@@ -45,6 +47,17 @@ export class AddEmotionModal {
   });
 
   close(role: ModalRole, data?: unknown): void {
-    this.modalCtrl.dismiss(data, role);
+    this.modalController.dismiss(data, role);
+  }
+
+  openEmotionsHintModal(): void {
+    from(
+      this.modalController.create({
+        component: EmotionsHintModal,
+        cssClass: 'slider-modal',
+      }),
+    )
+      .pipe(switchMap((modal) => modal.present()))
+      .subscribe();
   }
 }
