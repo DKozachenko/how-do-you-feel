@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-export const enum EMOTION_PATHS {
+export enum EMOTION_PATHS {
   Index = 'emotion',
 }
 

@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-export const enum JOURNAL_PATHS {
+export enum JOURNAL_PATHS {
   Index = 'journal',
 }
 

@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-export const enum SETTINGS_PATHS {
+export enum SETTINGS_PATHS {
   Index = 'settings',
 }
 
