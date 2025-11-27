@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { IonContent, IonIcon, ModalController } from '@ionic/angular/standalone';
+import { IonContent, IonIcon, IonText, ModalController } from '@ionic/angular/standalone';
 import { forkJoin, from, of, switchMap } from 'rxjs';
 import { Emotion } from '@core/model/emotion.interface';
 import { ModalRole } from '@core/model/modal-role.enum';
@@ -11,7 +11,7 @@ import { EmotionStorageService } from '../storage/emotion-storage';
   selector: 'app-emotion-page',
   templateUrl: './emotion-page.html',
   styleUrl: './emotion-page.scss',
-  imports: [IonContent, PulseButtonComponent, IonIcon],
+  imports: [IonContent, PulseButtonComponent, IonIcon, IonText],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmotionPage {
