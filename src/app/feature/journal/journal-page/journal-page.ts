@@ -42,6 +42,14 @@ export class JournalPage implements OnInit {
   emotions = signal<Emotion[]>([]);
 
   ngOnInit(): void {
+    this.load();
+  }
+
+  remove(id: string): void {
+    this.emotionsStorageService.removeById(id).subscribe(() => this.load());
+  }
+
+  private load(): void {
     this.emotionsStorageService.getAll().subscribe((data) => this.emotions.set(data ?? []));
   }
 }
