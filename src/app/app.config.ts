@@ -18,7 +18,9 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideIonicAngular({}),
+    provideIonicAngular({
+      useSetInputAPI: true,
+    }),
     importProvidersFrom(IonicStorageModule.forRoot()),
     provideAppInitializer(init),
   ],

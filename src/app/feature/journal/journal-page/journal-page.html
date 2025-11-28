@@ -14,7 +14,7 @@
               {{ emotion.name }}
 
               <div class="actions">
-                <ion-button fill="outline" color="light">
+                <ion-button fill="outline" color="light" (click)="openEditEmotionModal(emotion)">
                   <ion-icon slot="icon-only" src="icons/eyedrop-outline.svg" />
                 </ion-button>
 

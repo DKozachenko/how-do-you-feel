@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import {
   IonButton,
   IonCard,
@@ -12,9 +12,14 @@ import {
   IonTitle,
   IonToolbar,
   IonIcon,
+  ModalController,
+  ViewWillEnter,
 } from '@ionic/angular/standalone';
+import { forkJoin, from, of, switchMap } from 'rxjs';
 import { EmotionStorageService } from '@core/emotions/emotions-storage';
 import { Emotion } from '@core/model/emotion.interface';
+import { ModalRole } from '@core/model/modal-role.enum';
+import { EditEmotionModal } from '../edit-emotion-modal/edit-emotion-modal';
 
 @Component({
   selector: 'app-journal-page',
@@ -37,16 +42,38 @@ import { Emotion } from '@core/model/emotion.interface';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class JournalPage implements OnInit {
+export class JournalPage implements ViewWillEnter {
+  private readonly modalController = inject(ModalController);
   private readonly emotionsStorageService = inject(EmotionStorageService);
   emotions = signal<Emotion[]>([]);
 
-  ngOnInit(): void {
+  ionViewWillEnter(): void {
     this.load();
   }
 
   remove(id: string): void {
     this.emotionsStorageService.removeById(id).subscribe(() => this.load());
+  }
+
+  openEditEmotionModal(emotion: Emotion): void {
+    from(
+      this.modalController.create({
+        component: EditEmotionModal,
+        componentProps: {
+          emotion,
+        },
+      }),
+    )
+      .pipe(
+        switchMap((modal) => forkJoin([from(modal.onWillDismiss<Omit<Emotion, 'id'>>()), modal.present()])),
+        switchMap(([{ data, role }]) => {
+          if (role === ModalRole.Confirm && data) {
+            return this.emotionsStorageService.updateById(emotion.id, data);
+          }
+          return of();
+        }),
+      )
+      .subscribe(() => this.load());
   }
 
   private load(): void {
