@@ -6,30 +6,42 @@
 
 <ion-content>
   <ion-list>
-    @for (emotion of emotions(); track emotion.id) {
-      <ion-item>
-        <ion-card class="card">
-          <ion-card-header>
-            <ion-card-title class="ion-display-flex ion-align-items-center ion-justify-content-between">
-              {{ emotion.name }}
+    @for (emotionEntry of emotionsMap() | sortByDates; track emotionEntry[0]) {
+      @let date = emotionEntry[0];
+      @let emotions = emotionEntry[1];
 
-              <div class="actions">
-                <ion-button fill="outline" color="light" (click)="openEditEmotionModal(emotion)">
-                  <ion-icon slot="icon-only" src="icons/eyedrop-outline.svg" />
-                </ion-button>
+      <ion-item-group>
+        <ion-item-divider>
+          <ion-label>{{ date }}</ion-label>
+        </ion-item-divider>
 
-                <ion-button color="danger" (click)="remove(emotion.id)">
-                  <ion-icon slot="icon-only" src="icons/trash-outline.svg" />
-                </ion-button>
-              </div>
-            </ion-card-title>
-          </ion-card-header>
+        <!-- TODO: время отображать -->
+        @for (emotion of emotions; track emotion.id) {
+          <ion-item>
+            <ion-card class="card">
+              <ion-card-header>
+                <ion-card-title class="ion-display-flex ion-align-items-center ion-justify-content-between">
+                  {{ emotion.name }}
 
-          <ion-card-content>
-            {{ emotion.comment }}
-          </ion-card-content>
-        </ion-card>
-      </ion-item>
+                  <div class="actions">
+                    <ion-button fill="outline" color="light" (click)="openEditEmotionModal(emotion)">
+                      <ion-icon slot="icon-only" src="icons/eyedrop-outline.svg" />
+                    </ion-button>
+
+                    <ion-button color="danger" (click)="remove(emotion.id)">
+                      <ion-icon slot="icon-only" src="icons/trash-outline.svg" />
+                    </ion-button>
+                  </div>
+                </ion-card-title>
+              </ion-card-header>
+
+              <ion-card-content>
+                {{ emotion.comment }}
+              </ion-card-content>
+            </ion-card>
+          </ion-item>
+        }
+      </ion-item-group>
     }
   </ion-list>
 </ion-content>

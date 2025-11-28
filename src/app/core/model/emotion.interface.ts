@@ -5,3 +5,5 @@ export interface Emotion extends BaseEntity {
   comment?: string;
   dateTime: Date;
 }
+
+// TODO: цвет мб
