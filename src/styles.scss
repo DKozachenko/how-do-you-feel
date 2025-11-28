@@ -50,6 +50,10 @@
   --ion-background-color-step-950: #f2f2f2;
 }
 
+.toolbar {
+  border-bottom: 1px solid var(--ion-background-color-step-800);
+}
+
 .slider-modal {
   --height: 60vh;
 

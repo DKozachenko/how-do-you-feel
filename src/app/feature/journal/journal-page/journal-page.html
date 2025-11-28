@@ -1,1 +1,35 @@
-journal
+<ion-header>
+  <ion-toolbar class="toolbar ion-text-center">
+    <ion-title>Журнал</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    @for (emotion of emotions(); track emotion.id) {
+      <ion-item>
+        <ion-card class="card">
+          <ion-card-header>
+            <ion-card-title class="ion-display-flex ion-align-items-center ion-justify-content-between">
+              {{ emotion.name }}
+
+              <div class="actions">
+                <ion-button fill="outline" color="light">
+                  <ion-icon slot="icon-only" src="icons/eyedrop-outline.svg" />
+                </ion-button>
+
+                <ion-button color="danger">
+                  <ion-icon slot="icon-only" src="icons/trash-outline.svg" />
+                </ion-button>
+              </div>
+            </ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content>
+            {{ emotion.comment }}
+          </ion-card-content>
+        </ion-card>
+      </ion-item>
+    }
+  </ion-list>
+</ion-content>

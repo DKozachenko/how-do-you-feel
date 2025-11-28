@@ -34,12 +34,7 @@
       />
     </ion-item>
 
-    <ion-button
-      class="ion-margin-top"
-      expand="block"
-      [disabled]="form.invalid"
-      (click)="close(ModalRole.Confirm, form.value)"
-    >
+    <ion-button class="ion-margin-top" expand="block" [disabled]="form.invalid" (click)="confirmCreation()">
       Сохранить
     </ion-button>
   </form>

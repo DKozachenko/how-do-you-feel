@@ -14,6 +14,7 @@ import {
   ModalController,
 } from '@ionic/angular/standalone';
 import { from, switchMap } from 'rxjs';
+import { Emotion } from '@core/model/emotion.interface';
 import { ModalRole } from '@core/model/modal-role.enum';
 import { EmotionsHintModal } from '../emotions-hint-modal/emotions-hint-modal';
 
@@ -46,7 +47,7 @@ export class AddEmotionModal {
     comment: new FormControl<string>(''),
   });
 
-  close(role: ModalRole, data?: unknown): void {
+  close(role: ModalRole, data?: Omit<Emotion, 'id'>): void {
     this.modalController.dismiss(data, role);
   }
 
@@ -59,5 +60,15 @@ export class AddEmotionModal {
     )
       .pipe(switchMap((modal) => modal.present()))
       .subscribe();
+  }
+
+  confirmCreation(): void {
+    const entity: Omit<Emotion, 'id'> = {
+      name: this.form.value.name ?? '',
+      comment: this.form.value.comment || undefined,
+      dateTime: new Date(),
+    };
+
+    this.close(ModalRole.Confirm, entity);
   }
 }

@@ -25,7 +25,7 @@ export class EmotionPage {
       }),
     )
       .pipe(
-        switchMap((modal) => forkJoin([from(modal.onWillDismiss<Emotion>()), modal.present()])),
+        switchMap((modal) => forkJoin([from(modal.onWillDismiss<Omit<Emotion, 'id'>>()), modal.present()])),
         switchMap(([{ data, role }]) => {
           if (role === ModalRole.Confirm && data) {
             return this.emotionsStorageService.create(data);
