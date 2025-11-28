@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   IonButton,
   IonButtons,
   IonContent,
+  IonDatetime,
   IonHeader,
   IonIcon,
   IonInput,
@@ -13,15 +14,13 @@ import {
   IonToolbar,
   ModalController,
 } from '@ionic/angular/standalone';
-import { from, switchMap } from 'rxjs';
 import { Emotion } from '@core/model/emotion.interface';
 import { ModalRole } from '@core/model/modal-role.enum';
-import { EmotionsHintModal } from '../emotions-hint-modal/emotions-hint-modal';
 
 @Component({
-  selector: 'app-add-emotion-modal',
-  templateUrl: './add-emotion-modal.html',
-  styleUrl: './add-emotion-modal.scss',
+  selector: 'app-edit-emotion-modal',
+  templateUrl: './edit-emotion-modal.html',
+  styleUrl: './edit-emotion-modal.scss',
   imports: [
     IonContent,
     IonHeader,
@@ -33,40 +32,40 @@ import { EmotionsHintModal } from '../emotions-hint-modal/emotions-hint-modal';
     IonItem,
     IonInput,
     IonTextarea,
+    IonDatetime,
     ReactiveFormsModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AddEmotionModal {
+export class EditEmotionModal implements OnInit {
   private readonly modalController = inject(ModalController);
 
   protected readonly ModalRole = ModalRole;
 
+  emotion = input.required<Emotion>();
+
   form = new FormGroup({
     name: new FormControl<string>('', [Validators.required]),
     comment: new FormControl<string>(''),
+    dateTime: new FormControl<string>('', [Validators.required]),
   });
+
+  ngOnInit(): void {
+    this.form.patchValue({
+      ...this.emotion(),
+      dateTime: this.emotion().dateTime.toISOString(),
+    });
+  }
 
   close(role: ModalRole, data?: Omit<Emotion, 'id'>): void {
     this.modalController.dismiss(data, role);
-  }
-
-  openEmotionsHintModal(): void {
-    from(
-      this.modalController.create({
-        component: EmotionsHintModal,
-        cssClass: 'slider-modal',
-      }),
-    )
-      .pipe(switchMap((modal) => modal.present()))
-      .subscribe();
   }
 
   confirmCreation(): void {
     const entity: Omit<Emotion, 'id'> = {
       name: this.form.value.name ?? '',
       comment: this.form.value.comment || undefined,
-      dateTime: new Date(),
+      dateTime: new Date(this.form.value.dateTime ?? ''),
     };
 
     this.close(ModalRole.Confirm, entity);

@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { IonContent, IonIcon, IonText, ModalController } from '@ionic/angular/standalone';
 import { forkJoin, from, of, switchMap } from 'rxjs';
+import { EmotionStorageService } from '@core/emotions/emotions-storage';
 import { Emotion } from '@core/model/emotion.interface';
 import { ModalRole } from '@core/model/modal-role.enum';
 import { PulseButtonComponent } from '@ui/pulse-button/pulse-button';
 import { AddEmotionModal } from '../add-emotion-modal/add-emotion-modal';
-import { EmotionStorageService } from '../storage/emotion-storage';
 
 @Component({
   selector: 'app-emotion-page',
@@ -25,7 +25,7 @@ export class EmotionPage {
       }),
     )
       .pipe(
-        switchMap((modal) => forkJoin([from(modal.onWillDismiss<Emotion>()), modal.present()])),
+        switchMap((modal) => forkJoin([from(modal.onWillDismiss<Omit<Emotion, 'id'>>()), modal.present()])),
         switchMap(([{ data, role }]) => {
           if (role === ModalRole.Confirm && data) {
             return this.emotionsStorageService.create(data);
