@@ -18,6 +18,8 @@ import { Emotion } from '@core/model/emotion.interface';
 import { ModalRole } from '@core/model/modal-role.enum';
 import { EditEmotionModal } from '../edit-emotion-modal/edit-emotion-modal';
 import { EmotionCard } from '../emotion-card/emotion-card';
+import { FilterByRangePipe } from '../filter-by-range/filter-by-range.pipe';
+import { RangeFilter } from '../range-filter/range-filter';
 import { SortByDatesPipe } from '../sort-by-dates/sort-by-dates.pipe';
 
 @Component({
@@ -35,7 +37,9 @@ import { SortByDatesPipe } from '../sort-by-dates/sort-by-dates.pipe';
     IonItemGroup,
     IonItemDivider,
     SortByDatesPipe,
+    FilterByRangePipe,
     EmotionCard,
+    RangeFilter,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -43,6 +47,8 @@ export class JournalPage implements ViewWillEnter {
   private readonly modalController = inject(ModalController);
   private readonly emotionsStorageService = inject(EmotionStorageService);
   emotionsMap = signal(new Map<string, Emotion[]>());
+
+  rangeFilters = signal<[Date, Date] | null>(null);
 
   ionViewWillEnter(): void {
     this.load();

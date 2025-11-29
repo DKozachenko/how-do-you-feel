@@ -1,0 +1,52 @@
+<form
+  class="ion-display-flex ion-align-items-center ion-justify-content-evenly ion-padding-start ion-padding-end"
+  [formGroup]="form"
+>
+  <ion-datetime-button datetime="date-from" />
+
+  <ion-datetime-button datetime="date-to" />
+
+  <ion-button [disabled]="form.invalid" (click)="emitApply()">
+    <ion-icon slot="icon-only" src="icons/enter-outline.svg" />
+  </ion-button>
+
+  <ion-button fill="outline" (click)="setInitialValues()">
+    <ion-icon slot="icon-only" src="icons/reload-outline.svg" />
+  </ion-button>
+
+  <ion-modal [keepContentsMounted]="true">
+    <ng-template>
+      <ion-datetime
+        id="date-from"
+        presentation="date"
+        locale="ru-RU"
+        formControlName="from"
+        [formatOptions]="{
+          date: {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+          },
+        }"
+      />
+    </ng-template>
+  </ion-modal>
+
+  <ion-modal [keepContentsMounted]="true">
+    <ng-template>
+      <ion-datetime
+        id="date-to"
+        formControlName="to"
+        locale="ru-RU"
+        presentation="date"
+        [formatOptions]="{
+          date: {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+          },
+        }"
+      />
+    </ng-template>
+  </ion-modal>
+</form>
