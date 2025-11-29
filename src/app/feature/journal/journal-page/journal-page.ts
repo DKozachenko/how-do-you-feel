@@ -1,17 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import {
-  IonButton,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
   IonContent,
   IonHeader,
   IonItem,
   IonList,
   IonTitle,
   IonToolbar,
-  IonIcon,
   ModalController,
   ViewWillEnter,
   IonLabel,
@@ -23,6 +17,7 @@ import { EmotionStorageService } from '@core/emotions/emotions-storage';
 import { Emotion } from '@core/model/emotion.interface';
 import { ModalRole } from '@core/model/modal-role.enum';
 import { EditEmotionModal } from '../edit-emotion-modal/edit-emotion-modal';
+import { EmotionCard } from '../emotion-card/emotion-card';
 import { SortByDatesPipe } from '../sort-by-dates/sort-by-dates.pipe';
 
 @Component({
@@ -36,17 +31,11 @@ import { SortByDatesPipe } from '../sort-by-dates/sort-by-dates.pipe';
     IonToolbar,
     IonList,
     IonItem,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardTitle,
-    IonButton,
-    IonButton,
-    IonIcon,
     IonLabel,
     IonItemGroup,
     IonItemDivider,
     SortByDatesPipe,
+    EmotionCard,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

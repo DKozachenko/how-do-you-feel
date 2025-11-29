@@ -45,6 +45,7 @@ export class AddEmotionModal {
   form = new FormGroup({
     name: new FormControl<string>('', [Validators.required]),
     comment: new FormControl<string>(''),
+    color: new FormControl<string>('', [Validators.required]),
   });
 
   close(role: ModalRole, data?: Omit<Emotion, 'id'>): void {
@@ -66,6 +67,7 @@ export class AddEmotionModal {
     const entity: Omit<Emotion, 'id'> = {
       name: this.form.value.name ?? '',
       comment: this.form.value.comment || undefined,
+      color: this.form.value.color ?? '',
       dateTime: new Date(),
     };
 

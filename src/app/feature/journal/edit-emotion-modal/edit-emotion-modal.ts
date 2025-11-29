@@ -47,6 +47,7 @@ export class EditEmotionModal implements OnInit {
   form = new FormGroup({
     name: new FormControl<string>('', [Validators.required]),
     comment: new FormControl<string>(''),
+    color: new FormControl<string>(''),
     dateTime: new FormControl<string>('', [Validators.required]),
   });
 
@@ -65,6 +66,7 @@ export class EditEmotionModal implements OnInit {
     const entity: Omit<Emotion, 'id'> = {
       name: this.form.value.name ?? '',
       comment: this.form.value.comment || undefined,
+      color: this.form.value.color ?? '',
       dateTime: new Date(this.form.value.dateTime ?? ''),
     };
 

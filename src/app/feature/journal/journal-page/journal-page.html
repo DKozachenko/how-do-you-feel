@@ -15,30 +15,13 @@
           <ion-label>{{ date }}</ion-label>
         </ion-item-divider>
 
-        <!-- TODO: время отображать -->
         @for (emotion of emotions; track emotion.id) {
           <ion-item>
-            <ion-card class="card">
-              <ion-card-header>
-                <ion-card-title class="ion-display-flex ion-align-items-center ion-justify-content-between">
-                  {{ emotion.name }}
-
-                  <div class="actions">
-                    <ion-button fill="outline" color="light" (click)="openEditEmotionModal(emotion)">
-                      <ion-icon slot="icon-only" src="icons/eyedrop-outline.svg" />
-                    </ion-button>
-
-                    <ion-button color="danger" (click)="remove(emotion.id)">
-                      <ion-icon slot="icon-only" src="icons/trash-outline.svg" />
-                    </ion-button>
-                  </div>
-                </ion-card-title>
-              </ion-card-header>
-
-              <ion-card-content>
-                {{ emotion.comment }}
-              </ion-card-content>
-            </ion-card>
+            <app-emotion-card
+              [emotion]="emotion"
+              (edit)="openEditEmotionModal(emotion)"
+              (remove)="remove(emotion.id)"
+            />
           </ion-item>
         }
       </ion-item-group>

@@ -1,0 +1,27 @@
+<ion-card class="card">
+  <ion-card-header>
+    <ion-card-title class="ion-display-flex ion-align-items-center ion-justify-content-between">
+      <div class="ion-display-flex ion-align-items-center">
+        <span>{{ emotion().name }}</span>
+
+        <div class="color" [style.backgroundColor]="emotion().color"></div>
+      </div>
+
+      <div class="ion-display-flex ion-align-items-center">
+        <ion-badge class="ion-margin-end" color="light">{{ time() }}</ion-badge>
+
+        <ion-button fill="outline" color="light" (click)="edit.emit(emotion())">
+          <ion-icon slot="icon-only" src="icons/eyedrop-outline.svg" />
+        </ion-button>
+
+        <ion-button color="danger" (click)="remove.emit(emotion().id)">
+          <ion-icon slot="icon-only" src="icons/trash-outline.svg" />
+        </ion-button>
+      </div>
+    </ion-card-title>
+  </ion-card-header>
+
+  <ion-card-content class="ion-display-flex ion-flex-column">
+    {{ emotion().comment }}
+  </ion-card-content>
+</ion-card>
