@@ -19,6 +19,7 @@
       "@core/*": ["./src/app/core/*"],
       "@layout/*": ["./src/app/layout/*"],
       "@feature/*": ["./src/app/feature/*"],
+      "@pattern/*": ["./src/app/pattern/*"],
       "@ui/*": ["./src/app/ui/*"]
     }
   },

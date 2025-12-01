@@ -16,6 +16,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: EMOTION_PATHS.Index,
+    redirectTo: `${TABS_LAYOUT_PATHS.Index}/${EMOTION_PATHS.Index}`,
   },
 ];

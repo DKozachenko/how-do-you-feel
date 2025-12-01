@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit, output } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonButton, IonDatetime, IonDatetimeButton, IonIcon, IonModal } from '@ionic/angular/standalone';
+import { startOfDay } from 'date-fns';
 
 const INITIAL_FROM = new Date(new Date().setMonth(new Date().getMonth() - 1));
 const INITIAL_TO = new Date();
@@ -41,11 +42,6 @@ export class RangeFilter implements OnInit {
   }
 
   private getDateWithoutTime(dateTime: string): Date {
-    const date = new Date(dateTime);
-    const dateYear = date.getFullYear();
-    const dateMonth = date.getMonth();
-    const dateDay = date.getDate();
-
-    return new Date(dateYear, dateMonth, dateDay);
+    return startOfDay(new Date(dateTime));
   }
 }

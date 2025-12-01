@@ -12,9 +12,11 @@ import {
   IonItemGroup,
   IonItemDivider,
 } from '@ionic/angular/standalone';
+import { format } from 'date-fns';
 import { forkJoin, from, map, of, switchMap } from 'rxjs';
 import { EmotionStorageService } from '@core/emotions/emotions-storage';
 import { Emotion } from '@core/model/emotion.interface';
+import { MAIN_DATE_FORMAT } from '@core/model/main-date-format.constant';
 import { ModalRole } from '@core/model/modal-role.enum';
 import { EditEmotionModal } from '../edit-emotion-modal/edit-emotion-modal';
 import { EmotionCard } from '../emotion-card/emotion-card';
@@ -46,6 +48,7 @@ import { SortByDatesPipe } from '../sort-by-dates/sort-by-dates.pipe';
 export class JournalPage implements ViewWillEnter {
   private readonly modalController = inject(ModalController);
   private readonly emotionsStorageService = inject(EmotionStorageService);
+
   emotionsMap = signal(new Map<string, Emotion[]>());
 
   rangeFilters = signal<[Date, Date] | null>(null);
@@ -88,7 +91,7 @@ export class JournalPage implements ViewWillEnter {
 
   private groupEmotionsByDate(emotions: Emotion[]): Map<string, Emotion[]> {
     return emotions.reduce((acc, emotion) => {
-      const dateWithoutTime = `${emotion.dateTime.getDate()}.${emotion.dateTime.getMonth() + 1}.${emotion.dateTime.getFullYear()}`;
+      const dateWithoutTime = format(emotion.dateTime, MAIN_DATE_FORMAT);
 
       if (!acc.has(dateWithoutTime)) {
         acc.set(dateWithoutTime, []);
