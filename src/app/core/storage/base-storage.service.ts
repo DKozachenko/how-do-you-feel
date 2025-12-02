@@ -11,9 +11,14 @@ import { IonicStorageService } from './ionic-storage.service';
 export abstract class BaseStorageService<T extends BaseEntity> {
   private readonly storageService = inject(IonicStorageService);
   private storageKey = '';
+  private placeToInsertNewEntity: 'begin' | 'end' = 'end';
 
   protected setStorageKey(key: string): void {
     this.storageKey = key;
+  }
+
+  protected setPlaceToInsertNewEntity(place: 'begin' | 'end'): void {
+    this.placeToInsertNewEntity = place;
   }
 
   getAll(): Observable<T[] | null> {
@@ -32,7 +37,12 @@ export abstract class BaseStorageService<T extends BaseEntity> {
 
     return this.getAll().pipe(
       switchMap((allEntities) => {
-        const updatedEntities = [...(allEntities ?? []), entityForSaving];
+        let updatedEntities: T[] = [];
+        if (this.placeToInsertNewEntity === 'begin') {
+          updatedEntities = [entityForSaving, ...(allEntities ?? [])];
+        } else {
+          updatedEntities = [...(allEntities ?? []), entityForSaving];
+        }
 
         return this.storageService.set<T[]>(this.storageKey, updatedEntities);
       }),

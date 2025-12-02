@@ -8,5 +8,6 @@ export class LikesStorageService extends BaseStorageService<Action> {
   constructor() {
     super();
     this.setStorageKey(LIKES_STORAGE_KEY);
+    this.setPlaceToInsertNewEntity('begin');
   }
 }

@@ -13,10 +13,12 @@ import {
   IonToolbar,
   ModalController,
 } from '@ionic/angular/standalone';
-import { format } from 'date-fns';
+import { format, parse } from 'date-fns';
 import { Action } from '@core/model/action.interface';
 import { MAIN_DATE_FORMAT } from '@core/model/main-date-format.constant';
 import { ModalRole } from '@core/model/modal-role.enum';
+import { dateFormatValidator } from '@pattern/date-format/date-format.validator';
+import { futureDateValidator } from '@pattern/date-format/future-date.validator';
 
 @Component({
   selector: 'app-edit-action-modal',
@@ -48,7 +50,7 @@ export class EditActionModal implements OnInit {
     name: new FormControl<string>('', [Validators.required]),
     rate: new FormControl<number>(1, [Validators.required, Validators.min(0), Validators.max(10)]),
     comment: new FormControl<string>(''),
-    history: new FormArray<FormControl<string>>([], [Validators.required]),
+    history: new FormArray<FormControl<string>>([]),
   });
 
   get historyFormArray(): FormArray<FormControl<string>> {
@@ -56,26 +58,34 @@ export class EditActionModal implements OnInit {
   }
 
   ngOnInit(): void {
-    this.form.patchValue({
-      name: this.action().name,
-      rate: this.action().rate,
-      comment: this.action().comment,
-    });
+    if (this.action()) {
+      this.form.patchValue({
+        name: this.action().name,
+        rate: this.action().rate,
+        comment: this.action().comment,
+      });
 
-    this.action().history.forEach((date) => {
-      this.historyFormArray.push(
-        <FormControl<string>>new FormControl(format(date, MAIN_DATE_FORMAT), [Validators.required]),
-      );
-    });
+      this.form.controls.history.addValidators(Validators.required);
+
+      this.action().history.forEach((date) => {
+        this.addDateControl(format(date, MAIN_DATE_FORMAT));
+      });
+    }
   }
 
   close(role: ModalRole, data?: Omit<Action, 'id'>): void {
     this.modalController.dismiss(data, role);
   }
 
-  addDateControl(): void {
+  addDateControl(initialValue?: string): void {
     this.historyFormArray.push(
-      <FormControl<string>>new FormControl<string>(new Date().toISOString(), [Validators.required]),
+      <FormControl<string>>(
+        new FormControl<string>(initialValue ?? format(new Date(), MAIN_DATE_FORMAT), [
+          Validators.required,
+          dateFormatValidator(),
+          futureDateValidator(),
+        ])
+      ),
     );
   }
 
@@ -84,14 +94,19 @@ export class EditActionModal implements OnInit {
   }
 
   confirmCreation(): void {
-    console.warn('this.form', this.form.value);
-    // const entity: Omit<Action, 'id'> = {
-    //   name: this.form.value.name ?? '',
-    //   rate: this.form.value.rate ?? 0,
-    //   comment: this.form.value.comment || undefined,
-    //   history: [new Date()],
-    // };
+    const entityWithoutHistory: Omit<Action, 'id' | 'history'> = {
+      name: this.form.value.name ?? '',
+      rate: this.form.value.rate ?? 0,
+      comment: this.form.value.comment || undefined,
+    };
 
-    // this.close(ModalRole.Confirm, entity);
+    const entity: Omit<Action, 'id'> = {
+      ...entityWithoutHistory,
+      history: this.action()
+        ? (this.form.value.history ?? []).map((dateStr) => parse(dateStr, MAIN_DATE_FORMAT, new Date()))
+        : [new Date()],
+    };
+
+    this.close(ModalRole.Confirm, entity);
   }
 }

@@ -47,7 +47,6 @@ export class LikePage implements ViewWillEnter {
         switchMap((modal) => forkJoin([from(modal.onWillDismiss<Omit<Action, 'id'>>()), modal.present()])),
         switchMap(([{ data, role }]) => {
           if (role === ModalRole.Confirm && data) {
-            console.warn('data', data);
             if (action) {
               return this.likesStorageService.updateById(action.id, data);
             } else {

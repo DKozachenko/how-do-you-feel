@@ -31,11 +31,25 @@
       />
     </ion-item>
 
-    <ion-item formArrayName="history">
-      @for (historyDateControl of historyFormArray.controls; track $index) {
-        <ion-input type="text" placeholder="Сегодня" [formControl]="historyDateControl" />
-      }
-    </ion-item>
+    @if (action()) {
+      <ion-item formArrayName="history">
+        <div class="history-wrap">
+          @for (historyDateControl of historyFormArray.controls; track $index) {
+            <div class="history-input">
+              <ion-input class="date-input" type="text" [formControl]="historyDateControl" />
+
+              <ion-button (click)="removeDateControl($index)">
+                <ion-icon slot="icon-only" size="small" src="icons/remove-circle.svg" />
+              </ion-button>
+            </div>
+          }
+
+          <ion-button (click)="addDateControl()">
+            <ion-icon slot="icon-only" size="large" src="icons/add-circle.svg" />
+          </ion-button>
+        </div>
+      </ion-item>
+    }
 
     <ion-button class="ion-margin-top" expand="block" [disabled]="form.invalid" (click)="confirmCreation()">
       Сохранить

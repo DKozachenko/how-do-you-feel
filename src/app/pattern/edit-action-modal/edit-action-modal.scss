@@ -1,3 +1,31 @@
 .rate-label {
   min-width: 15%;
 }
+
+.date-input {
+  --color: var(--ion-text-color);
+
+  max-width: 100px;
+  text-align: center;
+  min-height: auto;
+}
+
+.history {
+  &-wrap {
+    display: flex;
+    flex-wrap: wrap;
+
+    padding: 10px 0 4px;
+    gap: 8px;
+    align-items: center;
+  }
+
+  &-input {
+    background-color: var(--ion-background-color-step-250);
+    border-radius: 18px;
+    padding: 0 10px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+}
