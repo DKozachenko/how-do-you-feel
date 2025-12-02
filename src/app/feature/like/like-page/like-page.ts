@@ -12,8 +12,8 @@ import {
 import { forkJoin, from, of, switchMap } from 'rxjs';
 import { Action } from '@core/model/action.interface';
 import { ModalRole } from '@core/model/modal-role.enum';
-import { ActionCard } from '@pattern/action-card/action-card';
-import { EditActionModal } from '@pattern/edit-action-modal/edit-action-modal';
+import { ActionCard } from '@pattern/action/action-card/action-card';
+import { EditActionModal } from '@pattern/action/edit-action-modal/edit-action-modal';
 import { LikesStorageService } from '../storage/likes-storage';
 
 @Component({

@@ -11,12 +11,24 @@ import {
   IonText,
 } from '@ionic/angular/standalone';
 import { Action } from '@core/model/action.interface';
+import { SortDatesPipe } from '../sort-dates/sort-dates.pipe';
 
 @Component({
   selector: 'app-action-card',
   templateUrl: './action-card.html',
   styleUrl: './action-card.scss',
-  imports: [IonCard, IonCardHeader, IonCardContent, IonButton, IonIcon, IonCardTitle, IonBadge, DatePipe, IonText],
+  imports: [
+    IonCard,
+    IonCardHeader,
+    IonCardContent,
+    IonButton,
+    IonIcon,
+    IonCardTitle,
+    IonBadge,
+    DatePipe,
+    IonText,
+    SortDatesPipe,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ActionCard {

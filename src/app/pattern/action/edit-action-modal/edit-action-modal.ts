@@ -17,8 +17,8 @@ import { format, parse } from 'date-fns';
 import { Action } from '@core/model/action.interface';
 import { MAIN_DATE_FORMAT } from '@core/model/main-date-format.constant';
 import { ModalRole } from '@core/model/modal-role.enum';
-import { dateFormatValidator } from '@pattern/date-format/date-format.validator';
-import { futureDateValidator } from '@pattern/date-format/future-date.validator';
+import { dateFormatValidator } from '@pattern/action/date-format/date-format.validator';
+import { futureDateValidator } from '@pattern/action/date-format/future-date.validator';
 
 @Component({
   selector: 'app-edit-action-modal',
