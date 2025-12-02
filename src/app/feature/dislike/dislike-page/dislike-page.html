@@ -1,1 +1,17 @@
-dislike
+<ion-header>
+  <ion-toolbar class="toolbar ion-text-center">
+    <ion-title>НЕ Нравится</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-button class="ion-padding-start ion-padding-end" expand="full" (click)="openEditActionModal()">
+    Добавить
+  </ion-button>
+
+  <ion-list class="ion-padding-top">
+    @for (action of dislikes(); track action.id) {
+      <app-action-card [action]="action" (edit)="openEditActionModal(action)" (remove)="remove($event)" />
+    }
+  </ion-list>
+</ion-content>

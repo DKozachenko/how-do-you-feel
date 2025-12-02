@@ -7,6 +7,6 @@ export enum DISLIKE_PATHS {
 export const DISLIKE_ROUTES: Routes = [
   {
     path: '',
-    loadComponent: () => import('./dislike-page/dislike-page').then((m) => m.DislikePage),
+    loadComponent: () => import('./dislike-page/dislike-page').then((m) => m.LikePage),
   },
 ];
