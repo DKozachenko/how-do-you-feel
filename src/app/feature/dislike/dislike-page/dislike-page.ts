@@ -8,6 +8,7 @@ import {
   IonButton,
   ViewWillEnter,
   ModalController,
+  IonText,
 } from '@ionic/angular/standalone';
 import { forkJoin, from, of, switchMap } from 'rxjs';
 import { Action } from '@core/model/action.interface';
@@ -20,7 +21,7 @@ import { DisikesStorageService } from '../storage/dislikes-storage';
   selector: 'app-dislike-page',
   templateUrl: './dislike-page.html',
   styleUrl: './dislike-page.scss',
-  imports: [IonHeader, IonContent, IonList, IonToolbar, IonTitle, IonButton, ActionCard],
+  imports: [IonHeader, IonContent, IonList, IonToolbar, IonTitle, IonButton, IonText, ActionCard],
   providers: [DisikesStorageService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
