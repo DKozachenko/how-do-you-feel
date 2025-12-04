@@ -63,7 +63,12 @@ export const boundariesEslintConfig: (Linter.Config & { extends: Config[] })[] =
           alwaysTryTypes: true,
         },
       },
-      'boundaries/ignore': ['**/*-eslint.config.ts', 'common-prettier-rules.ts', 'eslint.config.ts'],
+      'boundaries/ignore': [
+        '**/*-eslint.config.ts',
+        'common-prettier-rules.ts',
+        'eslint.config.ts',
+        'capacitor.config.ts',
+      ],
       'boundaries/dependency-nodes': ['import', 'dynamic-import'],
       'boundaries/elements': [
         {

@@ -41,7 +41,7 @@ $animation-duration: 3s;
   }
 
   &::after {
-    animation: pulse-border $animation-duration ease-out ($animation-duration / 2) infinite;
+    animation: pulse-border $animation-duration ease-out calc($animation-duration / 2) infinite;
   }
 
   .pulse-wave {
