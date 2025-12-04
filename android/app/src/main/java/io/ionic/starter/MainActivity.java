@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package com.dkozachenko.how_do_you_feel;
 
 import com.getcapacitor.BridgeActivity;
 
