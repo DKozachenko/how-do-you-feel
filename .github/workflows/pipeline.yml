@@ -1,5 +1,8 @@
 name: How Do You Feel
 
+permissions:
+  contents: write
+
 on:
   workflow_dispatch:
   pull_request:
@@ -11,9 +14,13 @@ on:
 env:
   NODE_MODULES_PATH: "./node_modules"
   JDK_VERSION: 21
-  RELEASE_APK_PATH: ./android/app/build/outputs/apk/release
-  UNSIGNED_RELEASE_APK_FILENAME: app-release-unsigned.apk
-  SIGNED_RELEASE_APK_FILENAME: how-do-you-feel-release.apk
+  RELEASE_APK_PATH: "./android/app/build/outputs/apk/release"
+  UNSIGNED_RELEASE_APK_FILENAME: "app-release-unsigned.apk"
+  SIGNED_RELEASE_APK_FILENAME: "how-do-you-feel-release.apk"
+
+  DOWNLOAD_ARTEFACT_PATH: "./artifacts/apk"
+  DOWNLOAD_ARTEFACT_NAME: "Release apk"
+  RELEASE_ARCHIVE_NAME: "how-do-you-feel.tar.gz"
 
 jobs:
   create-cache-key:
@@ -142,19 +149,59 @@ jobs:
     - name: Build apk file
       working-directory: ./android
       run: ./gradlew assembleRelease
+    - name: Get short SHA
+      uses: benjlevesque/short-sha@v3.0
+      id: short-sha
     - name: Sign up apk file
       uses: ./.github/actions/sign-up-apk
       with:
         apk-path: ${{ env.RELEASE_APK_PATH }}
         apk-unsigned-filename: ${{ env.UNSIGNED_RELEASE_APK_FILENAME }}
-        apk-signed-filename: ${{ env.SIGNED_RELEASE_APK_FILENAME }}
+        apk-signed-filename: "how-do-you-feel.${{ steps.short-sha.outputs.sha }}.apk"
         store-password: ${{ secrets.STORE_PASSWORD }}
-    - name: Get short SHA
-      uses: benjlevesque/short-sha@v3.0
-      id: short-sha
     - name: Create artifact with apk
       uses: actions/upload-artifact@v4
       with:
-        name: "${{ steps.short-sha.outputs.sha }}-commit apk"
-        path: ${{ env.RELEASE_APK_PATH }}/${{ env.SIGNED_RELEASE_APK_FILENAME }}
+        name: ${{ env.DOWNLOAD_ARTEFACT_NAME }}
+        path: "${{ env.RELEASE_APK_PATH }}/how-do-you-feel.${{ steps.short-sha.outputs.sha }}.apk"
+        retention-days: 7
+
+  build-release-version:
+    if: github.event_name == 'push' && github.ref_name == 'develop'
+    needs: [build-apk]
+    name: Build version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.create-release-version.outputs.VERSION }}
+    steps:
+      - name: Get repository code
+        uses: actions/checkout@v4
+      - name: Save package.json version
+        id: create-release-version
+        # Обрезаем версию по бокам на один символ, тк npm pkg get version возвращает строку
+        run: VERSION_STR=$(npm pkg get version) && echo "VERSION=${VERSION_STR:1:-1}" >> $GITHUB_OUTPUT
+
+  create-release:
+    if: github.event_name == 'push' && github.ref_name == 'develop'
+    needs: [build-release-version]
+    runs-on: ubuntu-latest
+    name: Create Release
+    steps:
+      - name: Download APK artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.DOWNLOAD_ARTEFACT_NAME }}
+          path: ${{ env.DOWNLOAD_ARTEFACT_PATH }}
+      - name: Make archive
+        run: tar -czvf ${{ env.RELEASE_ARCHIVE_NAME }} -C ${{ env.DOWNLOAD_ARTEFACT_PATH }} .
+      - name: Make Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.build-release-version.outputs.version }}
+          name: Release ${{ needs.build-release-version.outputs.version }}
+          body_path: ./README.md
+          files: ${{ env.RELEASE_ARCHIVE_NAME }}
+          draft: false
+          prerelease: false
+
 

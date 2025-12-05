@@ -1,8 +1,8 @@
 import { DISLIKE_PATHS } from '@feature/dislike/dislike.routes';
 import { EMOTION_PATHS } from '@feature/emotion/emotion.routes';
+import { INFO_PATHS } from '@feature/info/info.routes';
 import { JOURNAL_PATHS } from '@feature/journal/journal.routes';
 import { LIKE_PATHS } from '@feature/like/like.routes';
-import { SETTINGS_PATHS } from '@feature/settings/settings.routes';
 
 export const enum TABS_LAYOUT_PATHS {
   Index = 'main',
@@ -26,7 +26,7 @@ export const TABS_ROUTES = [
     loadChildren: () => import('@feature/journal/journal.routes').then((r) => r.JOURNAL_ROUTES),
   },
   {
-    path: SETTINGS_PATHS.Index,
-    loadChildren: () => import('@feature/settings/settings.routes').then((r) => r.SETTINGS_ROUTES),
+    path: INFO_PATHS.Index,
+    loadChildren: () => import('@feature/info/info.routes').then((r) => r.INFO_ROUTES),
   },
 ];
