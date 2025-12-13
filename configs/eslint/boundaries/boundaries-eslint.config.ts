@@ -53,6 +53,10 @@ export const boundariesEslintConfig: (Linter.Config & { extends: Config[] })[] =
                 ['feature-routes', { feature: '!${from.feature}' }],
               ],
             },
+            {
+              from: ['test-files'],
+              allow: ['env', 'core', 'ui', 'pattern', 'feature'],
+            },
           ],
         },
       ],
@@ -111,6 +115,11 @@ export const boundariesEslintConfig: (Linter.Config & { extends: Config[] })[] =
           type: 'feature',
           pattern: 'feature/*',
           capture: ['feature'],
+        },
+        {
+          type: 'test-files',
+          mode: 'file',
+          pattern: '*.spec.ts',
         },
       ],
     },
