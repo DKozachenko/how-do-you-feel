@@ -2,6 +2,7 @@ name: How Do You Feel
 
 permissions:
   contents: write
+  pull-requests: write
 
 on:
   workflow_dispatch:
@@ -21,6 +22,9 @@ env:
   DOWNLOAD_ARTEFACT_PATH: "./artifacts/apk"
   DOWNLOAD_ARTEFACT_NAME: "Release apk"
   RELEASE_ARCHIVE_NAME: "how-do-you-feel.tar.gz"
+
+  UNIT_COVERAGE_PATH: "./coverage"
+  UNIT_TEST_RESULTS_PATH: "./report/test-results.xml"
 
 jobs:
   create-cache-key:
@@ -82,6 +86,77 @@ jobs:
       - name: Run lint
         run: npm run stylelint
 
+  test-unit:
+    name: Run unit tests
+    needs: [create-cache-key, cache-deps]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get repository code
+        uses: actions/checkout@v4
+      - name: Restore node modules
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ env.NODE_MODULES_PATH }}
+          key: "${{ needs.create-cache-key.outputs.cache-key }}"
+          fail-on-cache-miss: true
+      - name: Run tests
+        run: npm run test:unit:ci
+
+  test-unit-coverage:
+    name: Create unit tests coverage report
+    needs: [create-cache-key, cache-deps]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get repository code
+        uses: actions/checkout@v4
+      - name: Restore node modules
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ env.NODE_MODULES_PATH }}
+          key: "${{ needs.create-cache-key.outputs.cache-key }}"
+          fail-on-cache-miss: true
+      - name: Run unit tests with coverage
+        run: npm run test:unit:coverage
+      - name: Get short SHA
+        uses: benjlevesque/short-sha@v3.0
+        id: short-sha
+      - name: Create artifact with coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: "Coverage Report for ${{ steps.short-sha.outputs.sha }}"
+          path: ${{ env.UNIT_COVERAGE_PATH }}
+
+  test-unit-report:
+    name: Create unit tests results report
+    needs: [create-cache-key, cache-deps]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get repository code
+        uses: actions/checkout@v4
+      - name: Restore node modules
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ env.NODE_MODULES_PATH }}
+          key: "${{ needs.create-cache-key.outputs.cache-key }}"
+          fail-on-cache-miss: true
+      - name: Run unit tests with results
+        run: npm run test:unit:report
+      - name: Create test results report check
+        uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+          name: Show unit tests results
+          path: ${{ env.UNIT_TEST_RESULTS_PATH }}
+          reporter: jest-junit
+      - name: Create test results annotations, PR comment and workflow summary
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: ${{ env.UNIT_TEST_RESULTS_PATH }}
+          comment_title: "Unit Test Results"
+          job_summary: true
+          check_run: false
+
   analyze-deps:
     name: Run analyze deps
     needs: [create-cache-key, cache-deps]
@@ -104,7 +179,7 @@ jobs:
       - name: Get short SHA
         uses: benjlevesque/short-sha@v3.0
         id: short-sha
-      - name: Create artifact with apk
+      - name: Create artifact with dependency graph
         uses: actions/upload-artifact@v4
         with:
           name: "Dependency Graph for ${{ steps.short-sha.outputs.sha }}"
@@ -112,7 +187,7 @@ jobs:
 
   build:
     name: Run build
-    needs: [create-cache-key, lint, stylelint, analyze-deps]
+    needs: [create-cache-key, lint, stylelint, test-unit, test-unit-coverage, test-unit-report, analyze-deps]
     runs-on: ubuntu-latest
     steps:
       - name: Get repository code
