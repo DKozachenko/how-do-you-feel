@@ -17,8 +17,8 @@ export default defineConfig({
   },
   reporter: [
     ['list', { printSteps: true }],
-    ['html', { outputFolder: '../../html-report' }],
-    ['junit', { outputFile: '../../report/test-results-e2e.xml' }],
+    ['html', { outputFolder: '../../e2e/html-report' }],
+    ['junit', { outputFile: '../../e2e/report/test-results-e2e.xml' }],
   ],
   use: {
     ...BASE_CONFIG.use,

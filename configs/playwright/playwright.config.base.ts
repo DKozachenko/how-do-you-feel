@@ -4,7 +4,7 @@ import { PlaywrightTestConfig, defineConfig, devices } from '@playwright/test';
 export const BASE_CONFIG: PlaywrightTestConfig = defineConfig({
   testDir: '../../e2e',
   testMatch: '*.spec.ts',
-  outputDir: '../../test-output',
+  outputDir: '../../e2e/test-output',
   timeout: 10000,
   use: {
     baseURL: 'http://localhost:4200',
