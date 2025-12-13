@@ -3,12 +3,12 @@ name: How Do You Feel
 permissions:
   contents: write
   pull-requests: write
+  checks: write
 
 on:
   workflow_dispatch:
   pull_request:
     types: [opened, reopened, synchronize]
-    branches: ['develop']
   push:
     branches: ['develop']
 
