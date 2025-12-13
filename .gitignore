@@ -45,3 +45,11 @@ Thumbs.db
 deps
 report
 coverage
+
+# Playwright
+/test-results-e2e/
+/html-report/
+/test-output/
+/playwright-report/
+/playwright/.cache/
+/playwright/.auth/
