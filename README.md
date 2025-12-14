@@ -44,6 +44,7 @@ Open [`Android Studio`](https://developer.android.com/studio), choose:
 - CSS colors descriptions in modal
 - Emotions hint in edit emotion modal
 - Styles for word wrapping
+- Count on "like" and "dislike" pages
 
 ### Changed
 

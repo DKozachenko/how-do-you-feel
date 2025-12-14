@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import {
   IonContent,
   IonHeader,
@@ -30,6 +30,7 @@ export class LikePage implements ViewWillEnter {
   private readonly modalController = inject(ModalController);
 
   dislikes = signal<Action[]>([]);
+  dislikesCount = computed(() => this.dislikes().length);
 
   ionViewWillEnter(): void {
     this.load();
