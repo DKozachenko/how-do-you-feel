@@ -1,8 +1,7 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { isValid, parse } from 'date-fns';
-import { MAIN_DATE_FORMAT } from '@core/model/main-date-format.constant';
 
-export function dateFormatValidator(): ValidatorFn {
+export function dateFormatValidator(format: string): ValidatorFn {
   return (control: AbstractControl<string | null>): ValidationErrors | null => {
     const dateStr = control.value;
 
@@ -11,14 +10,14 @@ export function dateFormatValidator(): ValidatorFn {
     }
 
     try {
-      const parsedDate = parse(dateStr, MAIN_DATE_FORMAT, new Date());
+      const parsedDate = parse(dateStr, format, new Date());
 
       if (!isValid(parsedDate)) {
-        return { 'incorrect-date': true };
+        return { 'incorrect-date': `Дата должна соответствовать формату: ${format}` };
       }
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_) {
-      return { 'incorrect-date': true };
+      return { 'incorrect-date': `Дата должна соответствовать формату: ${format}` };
     }
 
     return null;

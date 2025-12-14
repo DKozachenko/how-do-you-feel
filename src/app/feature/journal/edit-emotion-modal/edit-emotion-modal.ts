@@ -17,6 +17,8 @@ import { format, parse } from 'date-fns';
 import { Emotion } from '@core/model/emotion.interface';
 import { MAIN_DATETIME_FORMAT } from '@core/model/main-date-format.constant';
 import { ModalRole } from '@core/model/modal-role.enum';
+import { dateFormatValidator } from '@core/validators/date-format/date-format.validator';
+import { futureDateValidator } from '@core/validators/future-date/future-date.validator';
 
 @Component({
   selector: 'app-edit-emotion-modal',
@@ -48,7 +50,11 @@ export class EditEmotionModal implements OnInit {
     name: new FormControl<string>('', [Validators.required]),
     comment: new FormControl<string>(''),
     color: new FormControl<string>(''),
-    dateTime: new FormControl<string>('', [Validators.required]),
+    dateTime: new FormControl<string>('', [
+      Validators.required,
+      dateFormatValidator(MAIN_DATETIME_FORMAT),
+      futureDateValidator(MAIN_DATETIME_FORMAT),
+    ]),
   });
 
   ngOnInit(): void {
