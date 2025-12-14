@@ -10,7 +10,7 @@
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
-  <form [formGroup]="form">
+  <form pw-automation-id="emotion-modal-form" [formGroup]="form">
     <ion-item>
       <ion-input
         class="ion-margin-end"
@@ -18,6 +18,7 @@
         label="Название"
         formControlName="name"
         placeholder="Радость"
+        pw-automation-id="emotion-modal-form-control"
       />
 
       <ion-button (click)="openEmotionsHintModal()">
@@ -26,16 +27,23 @@
     </ion-item>
 
     <ion-item>
+      <ion-input
+        labelPlacement="floating"
+        label="Цвет"
+        formControlName="color"
+        placeholder="green"
+        pw-automation-id="emotion-modal-form-control"
+      />
+    </ion-item>
+
+    <ion-item>
       <ion-textarea
         labelPlacement="floating"
         label="Комментарий"
         formControlName="comment"
         placeholder="Например, причина или обстановка"
+        pw-automation-id="emotion-modal-form-control"
       />
-    </ion-item>
-
-    <ion-item>
-      <ion-input labelPlacement="floating" label="Цвет" formControlName="color" placeholder="Зеленый" />
     </ion-item>
 
     <ion-button class="ion-margin-top" expand="block" [disabled]="form.invalid" (click)="confirmCreation()">

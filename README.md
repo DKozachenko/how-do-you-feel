@@ -33,3 +33,14 @@ Open [`Android Studio`](https://developer.android.com/studio), choose:
 - **Like** page with things that user likes to do
 - **Dislike** page with things that user doesn't like to do
 - **Info** page with version from [`package.json`](./package.json)
+
+#### [1.1.0] - 14.12.2025
+
+### Added
+
+- E2E Tests with [Playwright](https://playwright.dev/)
+- Unit Tests with [Jest](https://jestjs.io/)
+
+### Changed
+
+- Change order of form fields in add emotion modal
