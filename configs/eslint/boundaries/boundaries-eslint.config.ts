@@ -6,7 +6,7 @@ export const boundariesEslintConfig: (Linter.Config & { extends: Config[] })[] =
   {
     name: 'boundaries-eslint/settings',
     files: ['**/*.ts'],
-    ignores: [],
+    ignores: [''],
     plugins: { boundaries },
     extends: [boundaries.configs.strict],
     rules: {
@@ -52,6 +52,10 @@ export const boundariesEslintConfig: (Linter.Config & { extends: Config[] })[] =
                 ['feature', { feature: '${from.feature}' }],
                 ['feature-routes', { feature: '!${from.feature}' }],
               ],
+            },
+            {
+              from: ['test-files'],
+              allow: ['env', 'core', 'layout', 'ui', 'pattern', 'feature', 'feature-routes', 'page-object-files'],
             },
           ],
         },
@@ -111,6 +115,16 @@ export const boundariesEslintConfig: (Linter.Config & { extends: Config[] })[] =
           type: 'feature',
           pattern: 'feature/*',
           capture: ['feature'],
+        },
+        {
+          type: 'test-files',
+          mode: 'file',
+          pattern: '*.spec.ts',
+        },
+        {
+          type: 'page-object-files',
+          mode: 'file',
+          pattern: '*.po.ts',
         },
       ],
     },

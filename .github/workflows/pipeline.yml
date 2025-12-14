@@ -2,12 +2,13 @@ name: How Do You Feel
 
 permissions:
   contents: write
+  pull-requests: write
+  checks: write
 
 on:
   workflow_dispatch:
   pull_request:
     types: [opened, reopened, synchronize]
-    branches: ['develop']
   push:
     branches: ['develop']
 
@@ -22,6 +23,13 @@ env:
   DOWNLOAD_ARTEFACT_NAME: "Release apk"
   RELEASE_ARCHIVE_NAME: "how-do-you-feel.tar.gz"
 
+  UNIT_COVERAGE_PATH: "./coverage"
+  UNIT_TEST_RESULTS_PATH: "./report/test-results.xml"
+
+  E2E_PLAYWRIGHT_HTML_REPORT_PATH: "./e2e/html-report"
+  E2E_PLAYWRIGHT_OUTPUT_PATH: "./e2e/test-output"
+  E2E_PLAYWRIGHT_TEST_RESULTS_PATH: "./e2e/report/test-results-e2e.xml"
+
 jobs:
   create-cache-key:
     name: Create cache key
@@ -35,9 +43,24 @@ jobs:
         id: create-cache-key
         run: echo "key=${{ github.repository }}-${{ github.ref }}-${{ hashFiles('package-lock.json') }}" >> $GITHUB_OUTPUT
 
+  get-short-sha:
+    name: Get short SHA commit
+    runs-on: ubuntu-latest
+    outputs:
+      short-sha: ${{ steps.output-short-sha.outputs.sha }}
+    steps:
+      - name: Get repository code
+        uses: actions/checkout@v4
+      - name: Get short SHA
+        uses: benjlevesque/short-sha@v3.0
+        id: short-sha
+      - name: Output short SHA
+        id: output-short-sha
+        run: echo "sha=${{ steps.short-sha.outputs.sha }}" >> $GITHUB_OUTPUT
+
   cache-deps:
     name: Cache dependencies
-    needs: [create-cache-key]
+    needs: [create-cache-key, get-short-sha]
     runs-on: ubuntu-latest
     steps:
       - name: Get repository code
@@ -52,7 +75,7 @@ jobs:
 
   lint:
     name: Run lint
-    needs: [create-cache-key, cache-deps]
+    needs: [create-cache-key, get-short-sha, cache-deps]
     runs-on: ubuntu-latest
     steps:
       - name: Get repository code
@@ -68,7 +91,7 @@ jobs:
 
   stylelint:
     name: Run stylelint
-    needs: [create-cache-key, cache-deps]
+    needs: [create-cache-key, get-short-sha, cache-deps]
     runs-on: ubuntu-latest
     steps:
       - name: Get repository code
@@ -84,7 +107,7 @@ jobs:
 
   analyze-deps:
     name: Run analyze deps
-    needs: [create-cache-key, cache-deps]
+    needs: [create-cache-key, get-short-sha, cache-deps]
     runs-on: ubuntu-latest
     steps:
       - name: Get repository code
@@ -101,18 +124,140 @@ jobs:
         run: mkdir deps
       - name: Run analyze:deps
         run: npm run analyze:deps
-      - name: Get short SHA
-        uses: benjlevesque/short-sha@v3.0
-        id: short-sha
-      - name: Create artifact with apk
+      - name: Create artifact with dependency graph
         uses: actions/upload-artifact@v4
         with:
-          name: "Dependency Graph for ${{ steps.short-sha.outputs.sha }}"
+          name: "Dependency Graph for ${{ needs.get-short-sha.outputs.short-sha }}"
           path: deps/graph.png
+
+  test-unit:
+    name: Run unit tests
+    needs: [create-cache-key, get-short-sha, cache-deps, lint, stylelint, analyze-deps]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get repository code
+        uses: actions/checkout@v4
+      - name: Restore node modules
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ env.NODE_MODULES_PATH }}
+          key: "${{ needs.create-cache-key.outputs.cache-key }}"
+          fail-on-cache-miss: true
+      - name: Run tests
+        run: npm run test:unit:ci
+
+  test-unit-coverage:
+    name: Create unit tests coverage report
+    needs: [create-cache-key, get-short-sha, cache-deps, lint, stylelint, analyze-deps]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get repository code
+        uses: actions/checkout@v4
+      - name: Restore node modules
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ env.NODE_MODULES_PATH }}
+          key: "${{ needs.create-cache-key.outputs.cache-key }}"
+          fail-on-cache-miss: true
+      - name: Run unit tests with coverage
+        run: npm run test:unit:coverage
+      - name: Create artifact with coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: "Coverage Report for ${{ needs.get-short-sha.outputs.short-sha }}"
+          path: ${{ env.UNIT_COVERAGE_PATH }}
+
+  test-unit-report:
+    name: Create unit tests results report
+    needs: [create-cache-key, get-short-sha, cache-deps, lint, stylelint, analyze-deps]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get repository code
+        uses: actions/checkout@v4
+      - name: Restore node modules
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ env.NODE_MODULES_PATH }}
+          key: "${{ needs.create-cache-key.outputs.cache-key }}"
+          fail-on-cache-miss: true
+      - name: Run unit tests with results
+        run: npm run test:unit:report
+      - name: Create test results report check
+        uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+          name: Show unit tests results
+          path: ${{ env.UNIT_TEST_RESULTS_PATH }}
+          reporter: jest-junit
+      - name: Create test results annotations, PR comment and workflow summary
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: ${{ env.UNIT_TEST_RESULTS_PATH }}
+          comment_title: "Unit Test Results"
+          job_summary: true
+          check_run: false
+
+  test-e2e-pw:
+    name: Run E2E Playwright tests
+    needs: [create-cache-key, get-short-sha, cache-deps, lint, stylelint, analyze-deps]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get repository code
+        uses: actions/checkout@v4
+      - name: Restore node modules
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ env.NODE_MODULES_PATH }}
+          key: "${{ needs.create-cache-key.outputs.cache-key }}"
+          fail-on-cache-miss: true
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+      - name: Run tests
+        run: npm run test:e2e:pw:ci
+      - name: Create artifact with output files (if exist)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: "Output files for ${{ needs.get-short-sha.outputs.short-sha }}"
+          path: ${{ env.E2E_PLAYWRIGHT_OUTPUT_PATH }}
+          if-no-files-found: ignore
+
+  test-e2e-pw-report:
+    name: Create E2E Playwright tests report
+    needs: [create-cache-key, get-short-sha, cache-deps, lint, stylelint, analyze-deps]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get repository code
+        uses: actions/checkout@v4
+      - name: Restore node modules
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ env.NODE_MODULES_PATH }}
+          key: "${{ needs.create-cache-key.outputs.cache-key }}"
+          fail-on-cache-miss: true
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+      - name: Run E2E tests with html report
+        run: npm run test:e2e:pw:report
+      - name: Create artifact with html report
+        uses: actions/upload-artifact@v4
+        with:
+          name: "E2E HTML report for ${{ needs.get-short-sha.outputs.short-sha }}"
+          path: ${{ env.E2E_PLAYWRIGHT_HTML_REPORT_PATH }}
+          if-no-files-found: error
+      - name: Create test results annotations, PR comment and workflow summary
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: ${{ env.E2E_PLAYWRIGHT_TEST_RESULTS_PATH }}
+          comment_title: "E2E Playwright Test Results"
+          job_summary: true
+          check_run: false
 
   build:
     name: Run build
-    needs: [create-cache-key, lint, stylelint, analyze-deps]
+    needs: [create-cache-key, get-short-sha, cache-deps, test-unit, test-unit-coverage, test-unit-report, test-e2e-pw, test-e2e-pw-report]
     runs-on: ubuntu-latest
     steps:
       - name: Get repository code
@@ -127,7 +272,7 @@ jobs:
         run: npm run web:build
 
   build-apk:
-    needs: [create-cache-key, build]
+    needs: [create-cache-key, get-short-sha, cache-deps, build]
     runs-on: ubuntu-latest
     steps:
     - name: Get repository code
@@ -149,21 +294,18 @@ jobs:
     - name: Build apk file
       working-directory: ./android
       run: ./gradlew assembleRelease
-    - name: Get short SHA
-      uses: benjlevesque/short-sha@v3.0
-      id: short-sha
     - name: Sign up apk file
       uses: ./.github/actions/sign-up-apk
       with:
         apk-path: ${{ env.RELEASE_APK_PATH }}
         apk-unsigned-filename: ${{ env.UNSIGNED_RELEASE_APK_FILENAME }}
-        apk-signed-filename: "how-do-you-feel.${{ steps.short-sha.outputs.sha }}.apk"
+        apk-signed-filename: "how-do-you-feel.${{ needs.get-short-sha.outputs.short-sha }}.apk"
         store-password: ${{ secrets.STORE_PASSWORD }}
     - name: Create artifact with apk
       uses: actions/upload-artifact@v4
       with:
         name: ${{ env.DOWNLOAD_ARTEFACT_NAME }}
-        path: "${{ env.RELEASE_APK_PATH }}/how-do-you-feel.${{ steps.short-sha.outputs.sha }}.apk"
+        path: "${{ env.RELEASE_APK_PATH }}/how-do-you-feel.${{ needs.get-short-sha.outputs.short-sha }}.apk"
         retention-days: 7
 
   build-release-version:

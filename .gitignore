@@ -43,3 +43,13 @@ __screenshots__/
 Thumbs.db
 
 deps
+report
+coverage
+
+# Playwright
+/e2e/report/
+/e2e/html-report/
+/e2e/test-output/
+/playwright-report/
+/playwright/.cache/
+/playwright/.auth/
