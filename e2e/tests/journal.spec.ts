@@ -87,5 +87,23 @@ test.describe('Journal Page', () => {
         await expect(control).toHaveAttribute('formControlName', EDIT_EMOTION_FIELD_ORDER[i]);
       }
     });
+
+    test('Should have big comment textarea field', async () => {
+      await test.step('Go to "journal" page', async () =>
+        await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${JOURNAL_PATHS.Index}`));
+
+      const journalPageObject = new JournalPageObject(sharedPage);
+
+      await test.step('Click on edit emotion modal button', async () =>
+        await journalPageObject.openEditEmotionModalButton.click());
+
+      await expect(journalPageObject.editEmotionModalForm).toBeVisible();
+
+      expect(journalPageObject.commentTextareaControl).toBeVisible();
+
+      const box = await journalPageObject.commentTextareaControl.boundingBox();
+      expect(box).not.toBeNull();
+      expect(box!.height).toBeGreaterThan(350);
+    });
   });
 });

@@ -40,6 +40,7 @@ Open [`Android Studio`](https://developer.android.com/studio), choose:
 
 - E2E Tests with [Playwright](https://playwright.dev/)
 - Unit Tests with [Jest](https://jestjs.io/)
+- `min-height` for all textarea's
 
 ### Changed
 

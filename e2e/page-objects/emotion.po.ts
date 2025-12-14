@@ -22,4 +22,8 @@ export class EmotionPageObject {
   get emotionModalSaveButton(): Locator {
     return this.page.getByTestId('emotion-modal-save-button');
   }
+
+  get commentTextareaControl(): Locator {
+    return this.page.locator('.textarea[formControlName="comment"]');
+  }
 }

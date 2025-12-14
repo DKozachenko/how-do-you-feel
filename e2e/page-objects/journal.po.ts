@@ -22,4 +22,8 @@ export class JournalPageObject {
   get emotionCards(): Locator {
     return this.page.getByTestId('emotion-card');
   }
+
+  get commentTextareaControl(): Locator {
+    return this.page.locator('.textarea[formControlName="comment"]');
+  }
 }
