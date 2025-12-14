@@ -19,6 +19,7 @@ import { MAIN_DATETIME_FORMAT } from '@core/model/main-date-format.constant';
 import { ModalRole } from '@core/model/modal-role.enum';
 import { dateFormatValidator } from '@core/validators/date-format/date-format.validator';
 import { futureDateValidator } from '@core/validators/future-date/future-date.validator';
+import { CssColorsHintButton } from '@pattern/css-colors-hint/css-colors-hint-button/css-colors-hint-button';
 import { EmotionHintButton } from '@pattern/emotions-hint/emotion-hint-button/emotion-hint-button';
 
 @Component({
@@ -38,6 +39,7 @@ import { EmotionHintButton } from '@pattern/emotions-hint/emotion-hint-button/em
     IonTextarea,
     ReactiveFormsModule,
     EmotionHintButton,
+    CssColorsHintButton,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

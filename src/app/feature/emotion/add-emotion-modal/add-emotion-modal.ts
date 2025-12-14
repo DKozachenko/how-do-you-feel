@@ -15,6 +15,7 @@ import {
 } from '@ionic/angular/standalone';
 import { Emotion } from '@core/model/emotion.interface';
 import { ModalRole } from '@core/model/modal-role.enum';
+import { CssColorsHintButton } from '@pattern/css-colors-hint/css-colors-hint-button/css-colors-hint-button';
 import { EmotionHintButton } from '@pattern/emotions-hint/emotion-hint-button/emotion-hint-button';
 
 @Component({
@@ -34,6 +35,7 @@ import { EmotionHintButton } from '@pattern/emotions-hint/emotion-hint-button/em
     IonTextarea,
     ReactiveFormsModule,
     EmotionHintButton,
+    CssColorsHintButton,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

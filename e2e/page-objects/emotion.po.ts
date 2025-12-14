@@ -34,4 +34,12 @@ export class EmotionPageObject {
   get emotionsHintModal(): Locator {
     return this.page.getByTestId('emotions-hint-modal');
   }
+
+  get cssColorsHintButton(): Locator {
+    return this.page.getByTestId('css-colors-hint-button');
+  }
+
+  get cssColorsHintModal(): Locator {
+    return this.page.getByTestId('css-colors-hint-modal');
+  }
 }

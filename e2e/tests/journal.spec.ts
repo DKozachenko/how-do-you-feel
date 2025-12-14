@@ -119,5 +119,20 @@ test.describe('Journal Page', () => {
 
       await expect(journalPageObject.emotionsHintModal).toBeVisible();
     });
+
+    test('Should open modal with css colors description', async () => {
+      await test.step('Go to "journal" page', async () =>
+        await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${JOURNAL_PATHS.Index}`));
+
+      const journalPageObject = new JournalPageObject(sharedPage);
+
+      await test.step('Click on add emotion modal button', async () =>
+        await journalPageObject.openEditEmotionModalButton.click());
+
+      await test.step('Click on css colors hint button', async () =>
+        await journalPageObject.cssColorsHintButton.click());
+
+      await expect(journalPageObject.cssColorsHintModal).toBeVisible();
+    });
   });
 });

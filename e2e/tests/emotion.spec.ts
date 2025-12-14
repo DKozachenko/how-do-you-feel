@@ -59,5 +59,20 @@ test.describe('Emotion Page', () => {
 
       await expect(emotionPageObject.emotionsHintModal).toBeVisible();
     });
+
+    test('Should open modal with css colors description', async ({ page }) => {
+      await test.step('Go to "emotion" page', async () =>
+        await page.goto(`/${TABS_LAYOUT_PATHS.Index}/${EMOTION_PATHS.Index}`));
+
+      const emotionPageObject = new EmotionPageObject(page);
+
+      await test.step('Click on add emotion modal button', async () =>
+        await emotionPageObject.openAddEmotionModalButton.click());
+
+      await test.step('Click on css colors hint button', async () =>
+        await emotionPageObject.cssColorsHintButton.click());
+
+      await expect(emotionPageObject.cssColorsHintModal).toBeVisible();
+    });
   });
 });
