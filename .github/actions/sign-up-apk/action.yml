@@ -10,18 +10,18 @@ inputs:
   apk-signed-filename:
     description: 'Name of signed release apk file'
     required: true
+  base64-key:
+    description: 'Key in base64'
+    required: true
   store-password:
-    description: 'Password for store for keytool'
+    description: 'Store password for keytool (the same as key password)'
+    required: true
+  key-alias:
+    description: 'Key alias for keytool'
     required: true
 runs:
   using: "composite"
   steps:
-    # Команды взяты с
-    # https://developer.android.com/build/building-cmdline#sign_cmdline
-    - name: Generate keys
-      working-directory: ${{ inputs.apk-path }}
-      run: keytool -genkeypair -v -keystore release-keys.jks -storepass ${{ inputs.store-password }} -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Diana Kozachenko, OU=None, O=None, L=Kazan, S=None, C=RU"
-      shell: bash
     - name: Set up zipalign
       uses: ./.github/actions/set-up-zipalign
     - name: Align apk
@@ -30,13 +30,22 @@ runs:
       shell: bash
     - name: Set up apksigner
       uses: ./.github/actions/set-up-apksigner
-    - name: Sign up apk with keys
+    - name: Restore keystore from GitHub Secrets
       working-directory: ${{ inputs.apk-path }}
-      # Проставление паролей таким образом, взято с
-      # https://stackoverflow.com/questions/40653492/apksigner-not-accepting-password
-      run: apksigner sign --ks release-keys.jks --ks-pass pass:${{ inputs.store-password }} --out ${{ inputs.apk-signed-filename }} app-release-unsigned-aligned.apk
+      run: echo "${{ inputs.base64-key }}" | base64 --decode > android-release-key.jks
+      shell: bash
+    - name: Sign apk with existing keys
+      working-directory: ${{ inputs.apk-path }}
+      run: |
+        apksigner sign \
+          --ks android-release-key.jks \
+          --ks-pass pass:${{ inputs.store-password }} \
+          --key-pass pass:${{ inputs.store-password }} \
+          --ks-key-alias ${{ inputs.key-alias }} \
+          --out ${{ inputs.apk-signed-filename }} \
+          app-release-unsigned-aligned.apk
       shell: bash
     - name: Verify apk
       working-directory: ${{ inputs.apk-path }}
-      run: apksigner verify ${{ inputs.apk-signed-filename }}
+      run: apksigner verify --print-certs ${{ inputs.apk-signed-filename }}
       shell: bash
