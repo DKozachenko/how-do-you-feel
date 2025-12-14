@@ -17,7 +17,7 @@
           <ion-label>{{ date }}</ion-label>
         </ion-item-divider>
 
-        @for (emotion of emotions; track emotion.id) {
+        @for (emotion of emotions | sortByTime; track emotion.id) {
           <ion-item>
             <app-emotion-card
               pw-automation-id="emotion-card"

@@ -4,7 +4,6 @@ import {
   IonButton,
   IonButtons,
   IonContent,
-  IonDatetime,
   IonHeader,
   IonIcon,
   IonInput,
@@ -14,7 +13,9 @@ import {
   IonToolbar,
   ModalController,
 } from '@ionic/angular/standalone';
+import { format, parse } from 'date-fns';
 import { Emotion } from '@core/model/emotion.interface';
+import { MAIN_DATETIME_FORMAT } from '@core/model/main-date-format.constant';
 import { ModalRole } from '@core/model/modal-role.enum';
 
 @Component({
@@ -32,7 +33,6 @@ import { ModalRole } from '@core/model/modal-role.enum';
     IonItem,
     IonInput,
     IonTextarea,
-    IonDatetime,
     ReactiveFormsModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -54,7 +54,7 @@ export class EditEmotionModal implements OnInit {
   ngOnInit(): void {
     this.form.patchValue({
       ...this.emotion(),
-      dateTime: this.emotion().dateTime.toISOString(),
+      dateTime: format(this.emotion().dateTime, MAIN_DATETIME_FORMAT),
     });
   }
 
@@ -67,7 +67,7 @@ export class EditEmotionModal implements OnInit {
       name: this.form.value.name ?? '',
       comment: this.form.value.comment || undefined,
       color: this.form.value.color ?? '',
-      dateTime: new Date(this.form.value.dateTime ?? ''),
+      dateTime: new Date(parse(this.form.value.dateTime ?? '', MAIN_DATETIME_FORMAT, new Date())),
     };
 
     this.close(ModalRole.Confirm, entity);

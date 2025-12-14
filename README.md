@@ -45,3 +45,4 @@ Open [`Android Studio`](https://developer.android.com/studio), choose:
 ### Changed
 
 - Change order of form fields in add emotion modal
+- `dateTime` field for edit emotion

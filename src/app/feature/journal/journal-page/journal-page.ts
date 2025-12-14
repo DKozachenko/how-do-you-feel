@@ -23,6 +23,7 @@ import { EmotionCard } from '../emotion-card/emotion-card';
 import { FilterByRangePipe } from '../filter-by-range/filter-by-range.pipe';
 import { RangeFilter } from '../range-filter/range-filter';
 import { SortByDatesPipe } from '../sort-by-dates/sort-by-dates.pipe';
+import { SortByTimePipe } from '../sort-by-time/sort-by-time.pipe';
 
 @Component({
   selector: 'app-journal-page',
@@ -39,6 +40,7 @@ import { SortByDatesPipe } from '../sort-by-dates/sort-by-dates.pipe';
     IonItemGroup,
     IonItemDivider,
     SortByDatesPipe,
+    SortByTimePipe,
     FilterByRangePipe,
     EmotionCard,
     RangeFilter,
