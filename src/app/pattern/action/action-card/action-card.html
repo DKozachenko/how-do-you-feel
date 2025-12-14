@@ -1,7 +1,10 @@
 <ion-card class="card">
   <ion-card-header>
     <ion-card-title class="ion-display-flex ion-align-items-center ion-justify-content-between">
-      {{ action().name }} ({{ action().rate }} / 10)
+      <span class="title-wrap"
+        >{{ action().name }}
+        <span class="no-wrap">({{ action().rate }} / 10)</span>
+      </span>
 
       <div class="ion-display-flex ion-align-items-center">
         <ion-button size="small" fill="outline" color="light" (click)="edit.emit(action())">
