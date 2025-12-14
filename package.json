@@ -1,6 +1,6 @@
 {
   "name": "how-do-you-feel",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "scripts": {
     "----------------BUILD----------------": "",
     "web:start": "ng serve",

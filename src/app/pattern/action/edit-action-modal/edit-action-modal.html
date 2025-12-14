@@ -11,7 +11,7 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <form [formGroup]="form">
+  <form pw-automation-id="action-modal-form" [formGroup]="form">
     <ion-item>
       <ion-input labelPlacement="floating" label="Название" formControlName="name" placeholder="Поход" />
     </ion-item>
@@ -24,6 +24,7 @@
 
     <ion-item>
       <ion-textarea
+        class="textarea"
         labelPlacement="floating"
         label="Комментарий"
         formControlName="comment"

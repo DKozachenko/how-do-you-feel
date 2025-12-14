@@ -4,7 +4,6 @@ import {
   IonButton,
   IonButtons,
   IonContent,
-  IonDatetime,
   IonHeader,
   IonIcon,
   IonInput,
@@ -14,8 +13,14 @@ import {
   IonToolbar,
   ModalController,
 } from '@ionic/angular/standalone';
+import { format, parse } from 'date-fns';
 import { Emotion } from '@core/model/emotion.interface';
+import { MAIN_DATETIME_FORMAT } from '@core/model/main-date-format.constant';
 import { ModalRole } from '@core/model/modal-role.enum';
+import { dateFormatValidator } from '@core/validators/date-format/date-format.validator';
+import { futureDateValidator } from '@core/validators/future-date/future-date.validator';
+import { CssColorsHintButton } from '@pattern/css-colors-hint/css-colors-hint-button/css-colors-hint-button';
+import { EmotionHintButton } from '@pattern/emotions-hint/emotion-hint-button/emotion-hint-button';
 
 @Component({
   selector: 'app-edit-emotion-modal',
@@ -32,8 +37,9 @@ import { ModalRole } from '@core/model/modal-role.enum';
     IonItem,
     IonInput,
     IonTextarea,
-    IonDatetime,
     ReactiveFormsModule,
+    EmotionHintButton,
+    CssColorsHintButton,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -48,13 +54,17 @@ export class EditEmotionModal implements OnInit {
     name: new FormControl<string>('', [Validators.required]),
     comment: new FormControl<string>(''),
     color: new FormControl<string>(''),
-    dateTime: new FormControl<string>('', [Validators.required]),
+    dateTime: new FormControl<string>('', [
+      Validators.required,
+      dateFormatValidator(MAIN_DATETIME_FORMAT),
+      futureDateValidator(MAIN_DATETIME_FORMAT),
+    ]),
   });
 
   ngOnInit(): void {
     this.form.patchValue({
       ...this.emotion(),
-      dateTime: this.emotion().dateTime.toISOString(),
+      dateTime: format(this.emotion().dateTime, MAIN_DATETIME_FORMAT),
     });
   }
 
@@ -67,7 +77,7 @@ export class EditEmotionModal implements OnInit {
       name: this.form.value.name ?? '',
       comment: this.form.value.comment || undefined,
       color: this.form.value.color ?? '',
-      dateTime: new Date(this.form.value.dateTime ?? ''),
+      dateTime: new Date(parse(this.form.value.dateTime ?? '', MAIN_DATETIME_FORMAT, new Date())),
     };
 
     this.close(ModalRole.Confirm, entity);

@@ -1,0 +1,17 @@
+.content {
+  &::part(scroll) {
+    border: 1px solid var(--ion-background-color-step-500);
+    border-radius: 16px;
+  }
+}
+
+.swiper-container {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.slide {
+  height: auto;
+  display: flex;
+  align-items: center;
+}

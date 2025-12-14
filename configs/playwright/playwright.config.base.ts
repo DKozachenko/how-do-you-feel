@@ -20,7 +20,13 @@ export const BASE_CONFIG: PlaywrightTestConfig = defineConfig({
   projects: [
     {
       name: 'Mobile Chrome',
-      use: { ...devices['Galaxy S24'] },
+      use: {
+        ...devices['Galaxy S24'],
+        viewport: {
+          width: 360,
+          height: 780,
+        },
+      },
     },
   ],
   webServer: {
