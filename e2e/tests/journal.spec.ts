@@ -105,5 +105,19 @@ test.describe('Journal Page', () => {
       expect(box).not.toBeNull();
       expect(box!.height).toBeGreaterThan(350);
     });
+
+    test('Should open modal with emotions description', async () => {
+      await test.step('Go to "journal" page', async () =>
+        await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${JOURNAL_PATHS.Index}`));
+
+      const journalPageObject = new JournalPageObject(sharedPage);
+
+      await test.step('Click on add emotion modal button', async () =>
+        await journalPageObject.openEditEmotionModalButton.click());
+
+      await test.step('Click on emotion hint button', async () => await journalPageObject.emotionHintButton.click());
+
+      await expect(journalPageObject.emotionsHintModal).toBeVisible();
+    });
   });
 });

@@ -39,11 +39,25 @@ test.describe('Emotion Page', () => {
         await emotionPageObject.openAddEmotionModalButton.click());
 
       await expect(emotionPageObject.addEmotionModalForm).toBeVisible();
-      expect(emotionPageObject.commentTextareaControl).toBeVisible();
+      await expect(emotionPageObject.commentTextareaControl).toBeVisible();
 
       const box = await emotionPageObject.commentTextareaControl.boundingBox();
       expect(box).not.toBeNull();
       expect(box!.height).toBeGreaterThan(350);
+    });
+
+    test('Should open modal with emotions description', async ({ page }) => {
+      await test.step('Go to "emotion" page', async () =>
+        await page.goto(`/${TABS_LAYOUT_PATHS.Index}/${EMOTION_PATHS.Index}`));
+
+      const emotionPageObject = new EmotionPageObject(page);
+
+      await test.step('Click on add emotion modal button', async () =>
+        await emotionPageObject.openAddEmotionModalButton.click());
+
+      await test.step('Click on emotion hint button', async () => await emotionPageObject.emotionHintButton.click());
+
+      await expect(emotionPageObject.emotionsHintModal).toBeVisible();
     });
   });
 });

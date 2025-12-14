@@ -13,10 +13,9 @@ import {
   IonToolbar,
   ModalController,
 } from '@ionic/angular/standalone';
-import { from, switchMap } from 'rxjs';
 import { Emotion } from '@core/model/emotion.interface';
 import { ModalRole } from '@core/model/modal-role.enum';
-import { EmotionsHintModal } from '../emotions-hint-modal/emotions-hint-modal';
+import { EmotionHintButton } from '@pattern/emotions-hint/emotion-hint-button/emotion-hint-button';
 
 @Component({
   selector: 'app-add-emotion-modal',
@@ -34,6 +33,7 @@ import { EmotionsHintModal } from '../emotions-hint-modal/emotions-hint-modal';
     IonInput,
     IonTextarea,
     ReactiveFormsModule,
+    EmotionHintButton,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -50,17 +50,6 @@ export class AddEmotionModal {
 
   close(role: ModalRole, data?: Omit<Emotion, 'id'>): void {
     this.modalController.dismiss(data, role);
-  }
-
-  openEmotionsHintModal(): void {
-    from(
-      this.modalController.create({
-        component: EmotionsHintModal,
-        cssClass: 'slider-modal',
-      }),
-    )
-      .pipe(switchMap((modal) => modal.present()))
-      .subscribe();
   }
 
   confirmCreation(): void {

@@ -26,4 +26,12 @@ export class EmotionPageObject {
   get commentTextareaControl(): Locator {
     return this.page.locator('.textarea[formControlName="comment"]');
   }
+
+  get emotionHintButton(): Locator {
+    return this.page.getByTestId('emotion-hint-button');
+  }
+
+  get emotionsHintModal(): Locator {
+    return this.page.getByTestId('emotions-hint-modal');
+  }
 }
