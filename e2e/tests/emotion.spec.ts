@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { EMOTION_PATHS } from '../../src/app/feature/emotion/emotion.routes';
 import { TABS_LAYOUT_PATHS } from '../../src/app/layout/tabs-layout/tabs-layout.routes';
+// eslint-disable-next-line boundaries/no-unknown
+import { ADD_EMOTION_FIELD_ORDER } from '../model/add-emotion-field-order.constant';
 import { EmotionPageObject } from '../page-objects/emotion.po';
 
 test.describe('Emotion Page', () => {
@@ -20,11 +22,11 @@ test.describe('Emotion Page', () => {
 
       const formControls = await emotionPageObject.addEmotionModalFormControls.all();
 
-      const FORM_CONTROL_ORDER = ['name', 'color', 'comment'];
+      for (let i = 0; i < formControls.length; ++i) {
+        const control = formControls[i];
 
-      formControls.forEach(async (control, index) => {
-        await expect(control).toHaveAttribute('formControlName', FORM_CONTROL_ORDER[index]);
-      });
+        await expect(control).toHaveAttribute('formControlName', ADD_EMOTION_FIELD_ORDER[i]);
+      }
     });
   });
 });

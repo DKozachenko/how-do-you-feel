@@ -11,7 +11,7 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <form [formGroup]="form">
+  <form pw-automation-id="edit-emotion-modal-form" [formGroup]="form">
     <ion-item>
       <ion-input
         class="ion-margin-end"
@@ -19,11 +19,18 @@
         label="Название"
         formControlName="name"
         placeholder="Радость"
+        pw-automation-id="edit-emotion-modal-form-control"
       />
     </ion-item>
 
     <ion-item>
-      <ion-input labelPlacement="floating" label="Цвет" formControlName="color" placeholder="Зеленый" />
+      <ion-input
+        labelPlacement="floating"
+        label="Цвет"
+        formControlName="color"
+        placeholder="Зеленый"
+        pw-automation-id="edit-emotion-modal-form-control"
+      />
     </ion-item>
 
     <ion-item>
@@ -32,11 +39,18 @@
         label="Комментарий"
         formControlName="comment"
         placeholder="Например, причина или обстановка"
+        pw-automation-id="edit-emotion-modal-form-control"
       />
     </ion-item>
 
     <ion-item>
-      <ion-datetime formControlName="dateTime" locale="ru-RU" presentation="date" [firstDayOfWeek]="1" />
+      <ion-datetime
+        formControlName="dateTime"
+        locale="ru-RU"
+        presentation="date"
+        pw-automation-id="edit-emotion-modal-form-control"
+        [firstDayOfWeek]="1"
+      />
     </ion-item>
 
     <ion-button class="ion-margin-top" expand="block" [disabled]="form.invalid" (click)="confirmCreation()">

@@ -10,11 +10,16 @@
       <div class="ion-display-flex ion-align-items-center">
         <ion-badge class="ion-margin-end" color="light">{{ time() }}</ion-badge>
 
-        <ion-button fill="outline" color="light" (click)="edit.emit(emotion())">
+        <ion-button
+          fill="outline"
+          color="light"
+          pw-automation-id="open-edit-emotion-modal-button"
+          (click)="edit.emit(emotion())"
+        >
           <ion-icon slot="icon-only" src="icons/eyedrop-outline.svg" />
         </ion-button>
 
-        <ion-button color="danger" (click)="remove.emit(emotion().id)">
+        <ion-button color="danger" pw-automation-id="remove-emotion-button" (click)="remove.emit(emotion().id)">
           <ion-icon slot="icon-only" src="icons/trash-outline.svg" />
         </ion-button>
       </div>

@@ -20,6 +20,7 @@
         @for (emotion of emotions; track emotion.id) {
           <ion-item>
             <app-emotion-card
+              pw-automation-id="emotion-card"
               [emotion]="emotion"
               (edit)="openEditEmotionModal(emotion)"
               (remove)="remove(emotion.id)"

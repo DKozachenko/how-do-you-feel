@@ -18,4 +18,8 @@ export class EmotionPageObject {
   get addEmotionModalFormControls(): Locator {
     return this.page.getByTestId('emotion-modal-form-control');
   }
+
+  get emotionModalSaveButton(): Locator {
+    return this.page.getByTestId('emotion-modal-save-button');
+  }
 }
