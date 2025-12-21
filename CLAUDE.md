@@ -184,3 +184,17 @@ Production build budgets (in `angular.json`):
 - Date formatting uses `date-fns` with the main format constant in `src/app/core/model/main-date-format.constant.ts`
 - Modal components should use `ModalRole` enum from `@core/model/modal-role.enum`
 - All configuration files are in `configs/` directory for better organization
+
+## TypeScript Best Practices
+
+- Use strict type checking
+- Prefer type inference when the type is obvious
+- Avoid the `any` type; use `unknown` when type is uncertain
+
+## Angular Best Practices
+
+- Always use standalone components over NgModules
+- Must NOT set `standalone: true` inside Angular decorators. It's the default in Angular v20+
+- Use signals for state management
+- Use `NgOptimizedImage` for all static images
+- `NgOptimizedImage` does not work for inline base64 images
