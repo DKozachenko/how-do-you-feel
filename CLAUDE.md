@@ -171,6 +171,7 @@ The GitHub Actions workflow (`.github/workflows/pipeline.yml`) includes:
 - Web build and Android APK generation
 - Automatic release creation when pushing to `develop` branch
 - APK signing with keystore from GitHub secrets
+- All jobs in the workflow MUST have a `name` property for consistency and better readability in the GitHub Actions UI
 
 ### Bundle Size Limits
 
