@@ -11,6 +11,7 @@ import {
   IonText,
 } from '@ionic/angular/standalone';
 import { Action } from '@core/model/action.interface';
+import { WrapLinesDirective } from '@ui/wrap-lines/wrap-lines.directive';
 import { SortDatesPipe } from '../sort-dates/sort-dates.pipe';
 
 @Component({
@@ -28,6 +29,7 @@ import { SortDatesPipe } from '../sort-dates/sort-dates.pipe';
     DatePipe,
     IonText,
     SortDatesPipe,
+    WrapLinesDirective,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
