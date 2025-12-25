@@ -1,0 +1,24 @@
+{
+  "eslint.useFlatConfig": true,
+  "eslint.options": {
+      "overrideConfigFile": "./configs/eslint/eslint.config.ts"
+  },
+  "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit",
+      "source.fixAll.stylelint": "explicit"
+  },
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "files.eol": "\n",
+  "stylelint.enable": true,
+  "stylelint.configFile": "./configs/stylelint/stylelint.config.js",
+  "stylelint.validate": [
+    "css",
+    "scss"
+  ],
+  "[css]": {
+    "editor.defaultFormatter": "stylelint.vscode-stylelint"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "stylelint.vscode-stylelint"
+  }
+}

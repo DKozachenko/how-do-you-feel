@@ -8,6 +8,7 @@ import {
   IonIcon,
   IonInput,
   IonItem,
+  IonNote,
   IonTextarea,
   IonTitle,
   IonToolbar,
@@ -17,6 +18,7 @@ import { format, parse } from 'date-fns';
 import { Emotion } from '@core/model/emotion.interface';
 import { MAIN_DATETIME_FORMAT } from '@core/model/main-date-format.constant';
 import { ModalRole } from '@core/model/modal-role.enum';
+import { ControlErrorPipe } from '@core/pipes/control-errors/control-errors.pipe';
 import { dateFormatValidator } from '@core/validators/date-format/date-format.validator';
 import { futureDateValidator } from '@core/validators/future-date/future-date.validator';
 import { CssColorsHintButton } from '@pattern/css-colors-hint/css-colors-hint-button/css-colors-hint-button';
@@ -40,6 +42,8 @@ import { EmotionHintButton } from '@pattern/emotions-hint/emotion-hint-button/em
     ReactiveFormsModule,
     EmotionHintButton,
     CssColorsHintButton,
+    ControlErrorPipe,
+    IonNote,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -52,8 +56,8 @@ export class EditEmotionModal implements OnInit {
 
   form = new FormGroup({
     name: new FormControl<string>('', [Validators.required]),
+    color: new FormControl<string>('', [Validators.required]),
     comment: new FormControl<string>(''),
-    color: new FormControl<string>(''),
     dateTime: new FormControl<string>('', [
       Validators.required,
       dateFormatValidator(MAIN_DATETIME_FORMAT),
@@ -66,6 +70,7 @@ export class EditEmotionModal implements OnInit {
       ...this.emotion(),
       dateTime: format(this.emotion().dateTime, MAIN_DATETIME_FORMAT),
     });
+    this.form.updateValueAndValidity();
   }
 
   close(role: ModalRole, data?: Omit<Emotion, 'id'>): void {

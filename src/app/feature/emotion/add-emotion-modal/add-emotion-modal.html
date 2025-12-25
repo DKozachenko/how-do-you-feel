@@ -11,45 +11,65 @@
 </ion-header>
 <ion-content class="ion-padding">
   <form pw-automation-id="emotion-modal-form" [formGroup]="form">
-    <ion-item>
-      <ion-input
-        class="ion-margin-end"
-        labelPlacement="floating"
-        label="Название"
-        formControlName="name"
-        placeholder="Радость"
-        pw-automation-id="emotion-modal-form-control"
-      />
+    <div class="form-control">
+      <ion-item>
+        <ion-input
+          class="ion-margin-end"
+          labelPlacement="floating"
+          label="Название"
+          formControlName="name"
+          placeholder="Радость"
+          pw-automation-id="emotion-modal-form-control"
+        />
 
-      <app-emotion-hint-button />
-    </ion-item>
+        <app-emotion-hint-button />
+      </ion-item>
 
-    <ion-item>
-      <ion-input
-        class="ion-margin-end"
-        labelPlacement="floating"
-        label="Цвет"
-        formControlName="color"
-        placeholder="green"
-        pw-automation-id="emotion-modal-form-control"
-      />
+      @let nameControl = form.get('name')!;
+      @if (nameControl.touched && !!nameControl.errors) {
+        <ion-note class="form-control__error-text" color="danger">
+          {{ nameControl | controlErrorPipe }}
+        </ion-note>
+      }
+    </div>
 
-      <app-css-colors-hint-button />
-    </ion-item>
+    <div class="form-control">
+      <ion-item>
+        <ion-input
+          class="ion-margin-end"
+          labelPlacement="floating"
+          label="Цвет"
+          formControlName="color"
+          placeholder="green"
+          pw-automation-id="emotion-modal-form-control"
+        />
 
-    <ion-item>
-      <ion-textarea
-        class="textarea"
-        labelPlacement="floating"
-        label="Комментарий"
-        formControlName="comment"
-        placeholder="Например, причина или обстановка"
-        pw-automation-id="emotion-modal-form-control"
-      />
-    </ion-item>
+        <app-css-colors-hint-button />
+      </ion-item>
+
+      @let colorControl = form.get('color')!;
+      @if (colorControl.touched && !!colorControl.errors) {
+        <ion-note class="form-control__error-text" color="danger">
+          {{ colorControl | controlErrorPipe }}
+        </ion-note>
+      }
+    </div>
+
+    <div class="form-control">
+      <ion-item>
+        <ion-textarea
+          class="textarea"
+          labelPlacement="floating"
+          label="Комментарий"
+          formControlName="comment"
+          placeholder="Например, причина или обстановка"
+          pw-automation-id="emotion-modal-form-control"
+        />
+      </ion-item>
+    </div>
 
     <ion-button
-      class="ion-margin-top"
+      class="marging-top-xxl"
       expand="block"
       pw-automation-id="emotion-modal-save-button"
       [disabled]="form.invalid"

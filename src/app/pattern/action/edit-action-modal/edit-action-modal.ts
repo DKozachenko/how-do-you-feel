@@ -8,6 +8,7 @@ import {
   IonIcon,
   IonInput,
   IonItem,
+  IonNote,
   IonTextarea,
   IonTitle,
   IonToolbar,
@@ -17,6 +18,7 @@ import { format, parse } from 'date-fns';
 import { Action } from '@core/model/action.interface';
 import { MAIN_DATE_FORMAT } from '@core/model/main-date-format.constant';
 import { ModalRole } from '@core/model/modal-role.enum';
+import { ControlErrorPipe } from '@core/pipes/control-errors/control-errors.pipe';
 import { dateFormatValidator } from '@core/validators/date-format/date-format.validator';
 import { futureDateValidator } from '@core/validators/future-date/future-date.validator';
 
@@ -36,6 +38,8 @@ import { futureDateValidator } from '@core/validators/future-date/future-date.va
     IonInput,
     IonTextarea,
     ReactiveFormsModule,
+    ControlErrorPipe,
+    IonNote,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -70,6 +74,8 @@ export class EditActionModal implements OnInit {
       this.action().history.forEach((date) => {
         this.addDateControl(format(date, MAIN_DATE_FORMAT));
       });
+
+      this.form.updateValueAndValidity();
     }
   }
 
@@ -87,10 +93,14 @@ export class EditActionModal implements OnInit {
         ])
       ),
     );
+    this.historyFormArray.markAsTouched();
+    this.historyFormArray.updateValueAndValidity();
   }
 
   removeDateControl(index: number): void {
     this.historyFormArray.removeAt(index);
+    this.historyFormArray.markAsTouched();
+    this.historyFormArray.updateValueAndValidity();
   }
 
   confirmCreation(): void {
