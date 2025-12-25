@@ -68,7 +68,7 @@ describe('dateFormatValidator', () => {
 
         const result = validator(control);
         expect(result).toEqual({
-          'incorrect-date': `Дата должна соответствовать формату: ${format}`,
+          'incorrect-date': `Несоответствие формату: ${format}`,
         });
       },
     );
