@@ -37,8 +37,9 @@ test.describe('Journal Page', () => {
       const controlValue = testEmotion[controlName] ?? '';
 
       await test.step(`Fill control ${controlName} with value ${controlValue}`, async () => {
-        await control.click();
-        await control.pressSequentially(controlValue);
+        const nativeInput = control.locator('input, textarea').first();
+        await nativeInput.fill(controlValue);
+        await expect(nativeInput).toHaveValue(controlValue);
       });
     }
 
