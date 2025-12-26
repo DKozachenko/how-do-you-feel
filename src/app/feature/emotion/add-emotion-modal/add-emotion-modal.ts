@@ -8,6 +8,7 @@ import {
   IonIcon,
   IonInput,
   IonItem,
+  IonNote,
   IonTextarea,
   IonTitle,
   IonToolbar,
@@ -15,6 +16,7 @@ import {
 } from '@ionic/angular/standalone';
 import { Emotion } from '@core/model/emotion.interface';
 import { ModalRole } from '@core/model/modal-role.enum';
+import { ControlErrorPipe } from '@core/pipes/control-errors/control-errors.pipe';
 import { CssColorsHintButton } from '@pattern/css-colors-hint/css-colors-hint-button/css-colors-hint-button';
 import { EmotionHintButton } from '@pattern/emotions-hint/emotion-hint-button/emotion-hint-button';
 
@@ -36,6 +38,8 @@ import { EmotionHintButton } from '@pattern/emotions-hint/emotion-hint-button/em
     ReactiveFormsModule,
     EmotionHintButton,
     CssColorsHintButton,
+    ControlErrorPipe,
+    IonNote,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -46,8 +50,8 @@ export class AddEmotionModal {
 
   form = new FormGroup({
     name: new FormControl<string>('', [Validators.required]),
-    comment: new FormControl<string>(''),
     color: new FormControl<string>('', [Validators.required]),
+    comment: new FormControl<string>(''),
   });
 
   close(role: ModalRole, data?: Omit<Emotion, 'id'>): void {

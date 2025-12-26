@@ -272,6 +272,7 @@ jobs:
         run: npm run web:build
 
   build-apk:
+    name: Build APK
     needs: [create-cache-key, get-short-sha, cache-deps, build]
     runs-on: ubuntu-latest
     steps:
@@ -313,7 +314,7 @@ jobs:
   build-release-version:
     if: github.event_name == 'push' && github.ref_name == 'develop'
     needs: [build-apk]
-    name: Build version
+    name: Build release version
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.create-release-version.outputs.VERSION }}

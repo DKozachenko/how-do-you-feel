@@ -12,56 +12,85 @@
 
 <ion-content class="ion-padding">
   <form pw-automation-id="edit-emotion-modal-form" [formGroup]="form">
-    <ion-item>
-      <ion-input
-        class="ion-margin-end"
-        labelPlacement="floating"
-        label="Название"
-        formControlName="name"
-        placeholder="Радость"
-        pw-automation-id="edit-emotion-modal-form-control"
-      />
+    <div class="form-control">
+      <ion-item>
+        <ion-input
+          class="ion-margin-end"
+          labelPlacement="floating"
+          label="Название"
+          formControlName="name"
+          placeholder="Радость"
+          pw-automation-id="edit-emotion-modal-form-control"
+        />
 
-      <app-emotion-hint-button />
-    </ion-item>
+        <app-emotion-hint-button />
+      </ion-item>
 
-    <ion-item>
-      <ion-input
-        class="ion-margin-end"
-        labelPlacement="floating"
-        label="Цвет"
-        formControlName="color"
-        placeholder="Зеленый"
-        pw-automation-id="edit-emotion-modal-form-control"
-      />
+      @let nameControl = form.get('name')!;
+      @if (nameControl.touched && !!nameControl.errors) {
+        <ion-note class="form-control__error-text" color="danger">
+          {{ nameControl | controlErrorPipe }}
+        </ion-note>
+      }
+    </div>
 
-      <app-css-colors-hint-button />
-    </ion-item>
+    <div class="form-control">
+      <ion-item>
+        <ion-input
+          class="ion-margin-end"
+          labelPlacement="floating"
+          label="Цвет"
+          formControlName="color"
+          placeholder="Зеленый"
+          pw-automation-id="edit-emotion-modal-form-control"
+        />
 
-    <ion-item>
-      <ion-textarea
-        class="textarea"
-        labelPlacement="floating"
-        label="Комментарий"
-        formControlName="comment"
-        placeholder="Например, причина или обстановка"
-        pw-automation-id="edit-emotion-modal-form-control"
-      />
-    </ion-item>
+        <app-css-colors-hint-button />
+      </ion-item>
 
-    <ion-item>
-      <ion-input
-        labelPlacement="floating"
-        label="Дата и время"
-        placeholder="01.01.1970 00:00"
-        formControlName="dateTime"
-        pw-automation-id="edit-emotion-modal-form-control"
-      >
-        <ion-icon slot="end" src="icons/calendar-outline.svg" aria-hidden="true" />
-      </ion-input>
-    </ion-item>
+      @let colorControl = form.get('color')!;
+      @if (colorControl.touched && !!colorControl.errors) {
+        <ion-note class="form-control__error-text" color="danger">
+          {{ colorControl | controlErrorPipe }}
+        </ion-note>
+      }
+    </div>
 
-    <ion-button class="ion-margin-top" expand="block" [disabled]="form.invalid" (click)="confirmCreation()">
+    <div class="form-control">
+      <ion-item>
+        <ion-textarea
+          class="textarea"
+          labelPlacement="floating"
+          label="Комментарий"
+          formControlName="comment"
+          placeholder="Например, причина или обстановка"
+          pw-automation-id="edit-emotion-modal-form-control"
+        />
+      </ion-item>
+    </div>
+
+    <div class="form-control">
+      <ion-item>
+        <ion-input
+          labelPlacement="floating"
+          label="Дата и время"
+          placeholder="01.01.1970 00:00"
+          formControlName="dateTime"
+          pw-automation-id="edit-emotion-modal-form-control"
+        >
+          <ion-icon slot="end" src="icons/calendar-outline.svg" aria-hidden="true" />
+        </ion-input>
+      </ion-item>
+
+      @let dateTimeControl = form.get('dateTime')!;
+      @if (dateTimeControl.touched && !!dateTimeControl.errors) {
+        <ion-note class="form-control__error-text" color="danger">
+          {{ dateTimeControl | controlErrorPipe }}
+        </ion-note>
+      }
+    </div>
+
+    <ion-button class="marging-top-xxl" expand="block" [disabled]="form.invalid" (click)="confirmCreation()">
       Сохранить
     </ion-button>
   </form>
