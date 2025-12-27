@@ -24,7 +24,7 @@
     <div class="ion-display-flex ion-flex-column ion-align-items-start ion-margin-top">
       <ion-text class="history-label ion-margin-bottom" color="tertiary">История</ion-text>
 
-      <div class="ion-display-flex history-dates">
+      <div class="ion-display-flex ion-flex-wrap history-dates">
         @for (date of action().history | sortDates; track date) {
           <ion-badge color="light">{{ date | date: 'dd.MM.yyyy' }}</ion-badge>
         }

@@ -5,7 +5,6 @@
 .date-input {
   --color: var(--ion-text-color);
 
-  max-width: 100px;
   text-align: center;
   min-height: auto;
 }
@@ -27,5 +26,6 @@
     display: flex;
     gap: 10px;
     align-items: center;
+    flex-basis: 48.5%;
   }
 }
