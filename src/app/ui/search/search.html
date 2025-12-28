@@ -1,0 +1,6 @@
+<ion-searchbar
+  show-clear-button="focus"
+  placeholder="Поиск"
+  [debounce]="debounce()"
+  (ionInput)="changed.emit($event.target.value ?? '')"
+/>

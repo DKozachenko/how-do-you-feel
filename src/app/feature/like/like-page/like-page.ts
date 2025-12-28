@@ -12,15 +12,27 @@ import {
 import { forkJoin, from, of, switchMap } from 'rxjs';
 import { Action } from '@core/model/action.interface';
 import { ModalRole } from '@core/model/modal-role.enum';
+import { FilterActionsPipe } from '@core/pipes/filter-actions/filter-actions.pipe';
 import { ActionCard } from '@pattern/action/action-card/action-card';
 import { EditActionModal } from '@pattern/action/edit-action-modal/edit-action-modal';
+import { SearchComponent } from '@ui/search/search';
 import { LikesStorageService } from '../storage/likes-storage';
 
 @Component({
   selector: 'app-like-page',
   templateUrl: './like-page.html',
   styleUrl: './like-page.scss',
-  imports: [IonHeader, IonContent, IonList, IonToolbar, IonTitle, IonButton, ActionCard],
+  imports: [
+    IonHeader,
+    IonContent,
+    IonList,
+    IonToolbar,
+    IonTitle,
+    IonButton,
+    ActionCard,
+    SearchComponent,
+    FilterActionsPipe,
+  ],
   providers: [LikesStorageService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -30,6 +42,7 @@ export class LikePage implements ViewWillEnter {
 
   likes = signal<Action[]>([]);
   likesCount = computed(() => this.likes().length);
+  searchInput = signal('');
 
   ionViewWillEnter(): void {
     this.load();

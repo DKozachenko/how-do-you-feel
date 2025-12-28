@@ -13,15 +13,28 @@ import {
 import { forkJoin, from, of, switchMap } from 'rxjs';
 import { Action } from '@core/model/action.interface';
 import { ModalRole } from '@core/model/modal-role.enum';
+import { FilterActionsPipe } from '@core/pipes/filter-actions/filter-actions.pipe';
 import { ActionCard } from '@pattern/action/action-card/action-card';
 import { EditActionModal } from '@pattern/action/edit-action-modal/edit-action-modal';
+import { SearchComponent } from '@ui/search/search';
 import { DisikesStorageService } from '../storage/dislikes-storage';
 
 @Component({
   selector: 'app-dislike-page',
   templateUrl: './dislike-page.html',
   styleUrl: './dislike-page.scss',
-  imports: [IonHeader, IonContent, IonList, IonToolbar, IonTitle, IonButton, IonText, ActionCard],
+  imports: [
+    IonHeader,
+    IonContent,
+    IonList,
+    IonToolbar,
+    IonTitle,
+    IonButton,
+    IonText,
+    ActionCard,
+    SearchComponent,
+    FilterActionsPipe,
+  ],
   providers: [DisikesStorageService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -31,6 +44,7 @@ export class LikePage implements ViewWillEnter {
 
   dislikes = signal<Action[]>([]);
   dislikesCount = computed(() => this.dislikes().length);
+  searchInput = signal('');
 
   ionViewWillEnter(): void {
     this.load();
