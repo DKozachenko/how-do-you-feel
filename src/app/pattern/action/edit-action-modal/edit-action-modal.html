@@ -52,6 +52,19 @@
       </ion-item>
     </div>
 
+    <div class="form-control">
+      <ion-item>
+        <ion-toggle formControlName="private">Приватность</ion-toggle>
+      </ion-item>
+
+      @let privateControl = form.get('private')!;
+      @if (privateControl.touched && !!privateControl.errors) {
+        <ion-note class="form-control__error-text" color="danger">
+          {{ privateControl | controlErrorPipe }}
+        </ion-note>
+      }
+    </div>
+
     @if (action()) {
       <div class="form-control">
         <ion-item formArrayName="history">
