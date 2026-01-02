@@ -10,13 +10,13 @@ import {
   ModalController,
 } from '@ionic/angular/standalone';
 import { forkJoin, from, of, switchMap } from 'rxjs';
+import { LikesStorageService } from '@core/likes/likes-storage';
 import { Action } from '@core/model/action.interface';
 import { ModalRole } from '@core/model/modal-role.enum';
 import { FilterActionsPipe } from '@core/pipes/filter-actions/filter-actions.pipe';
 import { ActionCard } from '@pattern/action/action-card/action-card';
 import { EditActionModal } from '@pattern/action/edit-action-modal/edit-action-modal';
 import { SearchComponent } from '@ui/search/search';
-import { LikesStorageService } from '../storage/likes-storage';
 
 @Component({
   selector: 'app-like-page',
@@ -33,7 +33,6 @@ import { LikesStorageService } from '../storage/likes-storage';
     SearchComponent,
     FilterActionsPipe,
   ],
-  providers: [LikesStorageService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LikePage implements ViewWillEnter {

@@ -11,13 +11,13 @@ import {
   IonText,
 } from '@ionic/angular/standalone';
 import { forkJoin, from, of, switchMap } from 'rxjs';
+import { DislikesStorageService } from '@core/dislikes/dislikes-storage';
 import { Action } from '@core/model/action.interface';
 import { ModalRole } from '@core/model/modal-role.enum';
 import { FilterActionsPipe } from '@core/pipes/filter-actions/filter-actions.pipe';
 import { ActionCard } from '@pattern/action/action-card/action-card';
 import { EditActionModal } from '@pattern/action/edit-action-modal/edit-action-modal';
 import { SearchComponent } from '@ui/search/search';
-import { DisikesStorageService } from '../storage/dislikes-storage';
 
 @Component({
   selector: 'app-dislike-page',
@@ -35,11 +35,10 @@ import { DisikesStorageService } from '../storage/dislikes-storage';
     SearchComponent,
     FilterActionsPipe,
   ],
-  providers: [DisikesStorageService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LikePage implements ViewWillEnter {
-  protected readonly dislikesStorageService = inject(DisikesStorageService);
+  protected readonly dislikesStorageService = inject(DislikesStorageService);
   private readonly modalController = inject(ModalController);
 
   dislikes = signal<Action[]>([]);
