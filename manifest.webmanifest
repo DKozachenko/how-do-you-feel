@@ -5,8 +5,8 @@
   "theme_color": "#000000",
   "background_color": "#ffffff",
   "display": "standalone",
-  "scope": "/",
-  "start_url": "/",
+  "scope": "/how-do-you-feel/",
+  "start_url": "/how-do-you-feel/",
   "orientation": "portrait",
   "icons": [
     {
