@@ -8,6 +8,8 @@ import {
   IonCardTitle,
   IonIcon,
 } from '@ionic/angular/standalone';
+import { LONG_PRESS_TIME_MS } from '@core/gesture/long-press/long-press.constants';
+import { LongPressDirective } from '@core/gesture/long-press/long-press.directive';
 import { Emotion } from '@core/model/emotion.interface';
 import { BlurDirective } from '@ui/blur/blur.directive';
 import { ReplaceStringPipe } from '@ui/blur/replace-string.pipe';
@@ -28,6 +30,7 @@ import { WrapLinesDirective } from '@ui/wrap-lines/wrap-lines.directive';
     WrapLinesDirective,
     BlurDirective,
     ReplaceStringPipe,
+    LongPressDirective,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -44,6 +47,8 @@ export class EmotionCard {
 
   blurCard = linkedSignal(() => this.emotion().private);
   textReplacement = linkedSignal(() => this.emotion().private);
+
+  protected readonly LONG_PRESS_TIME_MS = LONG_PRESS_TIME_MS;
 
   toggleBlurCard(): void {
     this.blurCard.update((value) => !value);

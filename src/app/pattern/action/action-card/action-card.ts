@@ -10,6 +10,8 @@ import {
   IonIcon,
   IonText,
 } from '@ionic/angular/standalone';
+import { LONG_PRESS_TIME_MS } from '@core/gesture/long-press/long-press.constants';
+import { LongPressDirective } from '@core/gesture/long-press/long-press.directive';
 import { Action } from '@core/model/action.interface';
 import { BlurDirective } from '@ui/blur/blur.directive';
 import { ReplaceStringPipe } from '@ui/blur/replace-string.pipe';
@@ -34,6 +36,7 @@ import { SortDatesPipe } from '../sort-dates/sort-dates.pipe';
     WrapLinesDirective,
     BlurDirective,
     ReplaceStringPipe,
+    LongPressDirective,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -45,6 +48,8 @@ export class ActionCard {
 
   blurCard = linkedSignal(() => this.action().private);
   textReplacement = linkedSignal(() => this.action().private);
+
+  protected readonly LONG_PRESS_TIME_MS = LONG_PRESS_TIME_MS;
 
   toggleBlurCard(): void {
     this.blurCard.update((value) => !value);

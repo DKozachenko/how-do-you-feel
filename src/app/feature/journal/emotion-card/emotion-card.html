@@ -1,4 +1,11 @@
-<ion-card blur [blurEnabled]="blurCard()" (enableReplaceText)="toggleTextReplace($event)" (click)="toggleBlurCard()">
+<ion-card
+  blur
+  ion-long-press
+  [interval]="LONG_PRESS_TIME_MS"
+  [blurEnabled]="blurCard()"
+  (enableReplaceText)="toggleTextReplace($event)"
+  (longPressed)="toggleBlurCard()"
+>
   <ion-card-header class="card-header">
     <ion-card-title class="ion-display-flex ion-align-items-center ion-justify-content-between">
       <div class="ion-display-flex ion-align-items-center header-left-group">
