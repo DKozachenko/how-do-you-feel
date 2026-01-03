@@ -271,6 +271,28 @@ jobs:
       - name: Run web:build
         run: npm run web:build
 
+  deploy-pwa:
+    # if: github.event_name == 'push' && github.ref_name == 'develop'
+    name: Deploy PWA to GitHub Pages
+    needs: [create-cache-key, get-short-sha, cache-deps, build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get repository code
+        uses: actions/checkout@v4
+      - name: Restore node modules
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ env.NODE_MODULES_PATH }}
+          key: "${{ needs.create-cache-key.outputs.cache-key }}"
+          fail-on-cache-miss: true
+      - name: Build web app for GitHub Pages
+        run: npm run web:build -- --base-href=/how-do-you-feel/
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist/how-do-you-feel/browser
+
   build-apk:
     name: Build APK
     needs: [create-cache-key, get-short-sha, cache-deps, build]
