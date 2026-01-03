@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, linkedSignal, output } from '@angular/core';
 import {
   IonBadge,
   IonButton,
@@ -9,13 +9,26 @@ import {
   IonIcon,
 } from '@ionic/angular/standalone';
 import { Emotion } from '@core/model/emotion.interface';
+import { BlurDirective } from '@ui/blur/blur.directive';
+import { ReplaceStringPipe } from '@ui/blur/replace-string.pipe';
 import { WrapLinesDirective } from '@ui/wrap-lines/wrap-lines.directive';
 
 @Component({
   selector: 'app-emotion-card',
   templateUrl: './emotion-card.html',
   styleUrl: './emotion-card.scss',
-  imports: [IonCard, IonCardHeader, IonCardContent, IonButton, IonIcon, IonCardTitle, IonBadge, WrapLinesDirective],
+  imports: [
+    IonCard,
+    IonCardHeader,
+    IonCardContent,
+    IonButton,
+    IonIcon,
+    IonCardTitle,
+    IonBadge,
+    WrapLinesDirective,
+    BlurDirective,
+    ReplaceStringPipe,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmotionCard {
@@ -28,4 +41,15 @@ export class EmotionCard {
 
   edit = output<Emotion>();
   remove = output<string>();
+
+  blurCard = linkedSignal(() => this.emotion().private);
+  textReplacement = linkedSignal(() => this.emotion().private);
+
+  toggleBlurCard(): void {
+    this.blurCard.update((value) => !value);
+  }
+
+  toggleTextReplace(value: boolean): void {
+    this.textReplacement.set(value);
+  }
 }

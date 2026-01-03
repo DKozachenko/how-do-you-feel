@@ -1,14 +1,14 @@
-<ion-card>
+<ion-card blur [blurEnabled]="blurCard()" (enableReplaceText)="toggleTextReplace($event)" (click)="toggleBlurCard()">
   <ion-card-header class="card-header">
     <ion-card-title class="ion-display-flex ion-align-items-center ion-justify-content-between">
       <div class="ion-display-flex ion-align-items-center header-left-group">
-        <span class="emotion-name">{{ emotion().name }}</span>
+        <span class="emotion-name">{{ emotion().name | replaceString: textReplacement() }}</span>
 
         <div class="color" [style.backgroundColor]="emotion().color"></div>
       </div>
 
       <div class="ion-display-flex ion-align-items-center">
-        <ion-badge class="ion-margin-end" color="light">{{ time() }}</ion-badge>
+        <ion-badge class="ion-margin-end" color="light">{{ time() | replaceString: textReplacement() }}</ion-badge>
 
         <ion-button
           fill="outline"
@@ -27,6 +27,6 @@
   </ion-card-header>
 
   <ion-card-content class="ion-display-flex ion-flex-column card-content">
-    <p wrapLines>{{ emotion().comment }}</p>
+    <p wrapLines>{{ emotion().comment ?? '' | replaceString: textReplacement() }}</p>
   </ion-card-content>
 </ion-card>
