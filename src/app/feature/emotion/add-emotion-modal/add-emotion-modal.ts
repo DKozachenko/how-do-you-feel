@@ -11,6 +11,7 @@ import {
   IonNote,
   IonTextarea,
   IonTitle,
+  IonToggle,
   IonToolbar,
   ModalController,
 } from '@ionic/angular/standalone';
@@ -40,6 +41,7 @@ import { EmotionHintButton } from '@pattern/emotions-hint/emotion-hint-button/em
     CssColorsHintButton,
     ControlErrorPipe,
     IonNote,
+    IonToggle,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -52,6 +54,7 @@ export class AddEmotionModal {
     name: new FormControl<string>('', [Validators.required]),
     color: new FormControl<string>('', [Validators.required]),
     comment: new FormControl<string>(''),
+    private: new FormControl<boolean>(false, [Validators.required]),
   });
 
   close(role: ModalRole, data?: Omit<Emotion, 'id'>): void {
@@ -61,8 +64,9 @@ export class AddEmotionModal {
   confirmCreation(): void {
     const entity: Omit<Emotion, 'id'> = {
       name: this.form.value.name ?? '',
-      comment: this.form.value.comment || undefined,
       color: this.form.value.color ?? '',
+      comment: this.form.value.comment || undefined,
+      private: this.form.value.private ?? false,
       dateTime: new Date(),
     };
 

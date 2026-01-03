@@ -6,9 +6,11 @@ import {
   provideAppInitializer,
   provideBrowserGlobalErrorListeners,
 } from '@angular/core';
+import { HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { provideIonicAngular } from '@ionic/angular/standalone';
 import { IonicStorageModule } from '@ionic/storage-angular';
+import { IonicGestureConfig } from '@core/gesture/configs/ionic-gesture-config';
 import { init } from './app.initializer';
 import { routes } from './app.routes';
 
@@ -23,5 +25,6 @@ export const appConfig: ApplicationConfig = {
     }),
     importProvidersFrom(IonicStorageModule.forRoot()),
     provideAppInitializer(init),
+    { provide: HAMMER_GESTURE_CONFIG, useClass: IonicGestureConfig },
   ],
 };

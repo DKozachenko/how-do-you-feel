@@ -11,6 +11,7 @@ import {
   IonNote,
   IonTextarea,
   IonTitle,
+  IonToggle,
   IonToolbar,
   ModalController,
 } from '@ionic/angular/standalone';
@@ -40,6 +41,7 @@ import { futureDateValidator } from '@core/validators/future-date/future-date.va
     ReactiveFormsModule,
     ControlErrorPipe,
     IonNote,
+    IonToggle,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -54,6 +56,7 @@ export class EditActionModal implements OnInit {
     name: new FormControl<string>('', [Validators.required]),
     rate: new FormControl<number>(1, [Validators.required, Validators.min(0), Validators.max(10)]),
     comment: new FormControl<string>(''),
+    private: new FormControl<boolean>(false, [Validators.required]),
     history: new FormArray<FormControl<string>>([]),
   });
 
@@ -67,6 +70,7 @@ export class EditActionModal implements OnInit {
         name: this.action().name,
         rate: this.action().rate,
         comment: this.action().comment,
+        private: this.action().private,
       });
 
       this.form.controls.history.addValidators(Validators.required);
@@ -108,6 +112,7 @@ export class EditActionModal implements OnInit {
       name: this.form.value.name ?? '',
       rate: this.form.value.rate ?? 0,
       comment: this.form.value.comment || undefined,
+      private: this.form.value.private ?? false,
     };
 
     const entity: Omit<Action, 'id'> = {

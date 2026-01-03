@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Action } from '@core/model/action.interface';
-import { BaseStorageService } from '@core/storage/base-storage.service';
+import { Action } from '../model/action.interface';
+import { BaseStorageService } from '../storage/base-storage.service';
 import { LIKES_STORAGE_KEY } from './likes.storage-key';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class LikesStorageService extends BaseStorageService<Action> {
   constructor() {
     super();

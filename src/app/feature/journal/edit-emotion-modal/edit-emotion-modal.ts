@@ -11,6 +11,7 @@ import {
   IonNote,
   IonTextarea,
   IonTitle,
+  IonToggle,
   IonToolbar,
   ModalController,
 } from '@ionic/angular/standalone';
@@ -44,6 +45,7 @@ import { EmotionHintButton } from '@pattern/emotions-hint/emotion-hint-button/em
     CssColorsHintButton,
     ControlErrorPipe,
     IonNote,
+    IonToggle,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -58,6 +60,7 @@ export class EditEmotionModal implements OnInit {
     name: new FormControl<string>('', [Validators.required]),
     color: new FormControl<string>('', [Validators.required]),
     comment: new FormControl<string>(''),
+    private: new FormControl<boolean>(false, [Validators.required]),
     dateTime: new FormControl<string>('', [
       Validators.required,
       dateFormatValidator(MAIN_DATETIME_FORMAT),
@@ -80,8 +83,9 @@ export class EditEmotionModal implements OnInit {
   confirmCreation(): void {
     const entity: Omit<Emotion, 'id'> = {
       name: this.form.value.name ?? '',
-      comment: this.form.value.comment || undefined,
       color: this.form.value.color ?? '',
+      comment: this.form.value.comment || undefined,
+      private: this.form.value.private || false,
       dateTime: new Date(parse(this.form.value.dateTime ?? '', MAIN_DATETIME_FORMAT, new Date())),
     };
 
