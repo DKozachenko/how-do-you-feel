@@ -273,7 +273,7 @@ jobs:
 
   deploy-pwa:
     # if: github.event_name == 'push' && github.ref_name == 'develop'
-    name: Deploy PWA to GitHub Pages
+    name: Deploy PWA (GitHub Pages)
     needs: [create-cache-key, get-short-sha, cache-deps, build]
     runs-on: ubuntu-latest
     steps:
