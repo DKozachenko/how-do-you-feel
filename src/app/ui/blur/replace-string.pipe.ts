@@ -6,7 +6,11 @@ const HIDE_SYMBOL = '#';
   name: 'replaceString',
 })
 export class ReplaceStringPipe implements PipeTransform {
-  transform(text: string | number, enabled: boolean): string {
+  transform(text: string | number | null, enabled: boolean): string {
+    if (!text) {
+      return '';
+    }
+
     if (enabled) {
       return String(text).replace(/[\wА-Яа-я]/g, HIDE_SYMBOL);
     }

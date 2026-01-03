@@ -30,7 +30,7 @@ export class BlurDirective {
 
   private checkEnabled(): void {
     if (this.blurEnabled()) {
-      this.renderer.setStyle(this.elementRef.nativeElement, 'filter', 'blur(10px)');
+      this.renderer.setStyle(this.elementRef.nativeElement, 'filter', 'blur(7px)');
       timer(BLUR_ANIMATION_DURATION_MS / 2).subscribe(() => this.enableReplaceText.emit(true));
     } else {
       this.enableReplaceText.emit(false);

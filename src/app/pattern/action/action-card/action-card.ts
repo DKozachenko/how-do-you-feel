@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, linkedSignal, output } from '@angular/core';
 import {
   IonBadge,
   IonButton,
@@ -11,6 +11,8 @@ import {
   IonText,
 } from '@ionic/angular/standalone';
 import { Action } from '@core/model/action.interface';
+import { BlurDirective } from '@ui/blur/blur.directive';
+import { ReplaceStringPipe } from '@ui/blur/replace-string.pipe';
 import { WrapLinesDirective } from '@ui/wrap-lines/wrap-lines.directive';
 import { SortDatesPipe } from '../sort-dates/sort-dates.pipe';
 
@@ -30,6 +32,8 @@ import { SortDatesPipe } from '../sort-dates/sort-dates.pipe';
     IonText,
     SortDatesPipe,
     WrapLinesDirective,
+    BlurDirective,
+    ReplaceStringPipe,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -38,4 +42,15 @@ export class ActionCard {
 
   edit = output<Action>();
   remove = output<string>();
+
+  blurCard = linkedSignal(() => this.action().private);
+  textReplacement = linkedSignal(() => this.action().private);
+
+  toggleBlurCard(): void {
+    this.blurCard.update((value) => !value);
+  }
+
+  toggleTextReplace(value: boolean): void {
+    this.textReplacement.set(value);
+  }
 }
