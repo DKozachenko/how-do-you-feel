@@ -36,7 +36,7 @@ import { SearchComponent } from '@ui/search/search';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LikePage implements ViewWillEnter {
-  protected readonly likesStorageService = inject(LikesStorageService);
+  private readonly likesStorageService = inject(LikesStorageService);
   private readonly modalController = inject(ModalController);
 
   likes = signal<Action[]>([]);
