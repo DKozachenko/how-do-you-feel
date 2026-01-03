@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { IonContent, IonHeader, IonText, IonTitle, IonToolbar, IonButton } from '@ionic/angular/standalone';
 
-import { forkJoin } from 'rxjs';
+import { forkJoin, switchMap } from 'rxjs';
 import { DislikesStorageService } from '@core/dislikes/dislikes-storage';
 import { DownloadService } from '@core/download-file/download-file.service';
 import { EmotionStorageService } from '@core/emotions/emotions-storage';
@@ -29,8 +29,10 @@ export class InfoPage {
       emotions: this.emotionsStorageService.getAll(),
       likes: this.likesStorageService.getAll(),
       dislikes: this.dislikesStorageService.getAll(),
-    }).subscribe((data) => {
-      this.downloadService.download([JSON.stringify(data)], 'how-do-you-feel.data.json');
-    });
+    })
+      .pipe(switchMap((data) => this.downloadService.download(JSON.stringify(data), 'how-do-you-feel.data.json')))
+      .subscribe({
+        error: (err) => console.error('Ошибка при скачивании файла', err),
+      });
   }
 }

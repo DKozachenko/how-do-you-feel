@@ -1,24 +1,36 @@
 import { Injectable } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { saveAs } from 'file-saver';
+import { from, map, Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DownloadService {
-  download(parts: BlobPart[], filename: string): void {
+  download(dataStr: string, filename: string): Observable<void> {
     if (Capacitor.getPlatform() === 'web') {
-      this.downloadPwa(parts, filename);
-      return;
+      return this.downloadPwa(dataStr, filename);
     }
 
-    this.downloadMobile();
+    return this.downloadMobile(dataStr, filename);
   }
 
-  private downloadPwa(parts: BlobPart[], filename: string): void {
-    const file = new File(parts, filename, { type: 'text/plain;charset=utf-8' });
+  private downloadPwa(dataStr: string, filename: string): Observable<void> {
+    const file = new File([dataStr], filename, { type: 'application/json;charset=utf-8' });
     saveAs(file);
+    return of(void 0);
   }
 
-  private downloadMobile(): void {}
+  private downloadMobile(dataStr: string, filename: string): Observable<void> {
+    return from(
+      Filesystem.writeFile({
+        path: filename,
+        data: dataStr,
+        directory: Directory.Documents,
+        encoding: Encoding.UTF8,
+        recursive: true,
+      }),
+    ).pipe(map(() => void 0));
+  }
 }
