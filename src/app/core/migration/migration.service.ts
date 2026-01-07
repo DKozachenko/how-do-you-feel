@@ -9,7 +9,7 @@ import { Emotion } from '@core/model/emotion.interface';
 import { DislikesStorageService } from '../dislikes/dislikes-storage';
 import { EmotionStorageService } from '../emotions/emotions-storage';
 import { PRIVATE_FIELD_MIGRATION_KEY } from '../model/migration.constants';
-import { IonicStorageService } from '../storage/ionic-storage.service';
+import { IonicStorageService } from '../storage/ionic-storage/ionic-storage.service';
 
 @Injectable({
   providedIn: 'root',

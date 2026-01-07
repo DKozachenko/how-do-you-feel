@@ -1,9 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { map, Observable, switchMap } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
-
 import { BaseEntity } from '../model/base-entity.interface';
-import { IonicStorageService } from './ionic-storage.service';
+import { IonicStorageService } from './ionic-storage/ionic-storage.service';
 
 @Injectable({
   providedIn: 'root',
