@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Action } from '../model/action.interface';
-import { BaseStorageService } from '../storage/base-storage.service';
+import { BaseStorageService } from '../storage/base-storage/base-storage.service';
 import { LIKES_STORAGE_KEY } from './likes.storage-key';
 
 @Injectable({

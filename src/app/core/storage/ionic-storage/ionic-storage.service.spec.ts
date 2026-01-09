@@ -21,10 +21,9 @@ describe('IonicStorageService', () => {
     when(mockStorage.create()).thenResolve(expectedStorage);
 
     const service = createService();
-    const result = await firstValueFrom(service.init());
 
+    expect(await firstValueFrom(service.init())).toBe(expectedStorage);
     verify(mockStorage.create()).once();
-    expect(result).toBe(expectedStorage);
   });
 
   it('should set value in storage', async () => {
