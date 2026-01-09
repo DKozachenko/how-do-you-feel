@@ -10,7 +10,7 @@ import {
   ModalController,
 } from '@ionic/angular/standalone';
 import { forkJoin, from, of, switchMap } from 'rxjs';
-import { LikesStorageService } from '@core/likes/likes-storage';
+import { LikesStorageService } from '@core/likes/likes-storage.service';
 import { Action } from '@core/model/action.interface';
 import { ModalRole } from '@core/model/modal-role.enum';
 import { FilterActionsPipe } from '@core/pipes/filter-actions/filter-actions.pipe';

@@ -1,13 +1,13 @@
 import { Injectable, inject } from '@angular/core';
 import { defaultIfEmpty, forkJoin, map, Observable, of, switchMap } from 'rxjs';
-import { DISLIKES_STORAGE_KEY } from '@core/dislikes/dislikes.storage-key';
-import { EMOTIONS_STORAGE_KEY } from '@core/emotions/emotions.storage-key';
-import { LikesStorageService } from '@core/likes/likes-storage';
-import { LIKES_STORAGE_KEY } from '@core/likes/likes.storage-key';
-import { Action } from '@core/model/action.interface';
-import { Emotion } from '@core/model/emotion.interface';
-import { DislikesStorageService } from '../dislikes/dislikes-storage';
-import { EmotionStorageService } from '../emotions/emotions-storage';
+import { DislikesStorageService } from '../dislikes/dislikes-storage.service';
+import { DISLIKES_STORAGE_KEY } from '../dislikes/dislikes.storage-key';
+import { EmotionStorageService } from '../emotions/emotions-storage.service';
+import { EMOTIONS_STORAGE_KEY } from '../emotions/emotions.storage-key';
+import { LikesStorageService } from '../likes/likes-storage.service';
+import { LIKES_STORAGE_KEY } from '../likes/likes.storage-key';
+import { Action } from '../model/action.interface';
+import { Emotion } from '../model/emotion.interface';
 import { PRIVATE_FIELD_MIGRATION_KEY } from '../model/migration.constants';
 import { IonicStorageService } from '../storage/ionic-storage/ionic-storage.service';
 
