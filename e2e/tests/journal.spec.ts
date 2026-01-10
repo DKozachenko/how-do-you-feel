@@ -19,11 +19,6 @@ test.describe('Journal Page', () => {
 
     const emotionPageObject = new EmotionPageObject(sharedPage);
 
-    await test.step('Click on add emotion modal button', async () =>
-      await emotionPageObject.openAddEmotionModalButton.click());
-
-    const formControls = await emotionPageObject.addEmotionModalFormControls.all();
-
     const testEmotion: Omit<Emotion, 'id' | 'dateTime'> = {
       name: 'Test Name',
       color: 'green',
@@ -31,28 +26,7 @@ test.describe('Journal Page', () => {
       private: false,
     };
 
-    for (let i = 0; i < formControls.length; ++i) {
-      const control = formControls[i];
-
-      const controlName = <keyof Omit<Emotion, 'id' | 'dateTime'>>await control.getAttribute('formControlName') ?? '';
-      const controlValue = testEmotion[controlName] ?? '';
-
-      await test.step(`Fill control ${controlName} with value ${controlValue}`, async () => {
-        const nativeInput = control.locator('input, textarea').first();
-
-        if (typeof controlValue === 'string') {
-          await nativeInput.fill(controlValue);
-          await expect(nativeInput).toHaveValue(controlValue);
-        } else {
-          if (controlValue) {
-            await control.click();
-          }
-          await expect(control).toHaveAttribute('aria-checked', String(controlValue));
-        }
-      });
-    }
-
-    await test.step('Save test emotion', async () => await emotionPageObject.emotionModalSaveButton.click());
+    await test.step('Create test emotion', async () => await emotionPageObject.createEmotion(testEmotion));
   });
 
   test.afterAll(async () => {

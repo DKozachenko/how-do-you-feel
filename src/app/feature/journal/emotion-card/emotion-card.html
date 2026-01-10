@@ -21,12 +21,18 @@
           fill="outline"
           color="light"
           pw-automation-id="open-edit-emotion-modal-button"
+          [disabled]="blurCard()"
           (click)="edit.emit(emotion())"
         >
           <ion-icon slot="icon-only" src="icons/eyedrop-outline.svg" />
         </ion-button>
 
-        <ion-button color="danger" pw-automation-id="remove-emotion-button" (click)="remove.emit(emotion().id)">
+        <ion-button
+          color="danger"
+          pw-automation-id="remove-emotion-button"
+          [disabled]="blurCard()"
+          (click)="remove.emit(emotion().id)"
+        >
           <ion-icon slot="icon-only" src="icons/trash-outline.svg" />
         </ion-button>
       </div>

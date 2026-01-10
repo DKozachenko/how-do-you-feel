@@ -1,4 +1,6 @@
-import { Locator, Page } from 'playwright/test';
+import { Locator, Page, test, expect } from 'playwright/test';
+// eslint-disable-next-line boundaries/element-types
+import { Emotion } from '../../src/app/core/model/emotion.interface';
 
 export class EmotionPageObject {
   private page: Page;
@@ -41,5 +43,34 @@ export class EmotionPageObject {
 
   get cssColorsHintModal(): Locator {
     return this.page.getByTestId('css-colors-hint-modal');
+  }
+
+  async createEmotion(testEmotion: Omit<Emotion, 'id' | 'dateTime'>): Promise<void> {
+    await test.step('Click on add emotion modal button', async () => await this.openAddEmotionModalButton.click());
+
+    const formControls = await this.addEmotionModalFormControls.all();
+
+    for (let i = 0; i < formControls.length; ++i) {
+      const control = formControls[i];
+
+      const controlName = <keyof Omit<Emotion, 'id' | 'dateTime'>>await control.getAttribute('formControlName') ?? '';
+      const controlValue = testEmotion[controlName] ?? '';
+
+      await test.step(`Fill control ${controlName} with value ${controlValue}`, async () => {
+        const nativeInput = control.locator('input, textarea').first();
+
+        if (typeof controlValue === 'string') {
+          await nativeInput.fill(controlValue);
+          await expect(nativeInput).toHaveValue(controlValue);
+        } else {
+          if (controlValue) {
+            await control.click();
+          }
+          await expect(control).toHaveAttribute('aria-checked', String(controlValue));
+        }
+      });
+    }
+
+    await test.step('Save test emotion', async () => await this.emotionModalSaveButton.click());
   }
 }
