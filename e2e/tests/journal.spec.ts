@@ -28,6 +28,7 @@ test.describe('Journal Page', () => {
       name: 'Test Name',
       color: 'green',
       comment: 'Test Description',
+      private: false,
     };
 
     for (let i = 0; i < formControls.length; ++i) {
@@ -38,8 +39,16 @@ test.describe('Journal Page', () => {
 
       await test.step(`Fill control ${controlName} with value ${controlValue}`, async () => {
         const nativeInput = control.locator('input, textarea').first();
-        await nativeInput.fill(controlValue);
-        await expect(nativeInput).toHaveValue(controlValue);
+
+        if (typeof controlValue === 'string') {
+          await nativeInput.fill(controlValue);
+          await expect(nativeInput).toHaveValue(controlValue);
+        } else {
+          if (controlValue) {
+            await control.click();
+          }
+          await expect(control).toHaveAttribute('aria-checked', String(controlValue));
+        }
       });
     }
 
@@ -76,7 +85,7 @@ test.describe('Journal Page', () => {
 
       await expect(journalPageObject.editEmotionModalForm).toBeVisible();
 
-      await expect(journalPageObject.editEmotionModalFormControls).toHaveCount(4);
+      await expect(journalPageObject.editEmotionModalFormControls).toHaveCount(5);
 
       const formControls = await journalPageObject.editEmotionModalFormControls.all();
 

@@ -18,7 +18,7 @@ test.describe('Emotion Page', () => {
 
       await expect(emotionPageObject.addEmotionModalForm).toBeVisible();
 
-      await expect(emotionPageObject.addEmotionModalFormControls).toHaveCount(3);
+      await expect(emotionPageObject.addEmotionModalFormControls).toHaveCount(4);
 
       const formControls = await emotionPageObject.addEmotionModalFormControls.all();
 
