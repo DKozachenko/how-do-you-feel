@@ -1,10 +1,10 @@
 import { test, expect, Page } from '@playwright/test';
 import { Action } from '../../src/app/core/model/action.interface';
-import { LIKE_PATHS } from '../../src/app/feature/like/like.routes';
+import { DISLIKE_PATHS } from '../../src/app/feature/dislike/dislike.routes';
 import { TABS_LAYOUT_PATHS } from '../../src/app/layout/tabs-layout/tabs-layout.routes';
 // eslint-disable-next-line boundaries/no-unknown
 import { ADD_ACTION_FIELD_ORDER } from '../model/add-action-field-order.constant';
-import { LikePageObject } from '../page-objects/like.po';
+import { DislikePageObject } from '../page-objects/dislike.po';
 
 let sharedPage: Page;
 
@@ -29,28 +29,29 @@ const TEST_ACTIONS: Omit<Action, 'id' | 'history'>[] = [
 // Private action "#" text
 // Date test
 // Amount in the title
-test.describe('Like Page', () => {
+test.describe('Dislike Page', () => {
   test.beforeAll(async ({ browser }) => {
     sharedPage = await browser.newPage();
 
-    await test.step('Go to "like" page', async () =>
-      await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${LIKE_PATHS.Index}`));
+    await test.step('Go to "dislike" page', async () =>
+      await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${DISLIKE_PATHS.Index}`));
 
-    const likePageObject = new LikePageObject(sharedPage);
+    const dislikePageObject = new DislikePageObject(sharedPage);
 
     for (let i = 0; i < TEST_ACTIONS.length; ++i) {
       const testEmotion = TEST_ACTIONS[i];
-      await test.step(`Create test action with index ${i}`, async () => await likePageObject.createAction(testEmotion));
+      await test.step(`Create test action with index ${i}`, async () =>
+        await dislikePageObject.createAction(testEmotion));
     }
   });
 
   test.afterAll(async () => {
-    await test.step('Go to "like" page', async () =>
-      await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${LIKE_PATHS.Index}`));
+    await test.step('Go to "dislike" page', async () =>
+      await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${DISLIKE_PATHS.Index}`));
 
-    const likePageObject = new LikePageObject(sharedPage);
+    const dislikePageObject = new DislikePageObject(sharedPage);
 
-    const actionCards = await likePageObject.actionCards.all();
+    const actionCards = await dislikePageObject.actionCards.all();
 
     for (let i = 0; i < actionCards.length; ++i) {
       const card = actionCards[i];
@@ -63,12 +64,12 @@ test.describe('Like Page', () => {
   });
 
   test('Should display NON-private action so that it is visible', async () => {
-    await test.step('Go to "like" page', async () =>
-      await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${LIKE_PATHS.Index}`));
+    await test.step('Go to "dislike" page', async () =>
+      await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${DISLIKE_PATHS.Index}`));
 
-    const likePageObject = new LikePageObject(sharedPage);
+    const dislikePageObject = new DislikePageObject(sharedPage);
 
-    const nonPrivateEmotionCard = likePageObject.actionCards.first();
+    const nonPrivateEmotionCard = dislikePageObject.actionCards.first();
     // Because "filter: initial" is applied not immediately, but after 50ms according to BlurDirective
     await sharedPage.waitForTimeout(300);
     const ionCard = nonPrivateEmotionCard.locator('ion-card');
@@ -77,12 +78,12 @@ test.describe('Like Page', () => {
   });
 
   test('Should display private emotion so that it is NOT visible and its actions NOT clickable', async () => {
-    await test.step('Go to "like" page', async () =>
-      await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${LIKE_PATHS.Index}`));
+    await test.step('Go to "dislike" page', async () =>
+      await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${DISLIKE_PATHS.Index}`));
 
-    const likePageObject = new LikePageObject(sharedPage);
+    const dislikePageObject = new DislikePageObject(sharedPage);
 
-    const privateEmotionCard = likePageObject.actionCards.last();
+    const privateEmotionCard = dislikePageObject.actionCards.last();
     const ionCard = privateEmotionCard.locator('ion-card');
     const ionCardStyle = await ionCard.getAttribute('style');
     expect(ionCardStyle).toContain('filter: blur');
@@ -90,34 +91,34 @@ test.describe('Like Page', () => {
     const editCardButton = privateEmotionCard.getByTestId('open-edit-action-modal-button');
     await test.step('Click on edit button', async () => await editCardButton.click({ force: true }));
     await expect(editCardButton).toHaveAttribute('disabled');
-    await expect(likePageObject.addActionModalForm).not.toBeVisible();
+    await expect(dislikePageObject.addActionModalForm).not.toBeVisible();
 
     const removeCardButton = privateEmotionCard.getByTestId('remove-action-button');
     await expect(removeCardButton).toHaveAttribute('disabled');
     await test.step('Click on remove button', async () => await removeCardButton.click({ force: true }));
 
-    await expect(likePageObject.actionCards).toHaveCount(TEST_ACTIONS.length);
+    await expect(dislikePageObject.actionCards).toHaveCount(TEST_ACTIONS.length);
   });
 
   test('Should filter actions according to to search input', async () => {
-    await test.step('Go to "like" page', async () =>
-      await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${LIKE_PATHS.Index}`));
+    await test.step('Go to "dislike" page', async () =>
+      await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${DISLIKE_PATHS.Index}`));
 
-    const likePageObject = new LikePageObject(sharedPage);
+    const dislikePageObject = new DislikePageObject(sharedPage);
 
     // Filtering NON-private action on purpose to be able to compare title and comment
     const searchQuery = 'description 2';
     await test.step(`Search action with value ${searchQuery}`, async () =>
-      await likePageObject.fillSearchInput(searchQuery));
+      await dislikePageObject.fillSearchInput(searchQuery));
 
     const [filteredAction] = TEST_ACTIONS.filter(
       (action) =>
         action.name.toLocaleLowerCase().includes(searchQuery) ||
         (action.comment ?? '').toLocaleLowerCase().includes(searchQuery),
     );
-    await expect(likePageObject.actionCards).toHaveCount(1);
+    await expect(dislikePageObject.actionCards).toHaveCount(1);
 
-    const filteredActionCard = likePageObject.actionCards.first();
+    const filteredActionCard = dislikePageObject.actionCards.first();
     const filteredActionCardTitle = filteredActionCard.getByTestId('action-title');
     await expect(filteredActionCardTitle).toContainText(filteredAction.name);
     await expect(filteredActionCardTitle).toContainText(`${filteredAction.rate} / 10`);
@@ -128,10 +129,10 @@ test.describe('Like Page', () => {
 
   test.describe('Add Action Modal', () => {
     test('Should create new action so it is displayed in the list', async () => {
-      await test.step('Go to "like" page', async () =>
-        await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${LIKE_PATHS.Index}`));
+      await test.step('Go to "dislike" page', async () =>
+        await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${DISLIKE_PATHS.Index}`));
 
-      const likePageObject = new LikePageObject(sharedPage);
+      const dislikePageObject = new DislikePageObject(sharedPage);
       const testAction: Omit<Action, 'id' | 'history'> = {
         name: 'Test Test Name',
         rate: 5,
@@ -139,25 +140,25 @@ test.describe('Like Page', () => {
         private: false,
       };
 
-      await test.step('Create test action', async () => await likePageObject.createAction(testAction));
+      await test.step('Create test action', async () => await dislikePageObject.createAction(testAction));
 
-      await expect(likePageObject.actionCards).toHaveCount(TEST_ACTIONS.length + 1);
+      await expect(dislikePageObject.actionCards).toHaveCount(TEST_ACTIONS.length + 1);
     });
 
     test('Should have correct field order in form (name, rate, comment, private)', async () => {
-      await test.step('Go to "like" page', async () =>
-        await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${LIKE_PATHS.Index}`));
+      await test.step('Go to "dislike" page', async () =>
+        await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${DISLIKE_PATHS.Index}`));
 
-      const likePageObject = new LikePageObject(sharedPage);
+      const dislikePageObject = new DislikePageObject(sharedPage);
 
       await test.step('Click on add action modal button', async () =>
-        await likePageObject.openAddActionModalButton.click());
+        await dislikePageObject.openAddActionModalButton.click());
 
-      await expect(likePageObject.addActionModalForm).toBeVisible();
+      await expect(dislikePageObject.addActionModalForm).toBeVisible();
 
-      await expect(likePageObject.addActionModalFormControls).toHaveCount(4);
+      await expect(dislikePageObject.addActionModalFormControls).toHaveCount(4);
 
-      const formControls = await likePageObject.addActionModalFormControls.all();
+      const formControls = await dislikePageObject.addActionModalFormControls.all();
 
       for (let i = 0; i < formControls.length; ++i) {
         const control = formControls[i];
@@ -167,18 +168,18 @@ test.describe('Like Page', () => {
     });
 
     test('Should have big comment textarea field', async () => {
-      await test.step('Go to "like" page', async () =>
-        await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${LIKE_PATHS.Index}`));
+      await test.step('Go to "dislike" page', async () =>
+        await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${DISLIKE_PATHS.Index}`));
 
-      const likePageObject = new LikePageObject(sharedPage);
+      const dislikePageObject = new DislikePageObject(sharedPage);
 
       await test.step('Click on add action modal button', async () =>
-        await likePageObject.openAddActionModalButton.click());
+        await dislikePageObject.openAddActionModalButton.click());
 
-      await expect(likePageObject.addActionModalForm).toBeVisible();
-      expect(likePageObject.commentTextareaControl).toBeVisible();
+      await expect(dislikePageObject.addActionModalForm).toBeVisible();
+      expect(dislikePageObject.commentTextareaControl).toBeVisible();
 
-      const box = await likePageObject.commentTextareaControl.boundingBox();
+      const box = await dislikePageObject.commentTextareaControl.boundingBox();
       expect(box).not.toBeNull();
       expect(box!.height).toBeGreaterThan(350);
     });
