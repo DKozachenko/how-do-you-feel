@@ -11,7 +11,7 @@ import {
   IonText,
 } from '@ionic/angular/standalone';
 import { forkJoin, from, of, switchMap } from 'rxjs';
-import { DislikesStorageService } from '@core/dislikes/dislikes-storage';
+import { DislikesStorageService } from '@core/dislikes/dislikes-storage.service';
 import { Action } from '@core/model/action.interface';
 import { ModalRole } from '@core/model/modal-role.enum';
 import { FilterActionsPipe } from '@core/pipes/filter-actions/filter-actions.pipe';

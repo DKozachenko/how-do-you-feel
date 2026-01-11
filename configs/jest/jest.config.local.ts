@@ -5,7 +5,7 @@ import { BASE_CONFIG } from './jest.config.base';
 const jestConfig: Config = {
   ...BASE_CONFIG,
   displayName: 'How do you feel:Local',
-  verbose: false,
+  verbose: true,
   silent: false,
   ci: false,
   collectCoverage: false,

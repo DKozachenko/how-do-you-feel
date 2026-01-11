@@ -9,24 +9,34 @@
   <ion-card-header class="card-header">
     <ion-card-title class="ion-display-flex ion-align-items-center ion-justify-content-between">
       <div class="ion-display-flex ion-align-items-center header-left-group">
-        <span class="emotion-name">{{ emotion().name | replaceString: textReplacement() }}</span>
+        <span class="emotion-name" pw-automation-id="emotion-name">{{
+          emotion().name | replaceString: textReplacement()
+        }}</span>
 
-        <div class="color" [style.backgroundColor]="emotion().color"></div>
+        <div class="color" pw-automation-id="emotion-color" [style.backgroundColor]="emotion().color"></div>
       </div>
 
       <div class="ion-display-flex ion-align-items-center">
-        <ion-badge class="ion-margin-end" color="light">{{ time() | replaceString: textReplacement() }}</ion-badge>
+        <ion-badge class="ion-margin-end" color="light" pw-automation-id="emotion-time">{{
+          time() | replaceString: textReplacement()
+        }}</ion-badge>
 
         <ion-button
           fill="outline"
           color="light"
           pw-automation-id="open-edit-emotion-modal-button"
+          [disabled]="blurCard()"
           (click)="edit.emit(emotion())"
         >
           <ion-icon slot="icon-only" src="icons/eyedrop-outline.svg" />
         </ion-button>
 
-        <ion-button color="danger" pw-automation-id="remove-emotion-button" (click)="remove.emit(emotion().id)">
+        <ion-button
+          color="danger"
+          pw-automation-id="remove-emotion-button"
+          [disabled]="blurCard()"
+          (click)="remove.emit(emotion().id)"
+        >
           <ion-icon slot="icon-only" src="icons/trash-outline.svg" />
         </ion-button>
       </div>
@@ -34,6 +44,6 @@
   </ion-card-header>
 
   <ion-card-content class="ion-display-flex ion-flex-column card-content">
-    <p wrapLines>{{ emotion().comment ?? '' | replaceString: textReplacement() }}</p>
+    <p wrapLines pw-automation-id="emotion-comment">{{ emotion().comment ?? '' | replaceString: textReplacement() }}</p>
   </ion-card-content>
 </ion-card>

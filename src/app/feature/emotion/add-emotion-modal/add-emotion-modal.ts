@@ -15,6 +15,7 @@ import {
   IonToolbar,
   ModalController,
 } from '@ionic/angular/standalone';
+import { startOfMinute } from 'date-fns';
 import { Emotion } from '@core/model/emotion.interface';
 import { ModalRole } from '@core/model/modal-role.enum';
 import { ControlErrorPipe } from '@core/pipes/control-errors/control-errors.pipe';
@@ -67,7 +68,7 @@ export class AddEmotionModal {
       color: this.form.value.color ?? '',
       comment: this.form.value.comment || undefined,
       private: this.form.value.private ?? false,
-      dateTime: new Date(),
+      dateTime: startOfMinute(new Date()),
     };
 
     this.close(ModalRole.Confirm, entity);

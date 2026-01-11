@@ -2,10 +2,10 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { IonContent, IonHeader, IonText, IonTitle, IonToolbar, IonButton } from '@ionic/angular/standalone';
 
 import { forkJoin, switchMap } from 'rxjs';
-import { DislikesStorageService } from '@core/dislikes/dislikes-storage';
+import { DislikesStorageService } from '@core/dislikes/dislikes-storage.service';
 import { DownloadService } from '@core/download-file/download-file.service';
-import { EmotionStorageService } from '@core/emotions/emotions-storage';
-import { LikesStorageService } from '@core/likes/likes-storage';
+import { EmotionStorageService } from '@core/emotions/emotions-storage.service';
+import { LikesStorageService } from '@core/likes/likes-storage.service';
 // eslint-disable-next-line boundaries/no-unknown
 import packageJson from '../../../../../package.json';
 

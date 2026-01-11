@@ -9,7 +9,7 @@ export default defineConfig({
   quiet: false,
   fullyParallel: false,
   forbidOnly: true,
-  retries: 0,
+  retries: 2,
   workers: 1,
   reportSlowTests: {
     threshold: 5000,

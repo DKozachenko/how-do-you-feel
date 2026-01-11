@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar class="toolbar ion-text-center">
-    <ion-title>Нравится ({{ likesCount() }})</ion-title>
+    <ion-title pw-automation-id="page-title">Нравится ({{ likesCount() }})</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -14,11 +14,16 @@
     Добавить
   </ion-button>
 
-  <app-search [debounce]="300" (changed)="searchInput.set($event)" />
+  <app-search pw-automation-id="search" [debounce]="300" (changed)="searchInput.set($event)" />
 
   <ion-list class="ion-padding-top">
     @for (action of likes() | filterActions: searchInput(); track action.id) {
-      <app-action-card [action]="action" (edit)="openEditActionModal(action)" (remove)="remove($event)" />
+      <app-action-card
+        pw-automation-id="action-card"
+        [action]="action"
+        (edit)="openEditActionModal(action)"
+        (remove)="remove($event)"
+      />
     }
   </ion-list>
 </ion-content>

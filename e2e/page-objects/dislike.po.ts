@@ -2,7 +2,7 @@ import { Locator, Page, test, expect } from 'playwright/test';
 // eslint-disable-next-line boundaries/element-types
 import { Action } from '../../src/app/core/model/action.interface';
 
-export class LikePageObject {
+export class DislikePageObject {
   private page: Page;
 
   constructor(page: Page) {
