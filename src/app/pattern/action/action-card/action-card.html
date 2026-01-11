@@ -1,17 +1,38 @@
-<ion-card class="card">
+<ion-card
+  class="card"
+  blur
+  ion-long-press
+  [interval]="LONG_PRESS_TIME_MS"
+  [blurEnabled]="blurCard()"
+  (enableReplaceText)="toggleTextReplace($event)"
+  (longPressed)="toggleBlurCard()"
+>
   <ion-card-header>
     <ion-card-title class="ion-display-flex ion-align-items-center ion-justify-content-between">
-      <span class="title-wrap"
-        >{{ action().name }}
-        <span class="no-wrap">({{ action().rate }} / 10)</span>
+      <span pw-automation-id="action-title" class="title-wrap"
+        >{{ action().name | replaceString: textReplacement() }}
+        <span class="no-wrap">({{ action().rate | replaceString: textReplacement() }} / 10)</span>
       </span>
 
       <div class="ion-display-flex ion-align-items-center">
-        <ion-button size="small" fill="outline" color="light" (click)="edit.emit(action())">
+        <ion-button
+          size="small"
+          fill="outline"
+          color="light"
+          pw-automation-id="open-edit-action-modal-button"
+          [disabled]="blurCard()"
+          (click)="edit.emit(action())"
+        >
           <ion-icon slot="icon-only" src="icons/eyedrop-outline.svg" />
         </ion-button>
 
-        <ion-button size="small" color="danger" (click)="remove.emit(action().id)">
+        <ion-button
+          size="small"
+          color="danger"
+          pw-automation-id="remove-action-button"
+          [disabled]="blurCard()"
+          (click)="remove.emit(action().id)"
+        >
           <ion-icon slot="icon-only" src="icons/trash-outline.svg" />
         </ion-button>
       </div>
@@ -19,14 +40,16 @@
   </ion-card-header>
 
   <ion-card-content class="ion-display-flex ion-flex-column">
-    <p>{{ action().comment }}</p>
+    <p pw-automation-id="action-comment" wrapLines>{{ action().comment ?? '' | replaceString: textReplacement() }}</p>
 
     <div class="ion-display-flex ion-flex-column ion-align-items-start ion-margin-top">
-      <ion-text class="history-label ion-margin-bottom" color="tertiary">История</ion-text>
+      <ion-text class="history-label ion-margin-bottom" color="tertiary"
+        >{{ 'История' | replaceString: textReplacement() }}
+      </ion-text>
 
-      <div class="ion-display-flex history-dates">
+      <div class="ion-display-flex ion-flex-wrap history-dates">
         @for (date of action().history | sortDates; track date) {
-          <ion-badge color="light">{{ date | date: 'dd.MM.yyyy' }}</ion-badge>
+          <ion-badge color="light">{{ date | date: 'dd.MM.yyyy' | replaceString: textReplacement() }}</ion-badge>
         }
       </div>
     </div>

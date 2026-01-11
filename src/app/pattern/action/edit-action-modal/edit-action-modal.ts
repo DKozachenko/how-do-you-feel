@@ -8,8 +8,10 @@ import {
   IonIcon,
   IonInput,
   IonItem,
+  IonNote,
   IonTextarea,
   IonTitle,
+  IonToggle,
   IonToolbar,
   ModalController,
 } from '@ionic/angular/standalone';
@@ -17,6 +19,7 @@ import { format, parse } from 'date-fns';
 import { Action } from '@core/model/action.interface';
 import { MAIN_DATE_FORMAT } from '@core/model/main-date-format.constant';
 import { ModalRole } from '@core/model/modal-role.enum';
+import { ControlErrorPipe } from '@core/pipes/control-errors/control-errors.pipe';
 import { dateFormatValidator } from '@core/validators/date-format/date-format.validator';
 import { futureDateValidator } from '@core/validators/future-date/future-date.validator';
 
@@ -36,6 +39,9 @@ import { futureDateValidator } from '@core/validators/future-date/future-date.va
     IonInput,
     IonTextarea,
     ReactiveFormsModule,
+    ControlErrorPipe,
+    IonNote,
+    IonToggle,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -50,6 +56,7 @@ export class EditActionModal implements OnInit {
     name: new FormControl<string>('', [Validators.required]),
     rate: new FormControl<number>(1, [Validators.required, Validators.min(0), Validators.max(10)]),
     comment: new FormControl<string>(''),
+    private: new FormControl<boolean>(false, [Validators.required]),
     history: new FormArray<FormControl<string>>([]),
   });
 
@@ -63,6 +70,7 @@ export class EditActionModal implements OnInit {
         name: this.action().name,
         rate: this.action().rate,
         comment: this.action().comment,
+        private: this.action().private,
       });
 
       this.form.controls.history.addValidators(Validators.required);
@@ -70,6 +78,8 @@ export class EditActionModal implements OnInit {
       this.action().history.forEach((date) => {
         this.addDateControl(format(date, MAIN_DATE_FORMAT));
       });
+
+      this.form.updateValueAndValidity();
     }
   }
 
@@ -87,10 +97,14 @@ export class EditActionModal implements OnInit {
         ])
       ),
     );
+    this.historyFormArray.markAsTouched();
+    this.historyFormArray.updateValueAndValidity();
   }
 
   removeDateControl(index: number): void {
     this.historyFormArray.removeAt(index);
+    this.historyFormArray.markAsTouched();
+    this.historyFormArray.updateValueAndValidity();
   }
 
   confirmCreation(): void {
@@ -98,6 +112,7 @@ export class EditActionModal implements OnInit {
       name: this.form.value.name ?? '',
       rate: this.form.value.rate ?? 0,
       comment: this.form.value.comment || undefined,
+      private: this.form.value.private ?? false,
     };
 
     const entity: Omit<Action, 'id'> = {

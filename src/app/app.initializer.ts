@@ -1,8 +1,11 @@
 import { inject } from '@angular/core';
-import { IonicStorageService } from '@core/storage/ionic-storage.service';
+import { switchMap } from 'rxjs';
+import { MigrationService } from '@core/migration/migration.service';
+import { IonicStorageService } from '@core/storage/ionic-storage/ionic-storage.service';
 
 export function init() {
   const storageService = inject(IonicStorageService);
+  const migrationService = inject(MigrationService);
 
-  return storageService.init();
+  return storageService.init().pipe(switchMap(() => migrationService.runAllMigrations()));
 }

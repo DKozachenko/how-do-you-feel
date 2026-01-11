@@ -14,7 +14,7 @@ import {
 } from '@ionic/angular/standalone';
 import { format } from 'date-fns';
 import { forkJoin, from, map, of, switchMap } from 'rxjs';
-import { EmotionStorageService } from '@core/emotions/emotions-storage';
+import { EmotionStorageService } from '@core/emotions/emotions-storage.service';
 import { Emotion } from '@core/model/emotion.interface';
 import { MAIN_DATE_FORMAT } from '@core/model/main-date-format.constant';
 import { ModalRole } from '@core/model/modal-role.enum';

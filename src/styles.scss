@@ -69,3 +69,23 @@
 .textarea {
   min-height: 350px !important;
 }
+
+.form-control {
+  position: relative;
+  margin-bottom: 12px;
+
+  &__error-text {
+    font-size: 12px;
+
+    position: absolute;
+    left: calc(var(--padding-start) + var(--ion-safe-area-left, 0px));
+    bottom: -2px;
+    z-index: 1000;
+
+    transform: translateY(100%);
+  }
+}
+
+.marging-top-xxl {
+  margin-top: 25px;
+}

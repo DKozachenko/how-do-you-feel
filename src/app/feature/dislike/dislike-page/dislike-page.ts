@@ -11,26 +11,39 @@ import {
   IonText,
 } from '@ionic/angular/standalone';
 import { forkJoin, from, of, switchMap } from 'rxjs';
+import { DislikesStorageService } from '@core/dislikes/dislikes-storage.service';
 import { Action } from '@core/model/action.interface';
 import { ModalRole } from '@core/model/modal-role.enum';
+import { FilterActionsPipe } from '@core/pipes/filter-actions/filter-actions.pipe';
 import { ActionCard } from '@pattern/action/action-card/action-card';
 import { EditActionModal } from '@pattern/action/edit-action-modal/edit-action-modal';
-import { DisikesStorageService } from '../storage/dislikes-storage';
+import { SearchComponent } from '@ui/search/search';
 
 @Component({
   selector: 'app-dislike-page',
   templateUrl: './dislike-page.html',
   styleUrl: './dislike-page.scss',
-  imports: [IonHeader, IonContent, IonList, IonToolbar, IonTitle, IonButton, IonText, ActionCard],
-  providers: [DisikesStorageService],
+  imports: [
+    IonHeader,
+    IonContent,
+    IonList,
+    IonToolbar,
+    IonTitle,
+    IonButton,
+    IonText,
+    ActionCard,
+    SearchComponent,
+    FilterActionsPipe,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LikePage implements ViewWillEnter {
-  protected readonly dislikesStorageService = inject(DisikesStorageService);
+  private readonly dislikesStorageService = inject(DislikesStorageService);
   private readonly modalController = inject(ModalController);
 
   dislikes = signal<Action[]>([]);
   dislikesCount = computed(() => this.dislikes().length);
+  searchInput = signal('');
 
   ionViewWillEnter(): void {
     this.load();

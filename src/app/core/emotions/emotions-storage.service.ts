@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BaseStorageService } from '@core/storage/base-storage.service';
 import { Emotion } from '../model/emotion.interface';
+import { BaseStorageService } from '../storage/base-storage/base-storage.service';
 import { EMOTIONS_STORAGE_KEY } from './emotions.storage-key';
 
 @Injectable({

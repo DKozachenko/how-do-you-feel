@@ -13,7 +13,7 @@ export function futureDateValidator(format: string): ValidatorFn {
       const parsedDate = parse(dateStr, format, new Date());
 
       if (!isValid(parsedDate)) {
-        return { 'incorrect-date': `Дата должна соответствовать формату: ${format}` };
+        return { 'incorrect-date': `Несоответствие формату: ${format}` };
       }
 
       if (parsedDate > new Date()) {

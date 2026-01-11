@@ -10,26 +10,38 @@ import {
   ModalController,
 } from '@ionic/angular/standalone';
 import { forkJoin, from, of, switchMap } from 'rxjs';
+import { LikesStorageService } from '@core/likes/likes-storage.service';
 import { Action } from '@core/model/action.interface';
 import { ModalRole } from '@core/model/modal-role.enum';
+import { FilterActionsPipe } from '@core/pipes/filter-actions/filter-actions.pipe';
 import { ActionCard } from '@pattern/action/action-card/action-card';
 import { EditActionModal } from '@pattern/action/edit-action-modal/edit-action-modal';
-import { LikesStorageService } from '../storage/likes-storage';
+import { SearchComponent } from '@ui/search/search';
 
 @Component({
   selector: 'app-like-page',
   templateUrl: './like-page.html',
   styleUrl: './like-page.scss',
-  imports: [IonHeader, IonContent, IonList, IonToolbar, IonTitle, IonButton, ActionCard],
-  providers: [LikesStorageService],
+  imports: [
+    IonHeader,
+    IonContent,
+    IonList,
+    IonToolbar,
+    IonTitle,
+    IonButton,
+    ActionCard,
+    SearchComponent,
+    FilterActionsPipe,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LikePage implements ViewWillEnter {
-  protected readonly likesStorageService = inject(LikesStorageService);
+  private readonly likesStorageService = inject(LikesStorageService);
   private readonly modalController = inject(ModalController);
 
   likes = signal<Action[]>([]);
   likesCount = computed(() => this.likes().length);
+  searchInput = signal('');
 
   ionViewWillEnter(): void {
     this.load();
