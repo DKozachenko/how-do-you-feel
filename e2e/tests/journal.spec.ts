@@ -10,6 +10,26 @@ import { JournalPageObject } from '../page-objects/journal.po';
 
 let sharedPage: Page;
 
+const TEST_EMOTIONS: Omit<Emotion, 'id' | 'dateTime'>[] = [
+  {
+    name: 'Test Name',
+    color: 'green',
+    comment: 'Test Description',
+    private: true,
+  },
+  {
+    name: 'Test Name 2',
+    color: 'blue',
+    comment: 'Test Description 2',
+    private: false,
+  },
+];
+
+// TODO: тест для цвета кружочка
+// тест на изменение данных
+// тест на удаление эмоции
+// тест на фильтр по дате
+// тест на то, что данные в приватной эмоции не видно
 test.describe('Journal Page', () => {
   test.beforeAll(async ({ browser }) => {
     sharedPage = await browser.newPage();
@@ -19,14 +39,11 @@ test.describe('Journal Page', () => {
 
     const emotionPageObject = new EmotionPageObject(sharedPage);
 
-    const testEmotion: Omit<Emotion, 'id' | 'dateTime'> = {
-      name: 'Test Name',
-      color: 'green',
-      comment: 'Test Description',
-      private: false,
-    };
-
-    await test.step('Create test emotion', async () => await emotionPageObject.createEmotion(testEmotion));
+    for (let i = 0; i < TEST_EMOTIONS.length; ++i) {
+      const testEmotion = TEST_EMOTIONS[i];
+      await test.step(`Create test emotion with index ${i}`, async () =>
+        await emotionPageObject.createEmotion(testEmotion));
+    }
   });
 
   test.afterAll(async () => {
@@ -41,10 +58,19 @@ test.describe('Journal Page', () => {
       const card = emotionCards[i];
 
       const removeCardButton = card.getByTestId('remove-emotion-button');
-      await test.step(`Remove tests emotion with index ${i}`, async () => await removeCardButton.click());
+      await test.step(`Remove test emotion with index ${i}`, async () => await removeCardButton.click());
     }
 
     await sharedPage.close();
+  });
+
+  test('Should display emotion card', async () => {
+    await test.step('Go to "journal" page', async () =>
+      await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${JOURNAL_PATHS.Index}`));
+
+    const journalPageObject = new JournalPageObject(sharedPage);
+
+    await expect(journalPageObject.emotionCards).toHaveCount(TEST_EMOTIONS.length);
   });
 
   test.describe('Edit Emotion Modal', () => {
@@ -55,7 +81,7 @@ test.describe('Journal Page', () => {
       const journalPageObject = new JournalPageObject(sharedPage);
 
       await test.step('Click on edit emotion modal button', async () =>
-        await journalPageObject.openEditEmotionModalButton.click());
+        await journalPageObject.openEditEmotionModalButton.first().click());
 
       await expect(journalPageObject.editEmotionModalForm).toBeVisible();
 
@@ -79,7 +105,7 @@ test.describe('Journal Page', () => {
       const journalPageObject = new JournalPageObject(sharedPage);
 
       await test.step('Click on edit emotion modal button', async () =>
-        await journalPageObject.openEditEmotionModalButton.click());
+        await journalPageObject.openEditEmotionModalButton.first().click());
 
       await expect(journalPageObject.editEmotionModalForm).toBeVisible();
 
@@ -96,8 +122,8 @@ test.describe('Journal Page', () => {
 
       const journalPageObject = new JournalPageObject(sharedPage);
 
-      await test.step('Click on add emotion modal button', async () =>
-        await journalPageObject.openEditEmotionModalButton.click());
+      await test.step('Click on edit emotion modal button', async () =>
+        await journalPageObject.openEditEmotionModalButton.first().click());
 
       await test.step('Click on emotion hint button', async () => await journalPageObject.emotionHintButton.click());
 
@@ -110,13 +136,51 @@ test.describe('Journal Page', () => {
 
       const journalPageObject = new JournalPageObject(sharedPage);
 
-      await test.step('Click on add emotion modal button', async () =>
-        await journalPageObject.openEditEmotionModalButton.click());
+      await test.step('Click on edit emotion modal button', async () =>
+        await journalPageObject.openEditEmotionModalButton.first().click());
 
       await test.step('Click on css colors hint button', async () =>
         await journalPageObject.cssColorsHintButton.click());
 
       await expect(journalPageObject.cssColorsHintModal).toBeVisible();
+    });
+
+    test('Should display NON-private emotion so that it is visible', async () => {
+      await test.step('Go to "journal" page', async () =>
+        await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${JOURNAL_PATHS.Index}`));
+
+      const journalPageObject = new JournalPageObject(sharedPage);
+
+      const nonPrivateEmotionCard = journalPageObject.emotionCards.first();
+      // Because "filter: initial" is applied not immediately, but after 50ms according to BlurDirective
+      await sharedPage.waitForTimeout(300);
+      const ionCard = nonPrivateEmotionCard.locator('ion-card');
+      const ionCardStyle = await ionCard.getAttribute('style');
+      // await expect(ionCard).toHaveCSS('filter', 'initial');
+      expect(ionCardStyle).toContain('filter: initial');
+    });
+
+    test('Should display private emotion so that it is NOT visible and its actions NOT clickable', async () => {
+      await test.step('Go to "journal" page', async () =>
+        await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${JOURNAL_PATHS.Index}`));
+
+      const journalPageObject = new JournalPageObject(sharedPage);
+
+      const privateEmotionCard = journalPageObject.emotionCards.last();
+      const ionCard = privateEmotionCard.locator('ion-card');
+      const ionCardStyle = await ionCard.getAttribute('style');
+      expect(ionCardStyle).toContain('filter: blur');
+
+      const editCardButton = privateEmotionCard.getByTestId('open-edit-emotion-modal-button');
+      await test.step('Click on edit button', async () => await editCardButton.click({ force: true }));
+      await expect(editCardButton).toHaveAttribute('disabled');
+      await expect(journalPageObject.editEmotionModalForm).not.toBeVisible();
+
+      const removeCardButton = privateEmotionCard.getByTestId('remove-emotion-button');
+      await expect(removeCardButton).toHaveAttribute('disabled');
+      await test.step('Click on remove button', async () => await removeCardButton.click({ force: true }));
+
+      await expect(journalPageObject.emotionCards).toHaveCount(TEST_EMOTIONS.length);
     });
   });
 });
