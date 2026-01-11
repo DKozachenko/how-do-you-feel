@@ -126,21 +126,7 @@ test.describe('Dislike Page', () => {
     await expect(filteredActionCardComment).toContainText(filteredAction.comment ?? '');
   });
 
-  test.describe('Actions', () => {
-    test('Should remove action on remove button click', async () => {
-      await test.step('Go to "dislike" page', async () =>
-        await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${DISLIKE_PATHS.Index}`));
-
-      const dislikePageObject = new DislikePageObject(sharedPage);
-
-      const nonPrivateCard = dislikePageObject.actionCards.first();
-      const nonPrivateCardRemoveButton = nonPrivateCard.getByTestId('remove-action-button');
-
-      await test.step('Click on remove action button', async () => await nonPrivateCardRemoveButton.click());
-
-      await expect(dislikePageObject.actionCards).toHaveCount(TEST_ACTIONS.length - 1);
-    });
-
+  test.describe.serial('Actions', () => {
     test('Should change data in card after editing action', async () => {
       await test.step('Go to "dislike" page', async () =>
         await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${DISLIKE_PATHS.Index}`));
@@ -163,6 +149,20 @@ test.describe('Dislike Page', () => {
 
       const actionComment = nonPrivateCard.getByTestId('action-comment');
       await expect(actionComment).toHaveText(newActionData.comment ?? '');
+    });
+
+    test('Should remove action on remove button click', async () => {
+      await test.step('Go to "dislike" page', async () =>
+        await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${DISLIKE_PATHS.Index}`));
+
+      const dislikePageObject = new DislikePageObject(sharedPage);
+
+      const nonPrivateCard = dislikePageObject.actionCards.first();
+      const nonPrivateCardRemoveButton = nonPrivateCard.getByTestId('remove-action-button');
+
+      await test.step('Click on remove action button', async () => await nonPrivateCardRemoveButton.click());
+
+      await expect(dislikePageObject.actionCards).toHaveCount(TEST_ACTIONS.length - 1);
     });
   });
 

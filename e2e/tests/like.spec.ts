@@ -125,21 +125,7 @@ test.describe('Like Page', () => {
     await expect(filteredActionCardComment).toContainText(filteredAction.comment ?? '');
   });
 
-  test.describe('Actions', () => {
-    test('Should remove action on remove button click', async () => {
-      await test.step('Go to "like" page', async () =>
-        await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${LIKE_PATHS.Index}`));
-
-      const likePageObject = new LikePageObject(sharedPage);
-
-      const nonPrivateCard = likePageObject.actionCards.first();
-      const nonPrivateCardRemoveButton = nonPrivateCard.getByTestId('remove-action-button');
-
-      await test.step('Click on remove action button', async () => await nonPrivateCardRemoveButton.click());
-
-      await expect(likePageObject.actionCards).toHaveCount(TEST_ACTIONS.length - 1);
-    });
-
+  test.describe.serial('Actions', () => {
     test('Should change data in card after editing action', async () => {
       await test.step('Go to "like" page', async () =>
         await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${LIKE_PATHS.Index}`));
@@ -162,6 +148,20 @@ test.describe('Like Page', () => {
 
       const actionComment = nonPrivateCard.getByTestId('action-comment');
       await expect(actionComment).toHaveText(newActionData.comment ?? '');
+    });
+
+    test('Should remove action on remove button click', async () => {
+      await test.step('Go to "like" page', async () =>
+        await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${LIKE_PATHS.Index}`));
+
+      const likePageObject = new LikePageObject(sharedPage);
+
+      const nonPrivateCard = likePageObject.actionCards.first();
+      const nonPrivateCardRemoveButton = nonPrivateCard.getByTestId('remove-action-button');
+
+      await test.step('Click on remove action button', async () => await nonPrivateCardRemoveButton.click());
+
+      await expect(likePageObject.actionCards).toHaveCount(TEST_ACTIONS.length - 1);
     });
   });
 

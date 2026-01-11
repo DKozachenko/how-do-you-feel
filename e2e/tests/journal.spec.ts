@@ -91,21 +91,7 @@ test.describe('Journal Page', () => {
     }
   });
 
-  test.describe('Actions', () => {
-    test('Should remove emotion on remove button click', async () => {
-      await test.step('Go to "journal" page', async () =>
-        await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${JOURNAL_PATHS.Index}`));
-
-      const journalPageObject = new JournalPageObject(sharedPage);
-
-      const nonPrivateCard = journalPageObject.emotionCards.first();
-      const nonPrivateCardRemoveButton = nonPrivateCard.getByTestId('remove-emotion-button');
-
-      await test.step('Click on remove emotion button', async () => await nonPrivateCardRemoveButton.click());
-
-      await expect(journalPageObject.emotionCards).toHaveCount(TEST_EMOTIONS.length - 1);
-    });
-
+  test.describe.serial('Actions', () => {
     test('Should change data in card after editing emotion', async () => {
       await test.step('Go to "journal" page', async () =>
         await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${JOURNAL_PATHS.Index}`));
@@ -130,6 +116,20 @@ test.describe('Journal Page', () => {
 
       const emotionComment = nonPrivateCard.getByTestId('emotion-comment');
       await expect(emotionComment).toHaveText(newEmotionData.comment ?? '');
+    });
+
+    test('Should remove emotion on remove button click', async () => {
+      await test.step('Go to "journal" page', async () =>
+        await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${JOURNAL_PATHS.Index}`));
+
+      const journalPageObject = new JournalPageObject(sharedPage);
+
+      const nonPrivateCard = journalPageObject.emotionCards.first();
+      const nonPrivateCardRemoveButton = nonPrivateCard.getByTestId('remove-emotion-button');
+
+      await test.step('Click on remove emotion button', async () => await nonPrivateCardRemoveButton.click());
+
+      await expect(journalPageObject.emotionCards).toHaveCount(TEST_EMOTIONS.length - 1);
     });
   });
 
