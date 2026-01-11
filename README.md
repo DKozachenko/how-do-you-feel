@@ -51,10 +51,15 @@ Open [`Android Studio`](https://developer.android.com/studio), choose:
 - Change order of form fields in add emotion modal
 - `dateTime` field for edit emotion
 
-#### [1.2.0] - 26.12.2025
+#### [1.2.0] - 11.01.2026
 
 ### Added
 
 - Error text for controls
 - Wrap text in action card and action card
+- Search for like and dislike pages
+- Privacy for actions and emotions
+- PWA support
+- Unit tests
+- E2E tests
  
