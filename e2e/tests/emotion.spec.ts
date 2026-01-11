@@ -101,6 +101,8 @@ test.describe('Emotion Page', () => {
       await expect(journalPageObject.emotionCards).toHaveCount(1);
 
       const onlyEmotionCard = journalPageObject.emotionCards.first();
+      // Because "filter: initial" is applied not immediately, but after 50ms according to BlurDirective
+      await page.waitForTimeout(300);
       const ionCard = onlyEmotionCard.locator('ion-card');
       const ionCardStyle = await ionCard.getAttribute('style');
       expect(ionCardStyle).toContain('filter: initial');
