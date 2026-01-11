@@ -10,7 +10,7 @@ import { JournalPageObject } from '../page-objects/journal.po';
 
 test.describe('Emotion Page', () => {
   test.describe('Add Emotion Modal', () => {
-    test('Should have correct field order in form (name, color, comment)', async ({ page }) => {
+    test('Should have correct field order in form (name, color, comment, private)', async ({ page }) => {
       await test.step('Go to "emotion" page', async () =>
         await page.goto(`/${TABS_LAYOUT_PATHS.Index}/${EMOTION_PATHS.Index}`));
 

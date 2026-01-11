@@ -5,7 +5,8 @@ import { INFO_PATHS } from '../../src/app/feature/info/info.routes';
 import { TABS_LAYOUT_PATHS } from '../../src/app/layout/tabs-layout/tabs-layout.routes';
 import { InfoPageObject } from '../page-objects/info.po';
 
-// TODO: тесты на кнопку экспорта
+// TODO
+// Export data button test
 test.describe('Info Page', () => {
   test('Should display correct version of application', async ({ page }) => {
     await test.step('Go to "info" page', async () =>

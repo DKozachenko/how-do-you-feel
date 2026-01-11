@@ -14,7 +14,13 @@
   <form pw-automation-id="action-modal-form" [formGroup]="form">
     <div class="form-control">
       <ion-item>
-        <ion-input labelPlacement="floating" label="Название" formControlName="name" placeholder="Поход" />
+        <ion-input
+          labelPlacement="floating"
+          label="Название"
+          formControlName="name"
+          placeholder="Поход"
+          pw-automation-id="action-modal-form-control"
+        />
       </ion-item>
 
       @let nameControl = form.get('name')!;
@@ -27,7 +33,15 @@
 
     <div class="form-control">
       <ion-item>
-        <ion-input formControlName="rate" label="Рейтинг" type="number" min="0" max="10" placeholder="5" />
+        <ion-input
+          formControlName="rate"
+          label="Рейтинг"
+          type="number"
+          min="0"
+          max="10"
+          placeholder="5"
+          pw-automation-id="action-modal-form-control"
+        />
 
         <span class="rate-label ion-margin-start">из 10</span>
       </ion-item>
@@ -48,13 +62,14 @@
           label="Комментарий"
           formControlName="comment"
           placeholder="Например, ощущения"
+          pw-automation-id="action-modal-form-control"
         />
       </ion-item>
     </div>
 
     <div class="form-control">
       <ion-item>
-        <ion-toggle formControlName="private">Приватность</ion-toggle>
+        <ion-toggle formControlName="private" pw-automation-id="action-modal-form-control">Приватность</ion-toggle>
       </ion-item>
 
       @let privateControl = form.get('private')!;
@@ -94,7 +109,13 @@
       </div>
     }
 
-    <ion-button class="marging-top-xxl" expand="block" [disabled]="form.invalid" (click)="confirmCreation()">
+    <ion-button
+      class="marging-top-xxl"
+      expand="block"
+      pw-automation-id="action-modal-save-button"
+      [disabled]="form.invalid"
+      (click)="confirmCreation()"
+    >
       Сохранить
     </ion-button>
   </form>

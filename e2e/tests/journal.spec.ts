@@ -25,11 +25,13 @@ const TEST_EMOTIONS: Omit<Emotion, 'id' | 'dateTime'>[] = [
   },
 ];
 
-// TODO: тест для цвета кружочка
-// тест на изменение данных
-// тест на удаление эмоции
-// тест на фильтр по дате
-// тест на то, что данные в приватной эмоции не видно
+// TODO:
+// Color cirle Test
+// Edit Test
+// Remove Test
+// Datepicket test
+// Private action "#" text
+// Datetime test
 test.describe('Journal Page', () => {
   test.beforeAll(async ({ browser }) => {
     sharedPage = await browser.newPage();
@@ -156,7 +158,6 @@ test.describe('Journal Page', () => {
       await sharedPage.waitForTimeout(300);
       const ionCard = nonPrivateEmotionCard.locator('ion-card');
       const ionCardStyle = await ionCard.getAttribute('style');
-      // await expect(ionCard).toHaveCSS('filter', 'initial');
       expect(ionCardStyle).toContain('filter: initial');
     });
 
