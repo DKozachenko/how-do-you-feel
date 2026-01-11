@@ -80,7 +80,7 @@ export class EditEmotionModal implements OnInit {
     this.modalController.dismiss(data, role);
   }
 
-  confirmCreation(): void {
+  confirmEdit(): void {
     const entity: Omit<Emotion, 'id'> = {
       name: this.form.value.name ?? '',
       color: this.form.value.color ?? '',

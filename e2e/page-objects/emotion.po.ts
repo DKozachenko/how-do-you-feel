@@ -48,6 +48,7 @@ export class EmotionPageObject {
   async createEmotion(testEmotion: Omit<Emotion, 'id' | 'dateTime'>): Promise<void> {
     await test.step('Click on add emotion modal button', async () => await this.openAddEmotionModalButton.click());
 
+    await expect(this.addEmotionModalFormControls.first()).toBeVisible({ timeout: 3000 });
     const formControls = await this.addEmotionModalFormControls.all();
 
     for (let i = 0; i < formControls.length; ++i) {
@@ -72,5 +73,7 @@ export class EmotionPageObject {
     }
 
     await test.step('Save test emotion', async () => await this.emotionModalSaveButton.click());
+    await expect(this.emotionModalSaveButton).toBeHidden({ timeout: 3000 });
+    await expect(this.openAddEmotionModalButton).toBeVisible({ timeout: 3000 });
   }
 }

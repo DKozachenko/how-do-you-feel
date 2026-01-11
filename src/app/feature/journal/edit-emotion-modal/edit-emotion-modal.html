@@ -105,7 +105,13 @@
       }
     </div>
 
-    <ion-button class="marging-top-xxl" expand="block" [disabled]="form.invalid" (click)="confirmCreation()">
+    <ion-button
+      class="marging-top-xxl"
+      expand="block"
+      pw-automation-id="emotion-modal-save-button"
+      [disabled]="form.invalid"
+      (click)="confirmEdit()"
+    >
       Сохранить
     </ion-button>
   </form>

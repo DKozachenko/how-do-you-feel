@@ -1,4 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
+import Color from 'color';
 import { Emotion } from '../../src/app/core/model/emotion.interface';
 import { EMOTION_PATHS } from '../../src/app/feature/emotion/emotion.routes';
 import { JOURNAL_PATHS } from '../../src/app/feature/journal/journal.routes';
@@ -15,22 +16,18 @@ const TEST_EMOTIONS: Omit<Emotion, 'id' | 'dateTime'>[] = [
     name: 'Test Name',
     color: 'green',
     comment: 'Test Description',
-    private: true,
+    private: false,
   },
   {
     name: 'Test Name 2',
     color: 'blue',
     comment: 'Test Description 2',
-    private: false,
+    private: true,
   },
 ];
 
 // TODO:
-// Color cirle Test
-// Edit Test
-// Remove Test
-// Datepicket test
-// Private action "#" text
+// Datepicker test
 // Datetime test
 test.describe('Journal Page', () => {
   test.beforeAll(async ({ browser }) => {
@@ -73,6 +70,67 @@ test.describe('Journal Page', () => {
     const journalPageObject = new JournalPageObject(sharedPage);
 
     await expect(journalPageObject.emotionCards).toHaveCount(TEST_EMOTIONS.length);
+  });
+
+  test('Should highlight circle near emotion name in correct color', async () => {
+    await test.step('Go to "journal" page', async () =>
+      await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${JOURNAL_PATHS.Index}`));
+
+    const journalPageObject = new JournalPageObject(sharedPage);
+
+    const emotionCards = await journalPageObject.emotionCards.all();
+
+    const reversedCards = emotionCards.toReversed();
+
+    for (let i = 0; i < reversedCards.length; ++i) {
+      const emotion = TEST_EMOTIONS[i];
+      const card = emotionCards[i];
+
+      const cardColor = card.getByTestId('emotion-color');
+      await expect(cardColor).toHaveCSS('background-color', Color(emotion.color).rgb().string());
+    }
+  });
+
+  test.describe('Actions', () => {
+    test('Should remove emotion on remove button click', async () => {
+      await test.step('Go to "journal" page', async () =>
+        await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${JOURNAL_PATHS.Index}`));
+
+      const journalPageObject = new JournalPageObject(sharedPage);
+
+      const nonPrivateCard = journalPageObject.emotionCards.first();
+      const nonPrivateCardRemoveButton = nonPrivateCard.getByTestId('remove-emotion-button');
+
+      await test.step('Click on remove emotion button', async () => await nonPrivateCardRemoveButton.click());
+
+      await expect(journalPageObject.emotionCards).toHaveCount(TEST_EMOTIONS.length - 1);
+    });
+
+    test('Should change data in card after editing emotion', async () => {
+      await test.step('Go to "journal" page', async () =>
+        await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${JOURNAL_PATHS.Index}`));
+
+      const journalPageObject = new JournalPageObject(sharedPage);
+
+      const nonPrivateCard = journalPageObject.emotionCards.first();
+      const newEmotionData: Omit<Emotion, 'id' | 'dateTime' | 'private'> = {
+        name: 'Name update',
+        color: 'yellow',
+        comment: 'Description updated',
+      };
+
+      await test.step('Edit NON-private emotion with new data', async () =>
+        await journalPageObject.editEmotion(nonPrivateCard, newEmotionData));
+
+      const emotionName = nonPrivateCard.getByTestId('emotion-name');
+      await expect(emotionName).toHaveText(newEmotionData.name);
+
+      const cardColor = nonPrivateCard.getByTestId('emotion-color');
+      await expect(cardColor).toHaveCSS('background-color', Color(newEmotionData.color).rgb().string());
+
+      const emotionComment = nonPrivateCard.getByTestId('emotion-comment');
+      await expect(emotionComment).toHaveText(newEmotionData.comment ?? '');
+    });
   });
 
   test.describe('Edit Emotion Modal', () => {
@@ -168,20 +226,14 @@ test.describe('Journal Page', () => {
       const journalPageObject = new JournalPageObject(sharedPage);
 
       const privateEmotionCard = journalPageObject.emotionCards.last();
-      const ionCard = privateEmotionCard.locator('ion-card');
-      const ionCardStyle = await ionCard.getAttribute('style');
-      expect(ionCardStyle).toContain('filter: blur');
+      const privateEmotion = TEST_EMOTIONS.find((emotion) => emotion.private);
 
-      const editCardButton = privateEmotionCard.getByTestId('open-edit-emotion-modal-button');
-      await test.step('Click on edit button', async () => await editCardButton.click({ force: true }));
-      await expect(editCardButton).toHaveAttribute('disabled');
-      await expect(journalPageObject.editEmotionModalForm).not.toBeVisible();
+      if (!privateEmotion) {
+        throw Error('Test should contain at least one private emotion in "TEST_EMOTIONS"');
+      }
 
-      const removeCardButton = privateEmotionCard.getByTestId('remove-emotion-button');
-      await expect(removeCardButton).toHaveAttribute('disabled');
-      await test.step('Click on remove button', async () => await removeCardButton.click({ force: true }));
-
-      await expect(journalPageObject.emotionCards).toHaveCount(TEST_EMOTIONS.length);
+      await test.step('Check card privacy', async () =>
+        await journalPageObject.checkPrivacy(privateEmotion, privateEmotionCard, TEST_EMOTIONS.length));
     });
   });
 });

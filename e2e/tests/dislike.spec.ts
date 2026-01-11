@@ -24,11 +24,7 @@ const TEST_ACTIONS: Omit<Action, 'id' | 'history'>[] = [
 ];
 
 // TODO:
-// Edit Test
-// Remove Test
-// Private action "#" text
 // Date test
-// Amount in the title
 test.describe('Dislike Page', () => {
   test.beforeAll(async ({ browser }) => {
     sharedPage = await browser.newPage();
@@ -63,6 +59,15 @@ test.describe('Dislike Page', () => {
     await sharedPage.close();
   });
 
+  test('Should have amount of action in the title', async () => {
+    await test.step('Go to "dislike" page', async () =>
+      await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${DISLIKE_PATHS.Index}`));
+
+    const dislikePageObject = new DislikePageObject(sharedPage);
+
+    await expect(dislikePageObject.pageTitle).toHaveText(`НЕ нравится (${TEST_ACTIONS.length})`);
+  });
+
   test('Should display NON-private action so that it is visible', async () => {
     await test.step('Go to "dislike" page', async () =>
       await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${DISLIKE_PATHS.Index}`));
@@ -83,21 +88,15 @@ test.describe('Dislike Page', () => {
 
     const dislikePageObject = new DislikePageObject(sharedPage);
 
-    const privateEmotionCard = dislikePageObject.actionCards.last();
-    const ionCard = privateEmotionCard.locator('ion-card');
-    const ionCardStyle = await ionCard.getAttribute('style');
-    expect(ionCardStyle).toContain('filter: blur');
+    const privateActionCard = dislikePageObject.actionCards.last();
+    const privateAction = TEST_ACTIONS.find((action) => action.private);
 
-    const editCardButton = privateEmotionCard.getByTestId('open-edit-action-modal-button');
-    await test.step('Click on edit button', async () => await editCardButton.click({ force: true }));
-    await expect(editCardButton).toHaveAttribute('disabled');
-    await expect(dislikePageObject.addActionModalForm).not.toBeVisible();
+    if (!privateAction) {
+      throw Error('Test should contain at least one private emotion in "TEST_EMOTIONS"');
+    }
 
-    const removeCardButton = privateEmotionCard.getByTestId('remove-action-button');
-    await expect(removeCardButton).toHaveAttribute('disabled');
-    await test.step('Click on remove button', async () => await removeCardButton.click({ force: true }));
-
-    await expect(dislikePageObject.actionCards).toHaveCount(TEST_ACTIONS.length);
+    await test.step('Check card privacy', async () =>
+      await dislikePageObject.checkPrivacy(privateAction, privateActionCard, TEST_ACTIONS.length));
   });
 
   test('Should filter actions according to to search input', async () => {
@@ -125,6 +124,46 @@ test.describe('Dislike Page', () => {
 
     const filteredActionCardComment = filteredActionCard.getByTestId('action-comment');
     await expect(filteredActionCardComment).toContainText(filteredAction.comment ?? '');
+  });
+
+  test.describe('Actions', () => {
+    test('Should remove action on remove button click', async () => {
+      await test.step('Go to "dislike" page', async () =>
+        await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${DISLIKE_PATHS.Index}`));
+
+      const dislikePageObject = new DislikePageObject(sharedPage);
+
+      const nonPrivateCard = dislikePageObject.actionCards.first();
+      const nonPrivateCardRemoveButton = nonPrivateCard.getByTestId('remove-action-button');
+
+      await test.step('Click on remove action button', async () => await nonPrivateCardRemoveButton.click());
+
+      await expect(dislikePageObject.actionCards).toHaveCount(TEST_ACTIONS.length - 1);
+    });
+
+    test('Should change data in card after editing action', async () => {
+      await test.step('Go to "dislike" page', async () =>
+        await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${DISLIKE_PATHS.Index}`));
+
+      const dislikePageObject = new DislikePageObject(sharedPage);
+
+      const nonPrivateCard = dislikePageObject.actionCards.first();
+      const newActionData: Omit<Action, 'id' | 'history' | 'private'> = {
+        name: 'Name update',
+        rate: 10,
+        comment: 'Description updated',
+      };
+
+      await test.step('Edit NON-private action with new data', async () =>
+        await dislikePageObject.editAction(nonPrivateCard, newActionData));
+
+      const actionTitle = nonPrivateCard.getByTestId('action-title');
+      await expect(actionTitle).toContainText(newActionData.name);
+      await expect(actionTitle).toContainText(`${newActionData.rate} / 10`);
+
+      const actionComment = nonPrivateCard.getByTestId('action-comment');
+      await expect(actionComment).toHaveText(newActionData.comment ?? '');
+    });
   });
 
   test.describe('Add Action Modal', () => {
