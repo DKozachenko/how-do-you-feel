@@ -40,12 +40,17 @@ export class LongPressDirective implements OnInit, OnDestroy {
     }
 
     this._hammer = new Hammer.Manager(this.el, {
-      recognizers: [[Hammer.Pan, { direction: Hammer.DIRECTION_VERTICAL }], [Hammer.Press], [Hammer.Tap]],
+      recognizers: [[Hammer.Press], [Hammer.Tap]],
+      touchAction: 'auto',
     });
 
-    this._hammer.on('pan', (e: any) => {
-      this.onPressEnd();
-    });
+    this.el.addEventListener(
+      'touchmove',
+      () => {
+        this.onPressEnd();
+      },
+      { passive: true },
+    );
 
     this._hammer.on('press', (e: any) => {
       this.pressed.emit(e);
@@ -63,13 +68,13 @@ export class LongPressDirective implements OnInit, OnDestroy {
       this.onPressEnd();
     });
 
-    // this.el.addEventListener('mouseleave', (e: any) => {
-    //   this.onPressEnd();
-    // });
+    this.el.addEventListener('mouseleave', (e: any) => {
+      this.onPressEnd();
+    });
 
-    // this.el.addEventListener('mouseout', (e: any) => {
-    //   this.onPressEnd();
-    // });
+    this.el.addEventListener('mouseout', (e: any) => {
+      this.onPressEnd();
+    });
   }
 
   clearInt(): void {
