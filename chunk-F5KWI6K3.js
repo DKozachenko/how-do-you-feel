@@ -1,0 +1,1 @@
+import{o as t,sb as r}from"./chunk-D4HFPDZI.js";var e="emotions";var i=class o extends r{constructor(){super(),this.setStorageKey(e)}static \u0275fac=function(n){return new(n||o)};static \u0275prov=t({token:o,factory:o.\u0275fac,providedIn:"root"})};export{e as a,i as b};
