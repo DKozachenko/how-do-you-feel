@@ -62,4 +62,14 @@ Open [`Android Studio`](https://developer.android.com/studio), choose:
 - PWA support
 - Unit tests
 - E2E tests
+
+#### [1.2.1] - 17.01.2026
+
+### Added
+
+- Toast after downloading file on Info page
+
+### Changed
+
+- Behavior of native scroll in [LongPressDirective](./src/app/core/gesture/long-press/long-press.directive.ts)
  
