@@ -1,7 +1,15 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { IonContent, IonHeader, IonText, IonTitle, IonToolbar, IonButton } from '@ionic/angular/standalone';
+import {
+  IonContent,
+  IonHeader,
+  IonText,
+  IonTitle,
+  IonToolbar,
+  IonButton,
+  ToastController,
+} from '@ionic/angular/standalone';
 
-import { forkJoin, switchMap } from 'rxjs';
+import { forkJoin, from, switchMap } from 'rxjs';
 import { DislikesStorageService } from '@core/dislikes/dislikes-storage.service';
 import { DownloadService } from '@core/download-file/download-file.service';
 import { EmotionStorageService } from '@core/emotions/emotions-storage.service';
@@ -21,6 +29,7 @@ export class InfoPage {
   private readonly dislikesStorageService = inject(DislikesStorageService);
   private readonly likesStorageService = inject(LikesStorageService);
   private readonly downloadService = inject(DownloadService);
+  private readonly toastController = inject(ToastController);
 
   version = packageJson.version;
 
@@ -30,7 +39,19 @@ export class InfoPage {
       likes: this.likesStorageService.getAll(),
       dislikes: this.dislikesStorageService.getAll(),
     })
-      .pipe(switchMap((data) => this.downloadService.download(JSON.stringify(data), 'how-do-you-feel.data.json')))
+      .pipe(
+        switchMap((data) => this.downloadService.download(JSON.stringify(data), 'how-do-you-feel.data.json')),
+        switchMap(() =>
+          from(
+            this.toastController.create({
+              message: 'Файл успешно скачан',
+              duration: 2000,
+              position: 'bottom',
+            }),
+          ),
+        ),
+        switchMap((toast) => from(toast.present())),
+      )
       .subscribe({
         error: (err) => console.error('Ошибка при скачивании файла', err),
       });
