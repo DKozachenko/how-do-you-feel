@@ -1,6 +1,7 @@
 import { FormArray, FormControl, Validators } from '@angular/forms';
 import { ControlErrorPipe } from './control-errors.pipe';
 
+// TODO: update/add tests for FormArray with errors NOT inside controls, but on FormArray itself
 describe('ControlErrorPipe', () => {
   function createPipe(): ControlErrorPipe {
     return new ControlErrorPipe();

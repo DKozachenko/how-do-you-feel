@@ -14,8 +14,9 @@ export class ControlErrorPipe implements PipeTransform {
       }));
 
       const controlsWithError = arrayErrors.filter((arrayControlInfo) => arrayControlInfo.errorText);
+      // if FormArray doesn't have errors inside controls
       if (controlsWithError.length < 1) {
-        return undefined;
+        return this.checkControlErrors(control);
       }
 
       const { errorText, value } = controlsWithError[0];
@@ -23,6 +24,10 @@ export class ControlErrorPipe implements PipeTransform {
       return `${errorText}: ${value}`;
     }
 
+    return this.checkControlErrors(control);
+  }
+
+  private checkControlErrors(control: AbstractControl<unknown>): string | undefined {
     const errors = control.errors;
 
     if (!errors) {
@@ -47,6 +52,10 @@ export class ControlErrorPipe implements PipeTransform {
 
     if (errors['future-date']) {
       return errors['future-date'];
+    }
+
+    if (errors['history-has-repetition']) {
+      return errors['history-has-repetition'];
     }
 
     return undefined;
