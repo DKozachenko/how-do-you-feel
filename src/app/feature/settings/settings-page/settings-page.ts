@@ -18,13 +18,13 @@ import { LikesStorageService } from '@core/likes/likes-storage.service';
 import packageJson from '../../../../../package.json';
 
 @Component({
-  selector: 'app-info-page',
-  templateUrl: './info-page.html',
-  styleUrl: './info-page.scss',
+  selector: 'app-settings-page',
+  templateUrl: './settings-page.html',
+  styleUrl: './settings-page.scss',
   imports: [IonHeader, IonTitle, IonToolbar, IonContent, IonText, IonButton],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InfoPage {
+export class SettingsPage {
   private readonly emotionsStorageService = inject(EmotionStorageService);
   private readonly dislikesStorageService = inject(DislikesStorageService);
   private readonly likesStorageService = inject(LikesStorageService);
