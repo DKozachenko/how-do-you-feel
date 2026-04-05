@@ -81,10 +81,23 @@
     </div>
 
     @if (action()) {
+      @let historyControls = historyFormArray.controls;
+
+      @if (historyControls.length > LAST_N_HISTORY_ITEMS) {
+        <ion-button size="small" fill="clear" (click)="toggleShowAllHistoryControls()">
+          {{ showAllHistoryControls() ? 'Скрыть' : 'Показать все' }}
+        </ion-button>
+      }
+
       <div class="form-control">
         <ion-item formArrayName="history">
           <div class="history-wrap">
-            @for (historyDateControl of historyFormArray.controls; track $index) {
+            @for (
+              historyDateControl of showAllHistoryControls()
+                ? historyControls
+                : (historyControls | lastItems: LAST_N_HISTORY_ITEMS);
+              track $index
+            ) {
               <div class="history-input">
                 <ion-input class="date-input" type="text" [formControl]="historyDateControl" />
 

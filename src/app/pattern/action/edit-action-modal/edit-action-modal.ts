@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, OnInit, signal } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   IonButton,
@@ -22,6 +22,9 @@ import { ModalRole } from '@core/model/modal-role.enum';
 import { ControlErrorPipe } from '@core/pipes/control-errors/control-errors.pipe';
 import { dateFormatValidator } from '@core/validators/date-format/date-format.validator';
 import { futureDateValidator } from '@core/validators/future-date/future-date.validator';
+import { LastItemsPipe } from '../last-items/last-items.pipe';
+import { LAST_N_HISTORY_ITEMS } from '../model/last-n-history-items.constant';
+import { historyValidator } from '../validators/history/history.validator';
 
 @Component({
   selector: 'app-edit-action-modal',
@@ -42,6 +45,7 @@ import { futureDateValidator } from '@core/validators/future-date/future-date.va
     ControlErrorPipe,
     IonNote,
     IonToggle,
+    LastItemsPipe,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -49,6 +53,7 @@ export class EditActionModal implements OnInit {
   private readonly modalController = inject(ModalController);
 
   protected readonly ModalRole = ModalRole;
+  protected readonly LAST_N_HISTORY_ITEMS = LAST_N_HISTORY_ITEMS;
 
   action = input.required<Action>();
 
@@ -59,6 +64,8 @@ export class EditActionModal implements OnInit {
     private: new FormControl<boolean>(false, [Validators.required]),
     history: new FormArray<FormControl<string>>([]),
   });
+
+  showAllHistoryControls = signal(false);
 
   get historyFormArray(): FormArray<FormControl<string>> {
     return this.form.controls.history;
@@ -73,7 +80,7 @@ export class EditActionModal implements OnInit {
         private: this.action().private,
       });
 
-      this.form.controls.history.addValidators(Validators.required);
+      this.form.controls.history.addValidators([Validators.required, historyValidator()]);
 
       this.action().history.forEach((date) => {
         this.addDateControl(format(date, MAIN_DATE_FORMAT));
@@ -85,6 +92,10 @@ export class EditActionModal implements OnInit {
 
   close(role: ModalRole, data?: Omit<Action, 'id'>): void {
     this.modalController.dismiss(data, role);
+  }
+
+  toggleShowAllHistoryControls(): void {
+    this.showAllHistoryControls.update((v) => !v);
   }
 
   addDateControl(initialValue?: string): void {

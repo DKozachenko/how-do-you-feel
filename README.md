@@ -78,6 +78,10 @@ Open [`Android Studio`](https://developer.android.com/studio), choose:
 ### Added
 
 - White border in case of emotion has "black" color
-- Sheet modal with color options for emotion with same name in storage  
+- Sheet modal with color options for emotion with same name in storage
+
+### Changed
+
+- Crop visible history items in card displaying and editing
 
  
