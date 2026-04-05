@@ -13,7 +13,12 @@
           emotion().name | replaceString: textReplacement()
         }}</span>
 
-        <div class="color" pw-automation-id="emotion-color" [style.backgroundColor]="emotion().color"></div>
+        <div
+          class="color"
+          pw-automation-id="emotion-color"
+          [style.backgroundColor]="emotion().color"
+          [style.border]="emotion().color === 'black' ? '1px solid white' : 'initial'"
+        ></div>
       </div>
 
       <div class="ion-display-flex ion-align-items-center">
