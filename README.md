@@ -72,4 +72,12 @@ Open [`Android Studio`](https://developer.android.com/studio), choose:
 ### Changed
 
 - Behavior of native scroll in [LongPressDirective](./src/app/core/gesture/long-press/long-press.directive.ts)
+
+#### [1.3.0] - 05.04.2026
+
+### Added
+
+- White border in case of emotion has "black" color
+- Sheet modal with color options for emotion with same name in storage  
+
  

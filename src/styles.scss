@@ -66,6 +66,12 @@
   --height: 80vh;
 }
 
+.colors-sheet-backdrop {
+  ion-backdrop {
+    background-color: var(--ion-background-color-step-250);
+  }
+}
+
 .textarea {
   min-height: 350px !important;
 }
