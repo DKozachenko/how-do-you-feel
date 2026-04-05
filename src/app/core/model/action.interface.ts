@@ -6,4 +6,5 @@ export interface Action extends BaseEntity {
   rate: number;
   comment?: string;
   history: Date[];
+  private: boolean;
 }

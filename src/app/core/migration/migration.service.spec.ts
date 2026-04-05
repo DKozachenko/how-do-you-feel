@@ -67,7 +67,7 @@ const MOCK_EMOTIONS_WITHOUT_PRIVATE_FIELD: Omit<Emotion, 'private'>[] = [
     dateTime: new Date(2024, 0, 14, 20, 0),
   },
 ];
-
+// TODO: update tests with migration with settings
 describe('MigrationService', () => {
   function createService(): MigrationService {
     return MockRender(MigrationService).point.componentInstance;
