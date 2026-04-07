@@ -6,7 +6,7 @@ import { EmotionStorageService } from '../emotions/emotions-storage.service';
 import { EMOTIONS_STORAGE_KEY } from '../emotions/emotions.storage-key';
 import { LikesStorageService } from '../likes/likes-storage.service';
 import { LIKES_STORAGE_KEY } from '../likes/likes.storage-key';
-import { ACTION_ORDER_SETTING } from '../model/action-order.constants';
+import { ACTION_ORDER_SETTING, ActionOrder } from '../model/action-order.constants';
 import { Action } from '../model/action.interface';
 import { Emotion } from '../model/emotion.interface';
 import { ACTION_ORDER_SETTING_MIGRATION_KEY, PRIVATE_FIELD_MIGRATION_KEY } from '../model/migration.constants';
@@ -89,7 +89,7 @@ export class MigrationService {
   }
 
   private runActionOrderSettingMigration(): Observable<void> {
-    return this.settingsStorageService.create(ACTION_ORDER_SETTING);
+    return this.settingsStorageService.create<ActionOrder>(ACTION_ORDER_SETTING);
   }
 
   private getMigrationState(): Observable<{
