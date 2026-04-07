@@ -10,11 +10,32 @@
   </ion-text>
 
   <ion-button
-    class="ion-padding-start ion-padding-end marging-top-xxl"
+    class="ion-padding-start ion-padding-end marging-top-xxl ion-margin-bottom"
     expand="full"
     pw-automation-id="export-data-button"
     (click)="exportData()"
   >
     Экспортировать данные (JSON)
   </ion-button>
+
+  <form
+    class="ion-display-flex ion-align-items-center ion-justify-content-evenly ion-padding-start ion-padding-end"
+    [formGroup]="form"
+  >
+    <div class="setting ion-padding form-control">
+      <p class="setting__title ion-margin-bottom">
+        Порядок отображения действия на страницах "Нравится" / "Не нравится"
+      </p>
+
+      <ion-radio-group
+        class="setting__group"
+        formControlName="actionOrder"
+        (ionChange)="updateActionOrderSetting($event.detail)"
+      >
+        <ion-radio class="ion-margin-bottom" [value]="ActionOrder.DEFAULT_ORDER">По умолчанию</ion-radio>
+        <br />
+        <ion-radio [value]="ActionOrder.FRESHNESS_ORDER">По свежести</ion-radio>
+      </ion-radio-group>
+    </div>
+  </form>
 </ion-content>
