@@ -38,7 +38,7 @@ jobs:
       cache-key: ${{ steps.create-cache-key.outputs.key }}
     steps:
       - name: Get repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Output cache key
         id: create-cache-key
         run: echo "key=${{ github.repository }}-${{ github.ref }}-${{ hashFiles('package-lock.json') }}" >> $GITHUB_OUTPUT
@@ -50,7 +50,7 @@ jobs:
       short-sha: ${{ steps.output-short-sha.outputs.sha }}
     steps:
       - name: Get repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Get short SHA
         uses: benjlevesque/short-sha@v3.0
         id: short-sha
@@ -64,11 +64,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Install dependencies
         run: npm ci --ignore-scripts
       - name: Cache (save) node modules
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: ${{ env.NODE_MODULES_PATH }}
           key: "${{ needs.create-cache-key.outputs.cache-key }}"
@@ -79,9 +79,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Restore node modules
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: ${{ env.NODE_MODULES_PATH }}
           key: "${{ needs.create-cache-key.outputs.cache-key }}"
@@ -95,9 +95,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Restore node modules
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: ${{ env.NODE_MODULES_PATH }}
           key: "${{ needs.create-cache-key.outputs.cache-key }}"
@@ -111,9 +111,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Restore node modules
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: ${{ env.NODE_MODULES_PATH }}
           key: "${{ needs.create-cache-key.outputs.cache-key }}"
@@ -125,7 +125,7 @@ jobs:
       - name: Run analyze:deps
         run: npm run analyze:deps
       - name: Create artifact with dependency graph
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: "Dependency Graph for ${{ needs.get-short-sha.outputs.short-sha }}"
           path: deps/graph.png
@@ -136,9 +136,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Restore node modules
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: ${{ env.NODE_MODULES_PATH }}
           key: "${{ needs.create-cache-key.outputs.cache-key }}"
@@ -152,9 +152,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Restore node modules
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: ${{ env.NODE_MODULES_PATH }}
           key: "${{ needs.create-cache-key.outputs.cache-key }}"
@@ -162,7 +162,7 @@ jobs:
       - name: Run unit tests with coverage
         run: npm run test:unit:coverage
       - name: Create artifact with coverage report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: "Coverage Report for ${{ needs.get-short-sha.outputs.short-sha }}"
           path: ${{ env.UNIT_COVERAGE_PATH }}
@@ -173,9 +173,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Restore node modules
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: ${{ env.NODE_MODULES_PATH }}
           key: "${{ needs.create-cache-key.outputs.cache-key }}"
@@ -183,7 +183,7 @@ jobs:
       - name: Run unit tests with results
         run: npm run test:unit:report
       - name: Create test results report check
-        uses: dorny/test-reporter@v1
+        uses: dorny/test-reporter@v3
         if: success() || failure()
         with:
           name: Show unit tests results
@@ -204,9 +204,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Restore node modules
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: ${{ env.NODE_MODULES_PATH }}
           key: "${{ needs.create-cache-key.outputs.cache-key }}"
@@ -217,7 +217,7 @@ jobs:
         run: npm run test:e2e:pw:ci
       - name: Create artifact with output files (if exist)
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: "Output files for ${{ needs.get-short-sha.outputs.short-sha }}"
           path: ${{ env.E2E_PLAYWRIGHT_OUTPUT_PATH }}
@@ -229,9 +229,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Restore node modules
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: ${{ env.NODE_MODULES_PATH }}
           key: "${{ needs.create-cache-key.outputs.cache-key }}"
@@ -241,7 +241,7 @@ jobs:
       - name: Run E2E tests with html report
         run: npm run test:e2e:pw:report
       - name: Create artifact with html report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: "E2E HTML report for ${{ needs.get-short-sha.outputs.short-sha }}"
           path: ${{ env.E2E_PLAYWRIGHT_HTML_REPORT_PATH }}
@@ -261,9 +261,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Restore node modules
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: ${{ env.NODE_MODULES_PATH }}
           key: "${{ needs.create-cache-key.outputs.cache-key }}"
@@ -277,9 +277,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Get repository code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: Restore node modules
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@v5
       with:
         path: ${{ env.NODE_MODULES_PATH }}
         key: "${{ needs.create-cache-key.outputs.cache-key }}"
@@ -305,7 +305,7 @@ jobs:
         store-password: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
         key-alias: ${{ secrets.ANDROID_KEY_ALIAS }}
     - name: Create artifact with apk
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: ${{ env.DOWNLOAD_ARTEFACT_NAME }}
         path: "${{ env.RELEASE_APK_PATH }}/how-do-you-feel.${{ needs.get-short-sha.outputs.short-sha }}.apk"
@@ -320,7 +320,7 @@ jobs:
       version: ${{ steps.create-release-version.outputs.VERSION }}
     steps:
       - name: Get repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Save package.json version
         id: create-release-version
         # Обрезаем версию по бокам на один символ, тк npm pkg get version возвращает строку
@@ -356,9 +356,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Restore node modules
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: ${{ env.NODE_MODULES_PATH }}
           key: "${{ needs.create-cache-key.outputs.cache-key }}"
