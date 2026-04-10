@@ -5,6 +5,7 @@ import { SETTINGS_PATHS } from '../../src/app/feature/settings/settings.routes';
 import { TABS_LAYOUT_PATHS } from '../../src/app/layout/tabs-layout/tabs-layout.routes';
 import { SettingsPageObject } from '../page-objects/settings.po';
 
+// TODO: settings tests
 test.describe('Settings Page', () => {
   test('Should display correct version of application', async ({ page }) => {
     await test.step('Go to "info" page', async () =>

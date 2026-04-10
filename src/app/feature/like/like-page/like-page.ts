@@ -11,9 +11,13 @@ import {
 } from '@ionic/angular/standalone';
 import { forkJoin, from, of, switchMap } from 'rxjs';
 import { LikesStorageService } from '@core/likes/likes-storage.service';
+import { ActionOrder } from '@core/model/action-order.constants';
 import { Action } from '@core/model/action.interface';
 import { ModalRole } from '@core/model/modal-role.enum';
+import { SettingsIds } from '@core/model/setting.interface';
 import { FilterActionsPipe } from '@core/pipes/filter-actions/filter-actions.pipe';
+import { SortActionsPipe } from '@core/pipes/sort-actions/sort-actions.pipe';
+import { SettingsStorageService } from '@core/settings/settings.service';
 import { ActionCard } from '@pattern/action/action-card/action-card';
 import { EditActionModal } from '@pattern/action/edit-action-modal/edit-action-modal';
 import { SearchComponent } from '@ui/search/search';
@@ -32,16 +36,20 @@ import { SearchComponent } from '@ui/search/search';
     ActionCard,
     SearchComponent,
     FilterActionsPipe,
+    SortActionsPipe,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LikePage implements ViewWillEnter {
   private readonly likesStorageService = inject(LikesStorageService);
+  private readonly settingStorageService = inject(SettingsStorageService);
   private readonly modalController = inject(ModalController);
 
   likes = signal<Action[]>([]);
   likesCount = computed(() => this.likes().length);
   searchInput = signal('');
+
+  actionOrder = signal<ActionOrder>(ActionOrder.DEFAULT_ORDER);
 
   ionViewWillEnter(): void {
     this.load();
@@ -77,6 +85,12 @@ export class LikePage implements ViewWillEnter {
   }
 
   private load(): void {
-    this.likesStorageService.getAll().subscribe((data) => this.likes.set(data ?? []));
+    forkJoin([
+      this.likesStorageService.getAll(),
+      this.settingStorageService.getById<ActionOrder>(SettingsIds.ACTION_ORDER),
+    ]).subscribe(([likes, setting]) => {
+      this.likes.set(likes ?? []);
+      this.actionOrder.set(setting?.value ?? ActionOrder.DEFAULT_ORDER);
+    });
   }
 }

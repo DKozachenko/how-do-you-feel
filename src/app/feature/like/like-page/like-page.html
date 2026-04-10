@@ -17,7 +17,7 @@
   <app-search pw-automation-id="search" [debounce]="300" (changed)="searchInput.set($event)" />
 
   <ion-list class="ion-padding-top">
-    @for (action of likes() | filterActions: searchInput(); track action.id) {
+    @for (action of likes() | sortActions: actionOrder() | filterActions: searchInput(); track action.id) {
       <app-action-card
         pw-automation-id="action-card"
         [action]="action"
