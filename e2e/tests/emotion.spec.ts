@@ -8,6 +8,8 @@ import { ADD_EMOTION_FIELD_ORDER } from '../model/add-emotion-field-order.consta
 import { EmotionPageObject } from '../page-objects/emotion.po';
 import { JournalPageObject } from '../page-objects/journal.po';
 
+//TODO: modal with color options
+
 test.describe('Emotion Page', () => {
   test.describe('Add Emotion Modal', () => {
     test('Should have correct field order in form (name, color, comment, private)', async ({ page }) => {

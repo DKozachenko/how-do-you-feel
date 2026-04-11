@@ -1,0 +1,14 @@
+.setting {
+  border: 1px solid var(--ion-background-color-step-500);
+  border-radius: 3px;
+
+  &__title {
+    margin-top: 0;
+  }
+
+  &__group {
+    &-item {
+      margin-bottom: 10px;
+    }
+  }
+}

@@ -44,6 +44,14 @@
           pw-automation-id="emotion-modal-form-control"
         />
 
+        @let uniqueExistingColorOptions = (uniqueExistingColors$ | async) ?? [];
+
+        @if (uniqueExistingColorOptions.length > 1) {
+          <app-existing-color-options-button
+            [colorOptions]="uniqueExistingColorOptions"
+            (colorChosen)="applyColor($event)"
+          />
+        }
         <app-css-colors-hint-button />
       </ion-item>
 

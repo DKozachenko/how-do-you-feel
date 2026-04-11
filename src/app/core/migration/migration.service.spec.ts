@@ -14,7 +14,8 @@ import { LikesStorageService } from '../likes/likes-storage.service';
 import { LIKES_STORAGE_KEY } from '../likes/likes.storage-key';
 import { Action } from '../model/action.interface';
 import { Emotion } from '../model/emotion.interface';
-import { PRIVATE_FIELD_MIGRATION_KEY } from '../model/migration.constants';
+import { ACTION_ORDER_SETTING_MIGRATION_KEY, PRIVATE_FIELD_MIGRATION_KEY } from '../model/migration.constants';
+import { SettingsStorageService } from '../settings/settings.service';
 import { IonicStorageService } from '../storage/ionic-storage/ionic-storage.service';
 import { MigrationService } from './migration.service';
 
@@ -67,7 +68,7 @@ const MOCK_EMOTIONS_WITHOUT_PRIVATE_FIELD: Omit<Emotion, 'private'>[] = [
     dateTime: new Date(2024, 0, 14, 20, 0),
   },
 ];
-
+// TODO: update tests with migration with settings
 describe('MigrationService', () => {
   function createService(): MigrationService {
     return MockRender(MigrationService).point.componentInstance;
@@ -77,22 +78,26 @@ describe('MigrationService', () => {
   let mockLikesStorage: LikesStorageService;
   let mockDislikesStorage: DislikesStorageService;
   let mockEmotionsStorage: EmotionStorageService;
+  let mockSettingsStorage: SettingsStorageService;
 
   beforeEach(() => {
     mockIonicStorage = mock(IonicStorageService);
     mockLikesStorage = mock(LikesStorageService);
     mockDislikesStorage = mock(DislikesStorageService);
     mockEmotionsStorage = mock(EmotionStorageService);
+    mockSettingsStorage = mock(SettingsStorageService);
 
     return MockBuilder(MigrationService)
       .mock(IonicStorageService, instance(mockIonicStorage))
       .mock(LikesStorageService, instance(mockLikesStorage))
       .mock(DislikesStorageService, instance(mockDislikesStorage))
-      .mock(EmotionStorageService, instance(mockEmotionsStorage));
+      .mock(EmotionStorageService, instance(mockEmotionsStorage))
+      .mock(SettingsStorageService, instance(mockSettingsStorage));
   });
 
   it('should skip migration when private field migration already completed', async () => {
     when(mockIonicStorage.get<boolean>(PRIVATE_FIELD_MIGRATION_KEY)).thenReturn(of(true));
+    when(mockIonicStorage.get<boolean>(ACTION_ORDER_SETTING_MIGRATION_KEY)).thenReturn(of(true));
 
     const service = createService();
     await firstValueFrom(service.runAllMigrations());
@@ -104,6 +109,7 @@ describe('MigrationService', () => {
 
   it('should run private field migration when not yet completed', async () => {
     when(mockIonicStorage.get<boolean>(PRIVATE_FIELD_MIGRATION_KEY)).thenReturn(of(false));
+    when(mockIonicStorage.get<boolean>(ACTION_ORDER_SETTING_MIGRATION_KEY)).thenReturn(of(true));
     when(mockLikesStorage.getAll()).thenReturn(of(<Action[]>MOCK_LIKES_WITHOUT_PRIVATE_FIELD));
     when(mockDislikesStorage.getAll()).thenReturn(of(<Action[]>MOCK_DISLIKES_WITHOUT_PRIVATE_FIELD));
     when(mockEmotionsStorage.getAll()).thenReturn(of(<Emotion[]>MOCK_EMOTIONS_WITHOUT_PRIVATE_FIELD));
@@ -119,6 +125,7 @@ describe('MigrationService', () => {
 
   it('should run private field migration when migration key is null', async () => {
     when(mockIonicStorage.get<boolean>(PRIVATE_FIELD_MIGRATION_KEY)).thenReturn(of(null));
+    when(mockIonicStorage.get<boolean>(ACTION_ORDER_SETTING_MIGRATION_KEY)).thenReturn(of(true));
     when(mockLikesStorage.getAll()).thenReturn(of(<Action[]>MOCK_LIKES_WITHOUT_PRIVATE_FIELD));
     when(mockDislikesStorage.getAll()).thenReturn(of(<Action[]>MOCK_DISLIKES_WITHOUT_PRIVATE_FIELD));
     when(mockEmotionsStorage.getAll()).thenReturn(of(<Emotion[]>MOCK_EMOTIONS_WITHOUT_PRIVATE_FIELD));
@@ -134,6 +141,7 @@ describe('MigrationService', () => {
 
   it('should set migration key to true after successful migration', async () => {
     when(mockIonicStorage.get<boolean>(PRIVATE_FIELD_MIGRATION_KEY)).thenReturn(of(false));
+    when(mockIonicStorage.get<boolean>(ACTION_ORDER_SETTING_MIGRATION_KEY)).thenReturn(of(true));
     when(mockLikesStorage.getAll()).thenReturn(of([]));
     when(mockDislikesStorage.getAll()).thenReturn(of([]));
     when(mockEmotionsStorage.getAll()).thenReturn(of([]));
@@ -147,6 +155,7 @@ describe('MigrationService', () => {
 
   it('should add private field to likes during migration', async () => {
     when(mockIonicStorage.get<boolean>(PRIVATE_FIELD_MIGRATION_KEY)).thenReturn(of(false));
+    when(mockIonicStorage.get<boolean>(ACTION_ORDER_SETTING_MIGRATION_KEY)).thenReturn(of(true));
     when(mockLikesStorage.getAll()).thenReturn(of(<Action[]>MOCK_LIKES_WITHOUT_PRIVATE_FIELD));
     when(mockDislikesStorage.getAll()).thenReturn(of(<Action[]>[]));
     when(mockEmotionsStorage.getAll()).thenReturn(of(<Emotion[]>[]));
@@ -165,6 +174,7 @@ describe('MigrationService', () => {
 
   it('should add private field to dislikes during migration', async () => {
     when(mockIonicStorage.get<boolean>(PRIVATE_FIELD_MIGRATION_KEY)).thenReturn(of(false));
+    when(mockIonicStorage.get<boolean>(ACTION_ORDER_SETTING_MIGRATION_KEY)).thenReturn(of(true));
     when(mockLikesStorage.getAll()).thenReturn(of(<Action[]>[]));
     when(mockDislikesStorage.getAll()).thenReturn(of(<Action[]>MOCK_DISLIKES_WITHOUT_PRIVATE_FIELD));
     when(mockEmotionsStorage.getAll()).thenReturn(of(<Emotion[]>[]));
@@ -183,6 +193,7 @@ describe('MigrationService', () => {
 
   it('should add private field to emotions during migration', async () => {
     when(mockIonicStorage.get<boolean>(PRIVATE_FIELD_MIGRATION_KEY)).thenReturn(of(false));
+    when(mockIonicStorage.get<boolean>(ACTION_ORDER_SETTING_MIGRATION_KEY)).thenReturn(of(true));
     when(mockLikesStorage.getAll()).thenReturn(of(<Action[]>[]));
     when(mockDislikesStorage.getAll()).thenReturn(of(<Action[]>[]));
     when(mockEmotionsStorage.getAll()).thenReturn(of(<Emotion[]>MOCK_EMOTIONS_WITHOUT_PRIVATE_FIELD));
@@ -201,6 +212,7 @@ describe('MigrationService', () => {
 
   it('should handle empty storage during migration', async () => {
     when(mockIonicStorage.get<boolean>(PRIVATE_FIELD_MIGRATION_KEY)).thenReturn(of(false));
+    when(mockIonicStorage.get<boolean>(ACTION_ORDER_SETTING_MIGRATION_KEY)).thenReturn(of(true));
     when(mockLikesStorage.getAll()).thenReturn(of(<Action[]>[]));
     when(mockDislikesStorage.getAll()).thenReturn(of(<Action[]>[]));
     when(mockEmotionsStorage.getAll()).thenReturn(of(<Emotion[]>[]));

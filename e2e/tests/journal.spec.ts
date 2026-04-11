@@ -24,6 +24,12 @@ const TEST_EMOTIONS: Omit<Emotion, 'id' | 'dateTime'>[] = [
     comment: 'Test Description 2',
     private: true,
   },
+  {
+    name: 'Test Black',
+    color: 'black',
+    comment: 'Test Description 3',
+    private: false,
+  },
 ];
 
 // TODO:
@@ -89,6 +95,19 @@ test.describe('Journal Page', () => {
       const cardColor = card.getByTestId('emotion-color');
       await expect(cardColor).toHaveCSS('background-color', Color(emotion.color).rgb().string());
     }
+  });
+
+  test('Should add white border to circle near emotion name if emotion color is equal "black"', async () => {
+    await test.step('Go to "journal" page', async () =>
+      await sharedPage.goto(`/${TABS_LAYOUT_PATHS.Index}/${JOURNAL_PATHS.Index}`));
+
+    const journalPageObject = new JournalPageObject(sharedPage);
+
+    const emotionWithBlackColor = await journalPageObject.emotionCards.last();
+
+    const cardColor = emotionWithBlackColor.getByTestId('emotion-color');
+    await expect(cardColor).toHaveCSS('background-color', Color('black').rgb().string());
+    await expect(cardColor).toHaveCSS('border', `1px solid ${Color('white').rgb().string()}`);
   });
 
   test.describe.serial('Actions', () => {
@@ -225,7 +244,7 @@ test.describe('Journal Page', () => {
 
       const journalPageObject = new JournalPageObject(sharedPage);
 
-      const privateEmotionCard = journalPageObject.emotionCards.last();
+      const privateEmotionCard = journalPageObject.emotionCards.nth(1);
       const privateEmotion = TEST_EMOTIONS.find((emotion) => emotion.private);
 
       if (!privateEmotion) {

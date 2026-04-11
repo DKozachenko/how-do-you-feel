@@ -25,6 +25,8 @@ const TEST_ACTIONS: Omit<Action, 'id' | 'history'>[] = [
 
 // TODO:
 // Date test
+// Hidden history items
+// Order with setting
 test.describe('Dislike Page', () => {
   test.beforeAll(async ({ browser }) => {
     sharedPage = await browser.newPage();

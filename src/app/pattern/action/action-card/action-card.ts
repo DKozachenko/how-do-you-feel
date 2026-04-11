@@ -16,6 +16,8 @@ import { Action } from '@core/model/action.interface';
 import { BlurDirective } from '@ui/blur/blur.directive';
 import { ReplaceStringPipe } from '@ui/blur/replace-string.pipe';
 import { WrapLinesDirective } from '@ui/wrap-lines/wrap-lines.directive';
+import { LastItemsPipe } from '../last-items/last-items.pipe';
+import { LAST_N_HISTORY_ITEMS } from '../model/last-n-history-items.constant';
 import { SortDatesPipe } from '../sort-dates/sort-dates.pipe';
 
 @Component({
@@ -37,6 +39,7 @@ import { SortDatesPipe } from '../sort-dates/sort-dates.pipe';
     BlurDirective,
     ReplaceStringPipe,
     LongPressDirective,
+    LastItemsPipe,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -50,6 +53,7 @@ export class ActionCard {
   textReplacement = linkedSignal(() => this.action().private);
 
   protected readonly LONG_PRESS_TIME_MS = LONG_PRESS_TIME_MS;
+  protected readonly LAST_N_HISTORY_ITEMS = LAST_N_HISTORY_ITEMS;
 
   toggleBlurCard(): void {
     this.blurCard.update((value) => !value);

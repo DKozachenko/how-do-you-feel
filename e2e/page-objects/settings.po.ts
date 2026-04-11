@@ -1,6 +1,6 @@
 import { Locator, Page } from 'playwright/test';
 
-export class InfoPageObject {
+export class SettingsPageObject {
   private page: Page;
 
   constructor(page: Page) {

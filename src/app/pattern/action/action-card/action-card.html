@@ -44,11 +44,11 @@
 
     <div class="ion-display-flex ion-flex-column ion-align-items-start ion-margin-top">
       <ion-text class="history-label ion-margin-bottom" color="tertiary"
-        >{{ 'История' | replaceString: textReplacement() }}
+        >{{ `История (последние ${LAST_N_HISTORY_ITEMS})` | replaceString: textReplacement() }}
       </ion-text>
 
       <div class="ion-display-flex ion-flex-wrap history-dates">
-        @for (date of action().history | sortDates; track date) {
+        @for (date of action().history | sortDates | lastItems: LAST_N_HISTORY_ITEMS; track date) {
           <ion-badge color="light">{{ date | date: 'dd.MM.yyyy' | replaceString: textReplacement() }}</ion-badge>
         }
       </div>

@@ -6,10 +6,12 @@ import { EmotionStorageService } from '../emotions/emotions-storage.service';
 import { EMOTIONS_STORAGE_KEY } from '../emotions/emotions.storage-key';
 import { LikesStorageService } from '../likes/likes-storage.service';
 import { LIKES_STORAGE_KEY } from '../likes/likes.storage-key';
+import { ACTION_ORDER_SETTING, ActionOrder } from '../model/action-order.constants';
 import { Action } from '../model/action.interface';
 import { Emotion } from '../model/emotion.interface';
-import { PRIVATE_FIELD_MIGRATION_KEY } from '../model/migration.constants';
+import { ACTION_ORDER_SETTING_MIGRATION_KEY, PRIVATE_FIELD_MIGRATION_KEY } from '../model/migration.constants';
 import { IonicStorageService } from '../storage/ionic-storage/ionic-storage.service';
+import { SettingsStorageService } from './../settings/settings.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +19,7 @@ import { IonicStorageService } from '../storage/ionic-storage/ionic-storage.serv
 export class MigrationService {
   private readonly storageService = inject(IonicStorageService);
   private readonly emotionsStorageService = inject(EmotionStorageService);
+  private readonly settingsStorageService = inject(SettingsStorageService);
   protected readonly dislikesStorageService = inject(DislikesStorageService);
   protected readonly likesStorageService = inject(LikesStorageService);
 
@@ -29,6 +32,13 @@ export class MigrationService {
           migrationSequence$ = migrationSequence$.pipe(
             switchMap(() => this.runPrivateFieldMigration()),
             switchMap(() => this.storageService.set<boolean>(PRIVATE_FIELD_MIGRATION_KEY, true)),
+          );
+        }
+
+        if (!migrationState[ACTION_ORDER_SETTING_MIGRATION_KEY]) {
+          migrationSequence$ = migrationSequence$.pipe(
+            switchMap(() => this.runActionOrderSettingMigration()),
+            switchMap(() => this.storageService.set<boolean>(ACTION_ORDER_SETTING_MIGRATION_KEY, true)),
           );
         }
 
@@ -78,11 +88,21 @@ export class MigrationService {
     );
   }
 
-  private getMigrationState(): Observable<{ [PRIVATE_FIELD_MIGRATION_KEY]: boolean }> {
-    return this.storageService.get<boolean>(PRIVATE_FIELD_MIGRATION_KEY).pipe(
-      map((value) => ({
-        [PRIVATE_FIELD_MIGRATION_KEY]: value ?? false,
-      })),
-    );
+  private runActionOrderSettingMigration(): Observable<void> {
+    return this.settingsStorageService.create<ActionOrder>(ACTION_ORDER_SETTING);
+  }
+
+  private getMigrationState(): Observable<{
+    [PRIVATE_FIELD_MIGRATION_KEY]: boolean;
+    [ACTION_ORDER_SETTING_MIGRATION_KEY]: boolean;
+  }> {
+    return forkJoin({
+      [PRIVATE_FIELD_MIGRATION_KEY]: this.storageService
+        .get<boolean>(PRIVATE_FIELD_MIGRATION_KEY)
+        .pipe(map((value) => value ?? false)),
+      [ACTION_ORDER_SETTING_MIGRATION_KEY]: this.storageService
+        .get<boolean>(ACTION_ORDER_SETTING_MIGRATION_KEY)
+        .pipe(map((value) => value ?? false)),
+    });
   }
 }

@@ -5,4 +5,5 @@ export interface Emotion extends BaseEntity {
   comment?: string;
   color: string;
   dateTime: Date;
+  private: boolean;
 }
