@@ -85,4 +85,10 @@ Open [`Android Studio`](https://developer.android.com/studio), choose:
 
 - Crop visible history items in card displaying and editing
 
+#### [1.3.1] - 02.08.2026
+
+### Added
+
+- Applying existing color for emotion if it's the only color
+
  
