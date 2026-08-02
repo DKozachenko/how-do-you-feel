@@ -1,0 +1,1 @@
+import{a,b}from"./chunk-CWMOBJWJ.js";import"./chunk-4BDOMZNY.js";import"./chunk-XFWXXTHX.js";import"./chunk-J3MUX6ML.js";import"./chunk-N6Z5CQMB.js";import"./chunk-VKVQMC33.js";import"./chunk-KZZABCGY.js";export{a as TABS_LAYOUT_PATHS,b as TABS_ROUTES};

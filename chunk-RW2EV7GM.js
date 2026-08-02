@@ -1,0 +1,1 @@
+import{Bb as o,s as e}from"./chunk-XILMTXQN.js";var r="likes";var i=class t extends o{constructor(){super(),this.setStorageKey(r),this.setPlaceToInsertNewEntity("begin")}static \u0275fac=function(c){return new(c||t)};static \u0275prov=e({token:t,factory:t.\u0275fac,providedIn:"root"})};export{r as a,i as b};
