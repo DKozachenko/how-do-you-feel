@@ -120,9 +120,9 @@ export class EditActionModal implements OnInit {
 
   confirmCreation(): void {
     const entityWithoutHistory: Omit<Action, 'id' | 'history'> = {
-      name: this.form.value.name ?? '',
+      name: this.form.value.name?.trim() ?? '',
       rate: this.form.value.rate ?? 0,
-      comment: this.form.value.comment || undefined,
+      comment: this.form.value.comment?.trim() || undefined,
       private: this.form.value.private ?? false,
     };
 

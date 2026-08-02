@@ -1,5 +1,6 @@
 import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   IonButton,
@@ -17,7 +18,7 @@ import {
   ModalController,
 } from '@ionic/angular/standalone';
 import { startOfMinute } from 'date-fns';
-import { debounceTime, map, of, startWith, switchMap } from 'rxjs';
+import { debounceTime, filter, map, of, shareReplay, startWith, switchMap } from 'rxjs';
 import { EmotionStorageService } from '@core/emotions/emotions-storage.service';
 import { Emotion } from '@core/model/emotion.interface';
 import { ModalRole } from '@core/model/modal-role.enum';
@@ -77,11 +78,21 @@ export class AddEmotionModal {
         map((allEmotions) =>
           (allEmotions ?? []).filter((emotion) => emotion.name.trim().toLowerCase() === name.trim().toLowerCase()),
         ),
-        map((emotionsWithSameName) => emotionsWithSameName.map((emotion) => emotion.color)),
+        map((emotionsWithSameName) => emotionsWithSameName.map((emotion) => emotion.color.trim())),
         map((existingColors) => Array.from(new Set(existingColors))),
+        shareReplay({ bufferSize: 1, refCount: true }),
       );
     }),
   );
+
+  constructor() {
+    this.uniqueExistingColors$
+      .pipe(
+        filter((existingColors) => existingColors.length === 1),
+        takeUntilDestroyed(),
+      )
+      .subscribe((existingColors) => this.applyColor(existingColors.at(0)!));
+  }
 
   close(role: ModalRole, data?: Omit<Emotion, 'id'>): void {
     this.modalController.dismiss(data, role);
@@ -93,9 +104,9 @@ export class AddEmotionModal {
 
   confirmCreation(): void {
     const entity: Omit<Emotion, 'id'> = {
-      name: this.form.value.name ?? '',
-      color: this.form.value.color ?? '',
-      comment: this.form.value.comment || undefined,
+      name: this.form.value.name?.trim() ?? '',
+      color: this.form.value.color?.trim() ?? '',
+      comment: this.form.value.comment?.trim() || undefined,
       private: this.form.value.private ?? false,
       dateTime: startOfMinute(new Date()),
     };
